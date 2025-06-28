@@ -1,9 +1,9 @@
 import os
 import httpx
 
-# 模型参数配置（支持环境变量）
-ARK_API_KEY = os.environ.get("ARK_API_KEY") or "ac7c2d46-edf5-4a90-b83e-c89cf078d5b9"
-ARK_MODEL_ID = "ep-20250624094206-t4rvj"
+# 模型参数配置
+ARK_API_KEY = os.environ.get("ARK_API_KEY") or "fbddbe4a-8479-4866-8e6a-fff1ec1effc7"
+ARK_MODEL_ID = "doubao-seed-1-6-250615"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 
 
@@ -40,7 +40,7 @@ async def call_doubao_model(prompt: str, img_urls=None) -> str:
         ]
     }
     # 发送 POST 请求调用模型
-    async with httpx.AsyncClient(timeout=200.0) as client:
+    async with httpx.AsyncClient(timeout=100000.0) as client:
         response = await client.post(f"{ARK_BASE_URL}/chat/completions", json=payload, headers=headers)
         response.raise_for_status()
         return response.json()["choices"][0]["message"]["content"]

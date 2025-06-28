@@ -30,7 +30,8 @@ async def generate_testcases(state: GraphState) -> GraphState:
 3. 如需求中涉及异常或边界情况，也请生成对应的负面测试用例；
 4. 不要省略任何必要细节。
 
-请确保返回是**严格符合 JSON 格式的数组**，不要包含解释、注释或 Markdown 格式，不要加“测试用例1”、“标题：”等前缀。
+请确保返回是严格符合 JSON 格式的数组，不要包含解释、注释或 Markdown 格式，不要加“测试用例1”、“标题：”等前缀。
+请最多只生成10条典型测试用例。
 """
     raw_response = await call_doubao_model(prompt)
     try:
