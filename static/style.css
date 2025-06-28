@@ -1,0 +1,370 @@
+/* 全局样式 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #1e88e5;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #0d47a1;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+h3 {
+    color: #1565c0;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* 表单样式 */
+.form-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input[type=text], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 200px;
+}
+
+/* 按钮样式 */
+button {
+    background: #1e88e5;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+button:hover {
+    background: #1565c0;
+}
+
+.secondary-btn {
+    background: #78909c;
+}
+
+.secondary-btn:hover {
+    background: #546e7a;
+}
+
+/* 加载动画 */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: #1e88e5;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 结果容器 */
+#result-container-gen, #result-container-md {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background: #f1f1f1;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* 导航标签 */
+.nav-tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 25px;
+}
+
+.tab-btn {
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    padding: 10px 20px;
+    background: none;
+    color: #333;
+    margin-right: 5px;
+    margin-bottom: -1px;
+}
+
+.tab-btn.active {
+    border: 1px solid #ddd;
+    border-bottom-color: white;
+    background-color: white;
+    color: #1e88e5;
+}
+
+/* 测试用例容器 */
+.test-cases-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.test-case {
+    flex: 1;
+}
+
+/* 评估结果样式 */
+.evaluation-summary {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.summary-score {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.score {
+    color: #1565c0;
+    font-size: 1.2em;
+}
+
+.eval-category {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fafafa;
+    border-left: 3px solid #1e88e5;
+    border-radius: 0 4px 4px 0;
+}
+
+.coverage-analysis {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.coverage-analysis h6 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #546e7a;
+}
+
+.coverage-analysis ul {
+    padding-left: 20px;
+}
+
+/* Markdown报告样式 */
+.markdown-body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    color: #24292e;
+    background-color: #ffffff;
+    border-radius: 6px;
+    overflow-wrap: break-word;
+}
+
+.markdown-body h1 {
+    color: #1e88e5;
+    text-align: left;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 0.3em;
+}
+
+.markdown-body h2 {
+    color: #0d47a1;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 0.3em;
+}
+
+.markdown-body h3 {
+    color: #1565c0;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.markdown-body h4 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.markdown-body p {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.markdown-body ul, .markdown-body ol {
+    padding-left: 2em;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.markdown-body li {
+    margin-bottom: 0.25em;
+}
+
+.markdown-body table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-top: 0;
+    margin-bottom: 16px;
+    display: block;
+    width: 100%;
+    overflow: auto;
+}
+
+.markdown-body table th {
+    font-weight: 600;
+    padding: 6px 13px;
+    border: 1px solid #dfe2e5;
+}
+
+.markdown-body table td {
+    padding: 6px 13px;
+    border: 1px solid #dfe2e5;
+}
+
+.markdown-body table tr {
+    background-color: #fff;
+    border-top: 1px solid #c6cbd1;
+}
+
+.markdown-body table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+}
+
+.markdown-body blockquote {
+    margin: 0 0 16px 0;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+}
+
+.markdown-body pre {
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border-radius: 3px;
+    margin-bottom: 16px;
+}
+
+.markdown-body code {
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,0.05);
+    border-radius: 3px;
+}
+
+.markdown-body pre code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    background-color: transparent;
+    border: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .test-cases-container {
+        grid-template-columns: 1fr;
+    }
+    
+    button {
+        width: 100%;
+        margin-right: 0;
+    }
+} 

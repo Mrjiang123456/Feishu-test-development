@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试用例评估系统</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- 引入marked.js库用于渲染Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>测试用例评估系统</h1>
+        
+        <div class="nav-links">
+            <a href="/" class="nav-link active">Markdown评估报告</a>
+            <a href="/test-cases" class="nav-link">测试用例生成与评估</a>
+        </div>
+        
+        <div class="form-section">
+            <h2>飞书文档信息</h2>
+            <div class="form-group">
+                <label for="doc-token">文档Token:</label>
+                <input type="text" id="doc-token" placeholder="输入飞书文档的Token">
+            </div>
+            <div class="form-group">
+                <label for="user-token">用户访问Token:</label>
+                <input type="text" id="user-token" placeholder="输入飞书用户访问Token">
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>测试用例</h2>
+            <div class="test-cases-container">
+                <div class="test-case">
+                    <h3>人工编写的测试用例</h3>
+                    <textarea id="human-cases" placeholder="输入人工编写的测试用例"></textarea>
+                </div>
+                <div class="test-case">
+                    <h3>LLM生成的测试用例</h3>
+                    <textarea id="llm-cases" placeholder="输入LLM生成的测试用例"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <button id="evaluate-btn">开始评估</button>
+        
+        <div id="loading" class="loading" style="display:none;">
+            <div class="spinner"></div>
+            <p>正在评估中，请稍候...</p>
+        </div>
+        
+        <!-- 评估结果将渲染在这里 -->
+        <div id="report-container" style="display:none;"></div>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html> 

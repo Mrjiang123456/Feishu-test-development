@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试用例生成与评估</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- 引入marked.js库用于渲染Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- 引入highlight.js库用于代码高亮 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/languages/json.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>测试用例生成与评估系统</h1>
+        
+        <div class="nav-tabs">
+            <button id="tab-generate" class="tab-btn active">生成测试用例</button>
+            <button id="tab-evaluate" class="tab-btn">评估测试用例</button>
+        </div>
+        
+        <div id="generate-section" class="tab-section">
+            <div class="form-section">
+                <h2>飞书文档信息</h2>
+                <div class="form-group">
+                    <label for="doc-token-gen">文档Token:</label>
+                    <input type="text" id="doc-token-gen" placeholder="输入飞书文档的Token">
+                </div>
+                <div class="form-group">
+                    <label for="user-token-gen">用户访问Token:</label>
+                    <input type="text" id="user-token-gen" placeholder="输入飞书用户访问Token">
+                </div>
+            </div>
+            
+            <button id="generate-btn">生成测试用例</button>
+            
+            <div id="loading-gen" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>正在生成测试用例，请稍候...</p>
+            </div>
+            
+            <div id="result-container-gen" style="display:none;">
+                <h3>生成的测试用例</h3>
+                <pre><code id="test-cases-result" class="json"></code></pre>
+                <button id="copy-result-btn" class="secondary-btn">复制结果</button>
+            </div>
+        </div>
+        
+        <div id="evaluate-section" class="tab-section" style="display:none;">
+            <div class="form-section">
+                <h2>测试用例</h2>
+                <div class="test-cases-container">
+                    <div class="test-case">
+                        <h3>LLM生成的测试用例 (JSON格式)</h3>
+                        <textarea id="llm-test-cases" placeholder="输入LLM生成的测试用例JSON"></textarea>
+                    </div>
+                    <div class="test-case">
+                        <h3>Golden测试用例 (JSON格式)</h3>
+                        <textarea id="golden-test-cases" placeholder="输入标准测试用例JSON"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="evaluate-btn">评估测试用例</button>
+            
+            <div id="loading-eval" class="loading" style="display:none;">
+                <div class="spinner"></div>
+                <p>正在评估测试用例，请稍候...</p>
+            </div>
+            
+            <div id="result-container-md" style="display:none;">
+                <h3>评估报告</h3>
+                <div id="markdown-report" class="markdown-body"></div>
+                <button id="copy-md-btn" class="secondary-btn">复制Markdown</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/test_cases.js"></script>
+</body>
+</html> 
