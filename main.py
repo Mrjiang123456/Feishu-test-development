@@ -13,6 +13,7 @@ app = FastAPI()
 class GenerateRequest(BaseModel):
     prd_text: str | None = None
     web_url: str | None = None
+    evaluate: bool = False  # 添加参数，决定是否评估生成的测试用例
 
 
 @app.post("/generate-json")
@@ -40,11 +41,31 @@ async def generate_testcases_api(request_data: GenerateRequest):
         # 执行 LangGraph 流程
         result = await graph.ainvoke({"prd_text": prd_text})
         testcases = result.get("testcases", [])
-
-        return JSONResponse(content={
+        
+        # 创建响应数据
+        response_data = {
             "success": True,
             "testcases": testcases
-        })
+        }
+        
+        # 如果需要评估，则调用group.py的main函数
+        if request_data.evaluate:
+            try:
+                # 导入group模块的main函数
+                from group import main as evaluate_testcases
+                
+                # 将testcases传递给evaluate_testcases函数
+                evaluation_result = evaluate_testcases({"testcases": testcases})
+                
+                # 将评估结果添加到响应中
+                response_data["evaluation"] = evaluation_result
+                
+            except Exception as eval_error:
+                # 记录评估过程中的错误，但不影响测试用例的返回
+                traceback.print_exc()
+                response_data["evaluation_error"] = str(eval_error)
+
+        return JSONResponse(content=response_data)
 
     except Exception as e:
         traceback.print_exc()

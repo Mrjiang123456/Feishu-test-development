@@ -7,7 +7,7 @@ from urllib.parse import urlparse, parse_qs
 FEISHU_APP_ID = os.environ.get("FEISHU_APP_ID") or "cli_a8d4ea8f8efcd00c"
 FEISHU_APP_SECRET = os.environ.get("FEISHU_APP_SECRET") or "VSi6TL9ansJFJsUVYJUPrkTLCmoqataV"
 FEISHU_APP_USER_ACCESS_TOKEN = os.environ.get(
-    "FEISHU_APP_user_access_token") or "u-ePu5ZfCOt17E9Wc6BHBduW0l52B5l42Xoi0054A807tL"
+    "FEISHU_APP_user_access_token") or "u-doQznEYKdebEC7ZGRn8BT_l55iPRl42XPo00glEE00K5"
 
 
 def is_docx_url(url: str) -> bool:
