@@ -50,9 +50,7 @@ async def generate_testcases_api(request_data: GenerateRequest):
 
         return JSONResponse(content={
             "success": True,
-            "testcases": testcases,
-            "image_count": len(images),
-            "images": images
+            "testcases": testcases
         })
 
     except Exception as e:

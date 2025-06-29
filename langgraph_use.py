@@ -4,13 +4,11 @@ from model_api import call_doubao_model
 import json
 import re
 
-
 class GraphState(TypedDict):
     prd_text: str
     images: list[str]
     requirements: str
     testcases: list[dict]
-
 
 # 第一步：从 PRD 文本中提取关键需求点
 async def extract_requirements(state: GraphState) -> GraphState:
@@ -31,9 +29,9 @@ PRD文字如下：\n{state['prd_text']}
         "images": state.get("images", [])
     }
 
-
 # 第二步：将需求逐条生成结构化测试用例
 async def generate_testcases(state: GraphState) -> GraphState:
+    # 用正则提取形如 1. xxx 的条目
     raw_points = re.findall(r"\d+\.\s*(.+)", state["requirements"])
     if not raw_points:
         raise ValueError(f"未能识别需求点，请检查提取内容：\n{state['requirements']}")
@@ -73,7 +71,6 @@ async def generate_testcases(state: GraphState) -> GraphState:
     return {
         "testcases": all_testcases
     }
-
 
 # 构建 LangGraph 工作流
 workflow = StateGraph(GraphState)
