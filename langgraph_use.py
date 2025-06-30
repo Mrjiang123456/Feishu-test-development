@@ -2,60 +2,77 @@ from langgraph.graph import StateGraph
 from typing import TypedDict
 from model_api import call_doubao_model
 import json
+import re
 
-# 定义状态类型，每一步都基于 GraphState 传递状态
 class GraphState(TypedDict):
     prd_text: str
+    images: list[str]
     requirements: str
-    testcases: str
+    testcases: list[dict]
 
 # 第一步：从 PRD 文本中提取关键需求点
 async def extract_requirements(state: GraphState) -> GraphState:
-    prompt = f"请从以下 PRD 文档中提取关键需求点（列出每一条）：\n{state['prd_text']}"
-    requirements = await call_doubao_model(prompt)
-    return {"requirements": requirements.strip()}
+    prompt = f"""你是一位产品分析专家，请从以下图文 PRD 中提取关键功能需求点：
 
-# 第二步：根据需求生成结构化测试用例
-async def generate_testcases(state: GraphState) -> GraphState:
-    prompt = f"""你是一个智能测试用例生成代理（TestAgent），用户提供了多个PRD需求点，你需要为每个需求点生成高质量的结构化测试用例。
-请根据以下格式，为每条需求生成一条测试用例：
-示例格式：
-[
-  {{
-    "标题": "登录-正常流程-非首次登录",
-    "前置条件": "用户已注册有效账号",
-    "操作步骤": [
-      "1. 打开登录页面",
-      "2. 输入正确用户名",
-      "3. 输入正确密码",
-      "4. 点击登录按钮"
-    ],
-    "预期结果": [
-      "1. 登录成功",
-      "2. 跳转至首页"
-    ]
-  }}
-]
+PRD文字如下：\n{state['prd_text']}
 
-请遵守以下约定：
-1. 每条需求点对应一条测试用例；
-2. 步骤（steps）和预期结果（expected_results）必须一一对应；
-3. 如有异常/边界场景，也请生成相应用例；
-4. 语言简洁、规范，便于测试人员直接执行；
-5. 输出为严格的 JSON 数组，不包含解释、注释或 Markdown。
+如有图片，可作为参考：\n{chr(10).join(state.get('images', []))}。
 
-以下是提取的需求点：
-{state['requirements']}
+请输出清晰分条的需求点，每条需求用阿拉伯数字编号：
+1. xxx
+2. xxx
+...
 """
-    raw_response = await call_doubao_model(prompt)
-    try:
-        testcases = json.loads(raw_response)
-    except Exception as e:
-        raise ValueError(f"JSON解析失败: {e}\n模型原始输出为:\n{raw_response}")
+    requirements = await call_doubao_model(prompt)
+    return {
+        "requirements": requirements.strip(),
+        "images": state.get("images", [])
+    }
 
-    return {"testcases": testcases}
+# 第二步：将需求逐条生成结构化测试用例
+async def generate_testcases(state: GraphState) -> GraphState:
+    # 用正则提取形如 1. xxx 的条目
+    raw_points = re.findall(r"\d+\.\s*(.+)", state["requirements"])
+    if not raw_points:
+        raise ValueError(f"未能识别需求点，请检查提取内容：\n{state['requirements']}")
 
+    all_testcases = []
+    for i, point in enumerate(raw_points, start=1):
+        prompt = f"""
+你是一个智能测试用例生成代理（Test Agent），根据以下功能需求和参考图片，生成一条结构化测试用例：
 
+需求点：
+{point}
+
+参考图片：
+{chr(10).join(state.get('images', []))}
+
+请使用以下 JSON 格式输出：
+{{
+  "标题": "测试用例标题，概括测试目标",
+  "前置条件": "执行前的准备条件",
+  "操作步骤": ["步骤1", "步骤2", ...],
+  "预期结果": ["步骤1的预期", "步骤2的预期", ...]
+}}
+
+要求：
+1. 步骤与预期结果一一对应；
+2. 内容完整，语义清晰；
+3. 输出必须是严格的 JSON 格式，不能包含解释、注释或 markdown；
+4. 仅输出 JSON 结构。
+"""
+        try:
+            response = await call_doubao_model(prompt)
+            testcase = json.loads(response)
+            all_testcases.append(testcase)
+        except Exception as e:
+            raise ValueError(f"第{i}条需求生成失败: {e}\n原始输出为:\n{response}")
+
+    return {
+        "testcases": all_testcases
+    }
+
+# 构建 LangGraph 工作流
 workflow = StateGraph(GraphState)
 workflow.add_node("extract_requirements", extract_requirements)
 workflow.add_node("generate_testcases", generate_testcases)

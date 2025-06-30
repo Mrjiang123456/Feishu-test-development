@@ -2,7 +2,7 @@ import os
 import httpx
 
 # 模型参数配置
-ARK_API_KEY = os.environ.get("ARK_API_KEY") or "fbddbe4a-8479-4866-8e6a-fff1ec1effc7"
+ARK_API_KEY = os.environ.get("ARK_API_KEY") or "82cb3741-9d83-46fe-aeee-faad19eaf765"
 ARK_MODEL_ID = "doubao-seed-1-6-250615"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 

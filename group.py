@@ -383,5 +383,7 @@ def main(ai_cases_data=None):
     # 返回评测报告结果
     return final_json_report
 
+# 确保这个模块被导入时不会自动执行评测
+# 只有在直接运行此脚本时才会执行
 if __name__ == "__main__":
     main()
