@@ -1,0 +1,484 @@
+{
+  "test_suite": "B端产品登录功能模块",
+  "test_cases": {
+    "functional_test_cases": [
+      {
+        "case_id": "TC-FUNC-LOGIN-001",
+        "title": "【正向-业务流程】验证有效用户成功登录",
+        "preconditions": "1. 系统存在状态为“正常”的用户账号（user: testuser01, pass: Password123!）。\n2. 用户已打开登录页。",
+        "steps": "1. 输入账号“testuser01”。\n2. 输入密码“Password123!”。\n3. 输入正确的图形验证码。\n4. 点击“登录”按钮。",
+        "expected_results": "1. 成功跳转到系统首页。\n2. 页面显示该用户的个人信息。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-002",
+        "title": "【正向-业务流程】验证首次登录用户强制修改密码",
+        "preconditions": "1. 系统存在状态为“首次登录”的用户账号。\n2. 用户已打开登录页。",
+        "steps": "1. 输入首次登录的账号和初始密码。\n2. 输入正确的图形验证码。\n3. 点击“登录”按钮。",
+        "expected_results": "1. 弹出“账号首次登录时需要重置初始密码!”提示框。\n2. 点击“确定”后，页面跳转至“修改初始密码”页。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-003",
+        "title": "【正向-交互】验证输入框清空按钮功能",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 在账号输入框输入“some text”。\n2. 点击输入框右侧出现的“x”清空按钮。",
+        "expected_results": "1. 输入框内容被清空。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-004",
+        "title": "【正向-交互】验证密码可见/不可见切换功能",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 在密码框输入“Password123!”。\n2. 鼠标按下“密码可见”图标不松开。\n3. 松开鼠标。",
+        "expected_results": "1. 按下时，密码显示为明文“Password123!”。\n2. 松开后，密码恢复为密文显示（••••••••）。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-005",
+        "title": "【正向-交互】验证图形验证码刷新功能",
+        "preconditions": "1. 用户已打开登录页，页面显示一个验证码（如ABCD）。",
+        "steps": "1. 点击图形验证码图片区域。",
+        "expected_results": "1. 图形验证码刷新，显示一个新的、不同于ABCD的验证码。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-006",
+        "title": "【正向-交互】验证Enter键触发登录",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 输入正确的账号、密码、验证码。\n2. 在验证码输入框内，按键盘上的“Enter”键。",
+        "expected_results": "1. 触发登录操作，页面成功跳转到系统首页。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-007",
+        "title": "【正向-交互】验证“找回密码”链接跳转",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 点击页面上的“找回密码”链接。",
+        "expected_results": "1. 页面成功跳转至“找回密码”页面。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-008",
+        "title": "【正向-逻辑】验证图形验证码输入不区分大小写",
+        "preconditions": "1. 页面显示的验证码为“AXZY”。\n2. 用户已打开登录页。",
+        "steps": "1. 输入正确的账号和密码。\n2. 在验证码输入框输入小写的“axzy”。\n3. 点击“登录”。",
+        "expected_results": "1. 登录成功。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-009",
+        "title": "【逆向-交互】验证必填项为空时登录按钮置灰",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 观察登录按钮状态。\n2. 仅输入账号，观察按钮。\n3. 输入账号和密码，观察按钮。",
+        "expected_results": "1. 在所有信息未完整填写前，“登录”按钮为灰色不可点击状态。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-010",
+        "title": "【逆向-校验】验证所有输入框为空的提示",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 不输入任何信息，直接点击“登录”按钮（若可点击）。",
+        "expected_results": "1. 页面提示“请输入登录账号”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-011",
+        "title": "【逆向-校验】验证密码为空的提示",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 输入账号和验证码，密码框留空，点击“登录”。",
+        "expected_results": "1. 页面提示“请输入登录密码”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-012",
+        "title": "【逆向-校验】验证验证码为空的提示",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 输入账号和密码，验证码框留空，点击“登录”。",
+        "expected_results": "1. 页面提示“请输入验证码”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-013",
+        "title": "【逆向-校验】验证输入不存在的账号",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 输入一个不存在的账号、任意密码和正确的验证码，点击“登录”。",
+        "expected_results": "1. 登录失败，提示“账号或密码错误”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-014",
+        "title": "【逆向-校验】验证输入错误的密码",
+        "preconditions": "1. 系统存在用户“testuser01”。\n2. 用户已打开登录页。",
+        "steps": "1. 输入账号“testuser01”、错误的密码和正确的验证码，点击“登录”。",
+        "expected_results": "1. 登录失败，提示“账号或密码错误”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-015",
+        "title": "【逆向-校验】验证输入错误的验证码",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 输入正确的账号和密码、错误的验证码，点击“登录”。",
+        "expected_results": "1. 登录失败，提示“请输入正确的验证码”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-016",
+        "title": "【逆向-状态】验证使用过期的图形验证码",
+        "preconditions": "1. 用户已打开登录页，记录当前验证码。",
+        "steps": "1. 等待61秒。\n2. 输入正确的账号和密码，输入61秒前记录的验证码，点击“登录”。",
+        "expected_results": "1. 登录失败，提示“验证码已失效”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-017",
+        "title": "【逆向-状态】验证刷新页面后使用旧验证码",
+        "preconditions": "1. 用户已打开登录页，记录当前验证码。",
+        "steps": "1. 刷新浏览器页面。\n2. 输入正确的账号和密码，输入刷新前的验证码，点击“登录”。",
+        "expected_results": "1. 登录失败，提示“请输入正确的验证码”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-018",
+        "title": "【逆向-边界】验证密码长度不符规则",
+        "preconditions": "1. 用户在任意需要输入密码的页面。",
+        "steps": "1. 输入少于8位或多于10位的密码，点击提交。",
+        "expected_results": "1. 提交失败，提示密码长度不符。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-019",
+        "title": "【逆向-健壮性】验证登录时网络中断",
+        "preconditions": "1. 用户已在登录页填好所有信息。",
+        "steps": "1. 断开网络连接。\n2. 点击“登录”按钮。",
+        "expected_results": "1. 页面给出友好提示，如“网络连接已断开，请检查网络”。"
+      },
+      {
+        "case_id": "TC-FUNC-LOGIN-020",
+        "title": "【逆向-健壮性】验证登录时后端服务异常",
+        "preconditions": "1. 通过Mock或工具使登录接口返回500错误。\n2. 用户已在登录页填好所有信息。",
+        "steps": "1. 点击“登录”按钮。",
+        "expected_results": "1. 页面给出通用错误提示，如“服务繁忙，请稍后重试”。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-001",
+        "title": "【正向-业务流程】验证修改初始密码完整流程",
+        "preconditions": "1. 已通过首次登录跳转到“修改初始密码”页。",
+        "steps": "1. 输入符合规则的新密码和确认密码。\n2. 获取并输入正确的短信验证码。\n3. 点击“提交”。",
+        "expected_results": "1. 提示“重置密码成功”。\n2. 页面跳转回登录页。\n3. 使用新密码可成功登录。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-002",
+        "title": "【正向-交互】验证获取短信验证码功能",
+        "preconditions": "1. 在需要短信验证码的页面。",
+        "steps": "1. 点击“获取验证码”按钮。",
+        "expected_results": "1. 按钮变为60秒倒计时状态，且不可点击。\n2. 手机成功收到6位数字验证码。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-003",
+        "title": "【正向-交互】验证修改密码页面的取消功能",
+        "preconditions": "1. 在“修改密码”或“修改初始密码”页面。",
+        "steps": "1. 点击“取消”按钮。",
+        "expected_results": "1. 页面返回至登录页或“我的”页面，未做任何密码修改。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-004",
+        "title": "【逆向-校验】验证两次输入密码不一致",
+        "preconditions": "1. 在需要确认密码的页面。",
+        "steps": "1. 输入新密码“NewPwd@2024”。\n2. 输入确认密码“DifferentPwd!”。\n3. 点击“提交”。",
+        "expected_results": "1. 提交失败，提示“两次输入的密码不一致”。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-005",
+        "title": "【逆向-校验】验证输入错误的短信验证码",
+        "preconditions": "1. 在需要短信验证码的页面。",
+        "steps": "1. 输入除正确验证码外的任意6位数字。\n2. 点击“提交”。",
+        "expected_results": "1. 提交失败，提示“验证码错误”。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-006",
+        "title": "【逆向-边界】验证新密码不满足强度规则（种类不足）",
+        "preconditions": "1. 在需要输入新密码的页面。",
+        "steps": "1. 输入不满足“两种类型”的密码，如“12345678”或“abcdefgh”。",
+        "expected_results": "1. 提交失败，提示密码不符合强度规则。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-007",
+        "title": "【正向-边界】验证新密码恰好满足强度规则（两种类型）",
+        "preconditions": "1. 在需要输入新密码的页面。",
+        "steps": "1. 输入恰好满足“两种类型”的密码，如“Pass1234”。",
+        "expected_results": "1. 密码规则校验通过。"
+      },
+      {
+        "case_id": "TC-FUNC-PWD-008",
+        "title": "【逆向-状态】验证使用过期的短信验证码",
+        "preconditions": "1. 已获取短信验证码。",
+        "steps": "1. 等待61秒。\n2. 输入该已过期的验证码，点击“提交”。",
+        "expected_results": "1. 提交失败，提示“验证码已失效”。"
+      },
+      {
+        "case_id": "TC-FUNC-FORGOT-001",
+        "title": "【正向-业务流程】验证找回密码完整流程",
+        "preconditions": "1. 系统存在用户，绑定了手机号。\n2. 用户在登录页。",
+        "steps": "1. 点击“找回密码”链接。\n2. 走完整个找回密码流程。",
+        "expected_results": "1. 成功重置密码并能用新密码登录。"
+      },
+      {
+        "case_id": "TC-FUNC-FORGOT-002",
+        "title": "【逆向-校验】验证为不存在的账号找回密码",
+        "preconditions": "1. 用户在“找回密码”页。",
+        "steps": "1. 输入一个不存在的账号。\n2. 点击“获取验证码”或“提交”。",
+        "expected_results": "1. 操作失败，提示“账号不存在”。"
+      },
+      {
+        "case_id": "TC-FUNC-CHANGE-001",
+        "title": "【正向-业务流程】验证登录后修改密码完整流程",
+        "preconditions": "1. 用户已登录系统。\n2. 用户进入“修改密码”页。",
+        "steps": "1. 输入正确的原密码、符合规则的新密码。\n2. 获取并输入正确的短信验证码。\n3. 点击“提交”。",
+        "expected_results": "1. 提示修改成功。\n2. 当前登录状态失效，被强制跳转到登录页。"
+      },
+      {
+        "case_id": "TC-FUNC-CHANGE-002",
+        "title": "【逆向-校验】验证输入错误的原密码",
+        "preconditions": "1. 用户在“修改密码”页。",
+        "steps": "1. 输入错误的原密码，其他信息正确。\n2. 点击“提交”。",
+        "expected_results": "1. 提交失败，提示“原密码不正确”。"
+      },
+      {
+        "case_id": "TC-FUNC-CHANGE-003",
+        "title": "【逆向-校验】验证新密码与原密码相同",
+        "preconditions": "1. 用户在“修改密码”页。",
+        "steps": "1. 在“新密码”框中输入与原密码相同的密码。\n2. 点击“提交”。",
+        "expected_results": "1. 提交失败，提示“新密码不能与原密码相同”。"
+      },
+      {
+        "case_id": "TC-FUNC-MULTI-001",
+        "title": "【正向-业务场景】验证多租户登录",
+        "preconditions": "1. 项目经理账号有权访问商户A和商户B。\n2. 登录页有“商户ID”输入框。",
+        "steps": "1. 输入项目经理账号密码。\n2. 输入商户A的ID。\n3. 点击“登录”。",
+        "expected_results": "1. 成功登录，并进入商户A的管理后台。"
+      },
+      {
+        "case_id": "TC-FUNC-MULTI-002",
+        "title": "【逆向-业务场景】验证登录无权限的商户",
+        "preconditions": "1. 项目经理账号无权访问商户C。\n2. 登录页有“商户ID”输入框。",
+        "steps": "1. 输入项目经理账号密码。\n2. 输入商户C的ID。\n3. 点击“登录”。",
+        "expected_results": "1. 登录失败，提示“无权访问该商户”。"
+      }
+    ],
+    "usability_test_cases": [
+      {
+        "case_id": "TC-USAB-UI-001",
+        "title": "验证错误提示信息清晰友好",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 故意输错密码并点击登录。",
+        "expected_results": "1. 错误提示信息明确指出问题所在（如“账号或密码错误”），而不是笼统的“失败”。"
+      },
+      {
+        "case_id": "TC-USAB-UI-002",
+        "title": "验证Tab键焦点切换顺序",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 连续按`Tab`键。",
+        "expected_results": "1. 焦点按照从上到下、从左到右的逻辑顺序在可交互元素间移动。"
+      },
+      {
+        "case_id": "TC-USAB-UI-003",
+        "title": "验证密码支持复制粘贴",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 在别处复制一段文本。\n2. 在密码框中右键选择“粘贴”或按`Ctrl+V`。",
+        "expected_results": "1. 文本被成功粘贴到密码框中。"
+      },
+      {
+        "case_id": "TC-USAB-A11Y-001",
+        "title": "验证全键盘可操作性",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 仅使用键盘（Tab, Shift+Tab, Enter, Space）完成一次完整的登录操作。",
+        "expected_results": "1. 能够成功完成登录。"
+      },
+      {
+        "case_id": "TC-USAB-NET-001",
+        "title": "验证弱网环境下的加载提示",
+        "preconditions": "1. 使用浏览器开发者工具模拟“Slow 3G”网络。\n2. 用户在登录页。",
+        "steps": "1. 点击“登录”按钮。",
+        "expected_results": "1. 在请求返回前，页面有明确的加载中（loading）提示，且按钮不可重复点击。"
+      }
+    ],
+    "compatibility_test_cases": [
+      {
+        "case_id": "TC-COMP-BROWSER-001",
+        "title": "验证在Chrome浏览器下功能正常",
+        "preconditions": "1. 浏览器：Chrome (最新版)。",
+        "steps": "1. 执行一次完整的登录流程。",
+        "expected_results": "1. 功能正常，页面显示无误。"
+      },
+      {
+        "case_id": "TC-COMP-BROWSER-002",
+        "title": "验证在Firefox浏览器下功能正常",
+        "preconditions": "1. 浏览器：Firefox (最新版)。",
+        "steps": "1. 执行一次完整的登录流程。",
+        "expected_results": "1. 功能正常，页面显示无误。"
+      },
+      {
+        "case_id": "TC-COMP-BROWSER-003",
+        "title": "验证在Edge浏览器下功能正常",
+        "preconditions": "1. 浏览器：Edge (最新版)。",
+        "steps": "1. 执行一次完整的登录流程。",
+        "expected_results": "1. 功能正常，页面显示无误。"
+      },
+      {
+        "case_id": "TC-COMP-OS-001",
+        "title": "验证在Windows 11系统下功能正常",
+        "preconditions": "1. 操作系统：Windows 11。",
+        "steps": "1. 使用任一支持的浏览器执行登录流程。",
+        "expected_results": "1. 功能正常，页面显示无误。"
+      },
+      {
+        "case_id": "TC-COMP-OS-002",
+        "title": "验证在macOS系统下功能正常",
+        "preconditions": "1. 操作系统：macOS (最新版)。",
+        "steps": "1. 使用任一支持的浏览器执行登录流程。",
+        "expected_results": "1. 功能正常，页面显示无误。"
+      },
+      {
+        "case_id": "TC-COMP-RES-001",
+        "title": "验证在1366x768分辨率下布局正常",
+        "preconditions": "1. 屏幕分辨率设置为1366x768。",
+        "steps": "1. 打开登录页面。",
+        "expected_results": "1. 页面布局正常，无元素重叠或截断。"
+      },
+      {
+        "case_id": "TC-COMP-SET-001",
+        "title": "验证浏览器缩放时的布局表现",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 使用`Ctrl +` 和 `Ctrl -` 将页面缩放至90%和150%。",
+        "expected_results": "1. 页面布局基本保持可用，无严重错乱。"
+      },
+      {
+        "case_id": "TC-COMP-SET-002",
+        "title": "验证禁用JavaScript时的页面表现",
+        "preconditions": "1. 在浏览器设置中禁用JavaScript。",
+        "steps": "1. 访问登录页面。",
+        "expected_results": "1. 页面显示友好提示，建议用户开启JavaScript。"
+      },
+      {
+        "case_id": "TC-COMP-RESP-001",
+        "title": "验证在平板设备尺寸下布局可用性",
+        "preconditions": "1. 使用浏览器开发者工具模拟iPad视图。",
+        "steps": "1. 打开登录页面。",
+        "expected_results": "1. 页面元素可完整显示和操作，保证基本可用性。"
+      }
+    ],
+    "security_test_cases": [
+      {
+        "case_id": "TC-SEC-COMM-001",
+        "title": "验证所有通信使用HTTPS",
+        "preconditions": "1. 用户已打开登录页。",
+        "steps": "1. 查看浏览器地址栏。",
+        "expected_results": "1. 地址以`https://`开头，并显示安全锁标志。"
+      },
+      {
+        "case_id": "TC-SEC-BFORCE-001",
+        "title": "验证密码错误次数限制与账号锁定",
+        "preconditions": "1. 系统存在用户“testuser01”。",
+        "steps": "1. 连续5次使用错误密码尝试登录该用户。\n2. 第6次使用正确密码尝试登录。",
+        "expected_results": "1. 第5次失败后，提示“账号已被锁定，请15分钟后再试”。\n2. 第6次尝试登录失败，提示依然为账号锁定。"
+      },
+      {
+        "case_id": "TC-SEC-BFORCE-002",
+        "title": "验证获取短信验证码频率限制",
+        "preconditions": "1. 在需要短信验证码的页面。",
+        "steps": "1. 点击“获取验证码”。\n2. 在60秒倒计时内，再次尝试点击该按钮。",
+        "expected_results": "1. 倒计时期间，按钮为灰色不可点击，无法重复发送请求。"
+      },
+      {
+        "case_id": "TC-SEC-DATA-001",
+        "title": "验证密码在传输过程中非明文",
+        "preconditions": "1. 打开浏览器开发者工具的网络面板。\n2. 用户在登录页。",
+        "steps": "1. 输入账号密码，点击“登录”。\n2. 查看登录请求的Payload或表单数据。",
+        "expected_results": "1. 密码字段在传输前已被加密，或通过HTTPS传输的请求体中不可见明文。"
+      },
+      {
+        "case_id": "TC-SEC-DATA-002",
+        "title": "验证前端不存储敏感信息",
+        "preconditions": "1. 用户在登录页输入密码。",
+        "steps": "1. 查看浏览器的Cookie, Local Storage, Session Storage。",
+        "expected_results": "1. 找不到任何明文或可轻易解密的密码信息。"
+      },
+      {
+        "case_id": "TC-SEC-SESS-001",
+        "title": "验证退出登录后会话立即失效",
+        "preconditions": "1. 用户已登录。\n2. 记录当前页面URL。",
+        "steps": "1. 点击“退出登录”。\n2. 点击浏览器后退按钮。",
+        "expected_results": "1. 页面跳转回登录页，且后退无法返回之前已登录的页面。"
+      },
+      {
+        "case_id": "TC-SEC-SESS-002",
+        "title": "验证会话超时后自动登出",
+        "preconditions": "1. 用户已登录。\n2. 系统设置会话超时时间为30分钟。",
+        "steps": "1. 保持页面不活动31分钟。\n2. 尝试点击页面上的任何需要授权的操作。",
+        "expected_results": "1. 操作失败，页面自动跳转到登录页，并提示“登录超时，请重新登录”。"
+      },
+      {
+        "case_id": "TC-SEC-SESS-003",
+        "title": "验证并发会话管理策略",
+        "preconditions": "1. 用户A在浏览器A中登录。\n2. 系统策略为“踢掉前一个会话”。",
+        "steps": "1. 在浏览器B中，使用同一用户A的凭据登录。",
+        "expected_results": "1. 浏览器B登录成功。\n2. 在浏览器A中进行任何操作，会被强制登出并跳转到登录页。"
+      },
+      {
+        "case_id": "TC-SEC-INJECT-001",
+        "title": "验证SQL注入防护",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 在账号输入框输入 `' or 1=1--`，点击登录。",
+        "expected_results": "1. 登录失败，无数据库错误暴露给前端，返回通用错误提示。"
+      },
+      {
+        "case_id": "TC-SEC-INJECT-002",
+        "title": "验证XSS跨站脚本攻击防护",
+        "preconditions": "1. 用户在登录页。",
+        "steps": "1. 在账号输入框输入 `<script>alert('xss')</script>`，点击登录。",
+        "expected_results": "1. 登录失败，浏览器没有弹出alert窗口，输入被正确转义。"
+      },
+      {
+        "case_id": "TC-SEC-VCODE-001",
+        "title": "验证短信验证码的一次性有效原则",
+        "preconditions": "1. 用户在“找回密码”页，已收到短信验证码。",
+        "steps": "1. 使用该验证码成功提交一次。\n2. 返回上一步，再次尝试使用同一个验证码提交。",
+        "expected_results": "1. 第二次提交失败，提示“验证码错误”或“验证码已失效”。"
+      },
+      {
+        "case_id": "TC-SEC-LEAK-001",
+        "title": "验证登录失败提示信息的模糊性",
+        "preconditions": "1. 系统存在用户“testuser01”。",
+        "steps": "1. 场景一：输入“testuser01”和错误密码。\n2. 场景二：输入不存在的账号“nonexistentuser”。",
+        "expected_results": "1. 两种场景下返回的错误提示完全相同，均为“账号或密码错误”。"
+      },
+      {
+        "case_id": "TC-SEC-LEAK-002",
+        "title": "验证前端代码不泄露敏感信息",
+        "preconditions": "1. 打开浏览器开发者工具。",
+        "steps": "1. 查看页面加载的JS源文件。",
+        "expected_results": "1. 源代码中不应包含硬编码的API密钥、加密盐值等敏感信息。"
+      }
+    ],
+    "performance_test_cases": [
+      {
+        "case_id": "TC-PERF-FRONT-001",
+        "title": "验证登录页首次内容绘制时间（FCP）",
+        "preconditions": "1. 使用Lighthouse或开发者工具。\n2. 网络条件正常。",
+        "steps": "1. 清空缓存后加载登录页。",
+        "expected_results": "1. FCP时间 < 2秒。"
+      },
+      {
+        "case_id": "TC-PERF-FRONT-002",
+        "title": "验证登录页综合性能得分",
+        "preconditions": "1. 使用Lighthouse工具。",
+        "steps": "1. 对登录页面运行一次性能分析。",
+        "expected_results": "1. Lighthouse性能得分 > 80分。"
+      },
+      {
+        "case_id": "TC-PERF-BACK-001",
+        "title": "验证登录API单用户响应时间",
+        "preconditions": "1. 使用JMeter或类似工具。",
+        "steps": "1. 对登录接口发送单个请求。",
+        "expected_results": "1. 接口响应时间 < 500ms。"
+      },
+      {
+        "case_id": "TC-PERF-SMS-001",
+        "title": "验证短信网关响应及送达时间",
+        "preconditions": "1. 在“找回密码”页。",
+        "steps": "1. 点击“获取验证码”，同时开始计时。",
+        "expected_results": "1. 10秒内成功收到短信。"
+      },
+      {
+        "case_id": "TC-PERF-LOAD-001",
+        "title": "验证并发登录场景下的系统稳定性",
+        "preconditions": "1. 使用JMeter配置100个并发用户。\n2. 准备100个测试账号。",
+        "steps": "1. 在10秒内启动所有用户，持续发起登录请求5分钟。",
+        "expected_results": "1. 平均响应时间≤500ms。\n2. 错误率<1%。\n3. 服务器CPU和内存使用率<75%。"
+      }
+    ]
+  }
+}
