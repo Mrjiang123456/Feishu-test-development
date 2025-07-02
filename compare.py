@@ -38,8 +38,8 @@ GOLDEN_CASES_FILE = "goldenset/golden_cases.json"  # 从goldenset文件夹读取
 current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 REPORT_FILE = f"output_evaluation/evaluation_markdown/evaluation_report-{current_time}.md"  # 输出到evaluation_markdown文件夹
 REPORT_JSON_FILE = f"output_evaluation/evaluation_json/evaluation_report-{current_time}.json"  # 输出到evaluation_json文件夹
-FORMATTED_AI_CASES_FILE = f"testset/formatted_test_cases-{current_time}.json"  # 保存在testset文件夹
-FORMATTED_GOLDEN_CASES_FILE = f"goldenset/formatted_golden_cases-{current_time}.json"  # 保存在goldenset文件夹
+FORMATTED_AI_CASES_FILE = "testset/formatted_test_cases.json"  # 保存在testset文件夹
+FORMATTED_GOLDEN_CASES_FILE = "goldenset/formatted_golden_cases.json"  # 保存在goldenset文件夹
 LOG_FILE = "log/evaluation_log.txt"  # 日志文件保存在log文件夹
 
 # --- 优化配置 ---
@@ -53,68 +53,72 @@ MAX_TOKEN_SIZE = 8000  # LLM处理的最大文本长度
 start_time = None
 step_times = {}
 
+
 def log(message, step=None, important=False):
     """记录日志，包含时间信息"""
     global start_time, step_times
-    
+
     current_time = time.time()
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # 如果是首次调用，初始化开始时间
     if start_time is None:
         start_time = current_time
-    
+
     # 计算从开始到现在的总时间
     total_elapsed = current_time - start_time
-    
+
     # 构建日志信息，包含模型名称
     log_message = f"[{timestamp}] [模型: {MODEL_NAME}] [总计: {total_elapsed:.1f}s] {message}"
-    
+
     # 只打印重要日志
     if important:
         print(log_message)
-    
+
     # 确保日志目录存在
     os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-    
+
     # 写入日志文件（追加模式）
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(log_message + "\n")
+
 
 def start_logging():
     """开始日志记录"""
     global start_time
     start_time = time.time()
-    
+
     # 创建分隔符，使用追加模式
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         f.write(f"\n=== 评测日志开始 [{MODEL_NAME}] {timestamp} ===\n")
-    
+
     log("日志记录开始", important=True)
+
 
 def end_logging():
     """结束日志记录，显示总时间"""
     if start_time:
         total_time = time.time() - start_time
         log(f"评测完成，总执行时间: {total_time:.1f}秒", important=True)
-        
+
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"=== 评测日志结束 [{MODEL_NAME}] {timestamp}，总执行时间: {total_time:.1f}秒 ===\n\n")
     else:
         log("日志结束，但未找到开始时间记录")
 
+
 # --- LLM 通信模块 ---
 async def async_call_llm(
-    session: aiohttp.ClientSession,
-    prompt: str, 
-    system_prompt: str = "You are a helpful assistant.",
-    retries: int = 3
+        session: aiohttp.ClientSession,
+        prompt: str,
+        system_prompt: str = "You are a helpful assistant.",
+        retries: int = 3
 ) -> Optional[Dict]:
     """
     异步调用LLM API
-    
+
     :param session: aiohttp会话
     :param prompt: 用户输入的提示
     :param system_prompt: 系统角色提示
@@ -122,16 +126,16 @@ async def async_call_llm(
     :return: 解析后的JSON对象，失败则返回None
     """
     log(f"调用LLM: prompt长度={len(prompt)}")
-    
+
     if not VOLC_BEARER_TOKEN:
         log("错误：VOLC_BEARER_TOKEN未设置", important=True)
         return None
-        
+
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {VOLC_BEARER_TOKEN}"
     }
-    
+
     payload = {
         "model": MODEL_NAME,
         "messages": [
@@ -139,63 +143,64 @@ async def async_call_llm(
             {"role": "user", "content": prompt}
         ]
     }
-    
+
     for attempt in range(retries):
         try:
             call_start = time.time()
             async with session.post(
-                API_URL, 
-                headers=headers, 
-                json=payload, 
-                timeout=120
+                    API_URL,
+                    headers=headers,
+                    json=payload,
+                    timeout=120
             ) as response:
                 if response.status != 200:
-                    log(f"LLM API调用失败，状态码: {response.status}，重试中 ({attempt+1}/{retries})", important=True)
+                    log(f"LLM API调用失败，状态码: {response.status}，重试中 ({attempt + 1}/{retries})", important=True)
                     await asyncio.sleep(1 * (attempt + 1))  # 指数退避
                     continue
-                    
+
                 response_json = await response.json()
                 content = response_json['choices'][0]['message']['content']
-                
+
                 # 从Markdown代码块提取JSON
                 if "```json" in content:
                     content = content.split("```json")[1].split("```")[0].strip()
                 elif "```" in content:
                     content = content.split("```")[1].split("```")[0].strip()
-                
+
                 call_time = time.time() - call_start
                 log(f"LLM调用成功，耗时={call_time:.1f}秒")
-                
+
                 try:
                     return json.loads(content)
                 except json.JSONDecodeError:
                     # 如果不是有效的JSON，直接返回文本内容
                     return {"text": content}
-                
+
         except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-            log(f"请求异常 (尝试 {attempt+1}/{retries}): {e}")
+            log(f"请求异常 (尝试 {attempt + 1}/{retries}): {e}")
             await asyncio.sleep(1 * (attempt + 1))
         except (KeyError, IndexError) as e:
             log(f"解析响应失败: {e}")
             return None
-    
+
     log(f"LLM API调用失败，已重试{retries}次", important=True)
     return None
+
 
 def extract_sample_cases(json_data, max_cases=None):
     """
     从JSON数据中提取样本测试用例
-    
+
     :param json_data: 原始JSON数据
     :param max_cases: 最大提取的测试用例数量，None表示不限制
     :return: 样本测试用例
     """
     try:
         data = json.loads(json_data)
-        
+
         # 提取所有测试用例
         all_cases = []
-        
+
         # 处理test_cases.json格式
         if isinstance(data, dict) and "testcases" in data:
             testcases = data["testcases"]
@@ -203,7 +208,7 @@ def extract_sample_cases(json_data, max_cases=None):
                 all_cases = testcases["test_cases"] if max_cases is None else testcases["test_cases"][:max_cases]
             elif isinstance(testcases, list):
                 all_cases = testcases if max_cases is None else testcases[:max_cases]
-        
+
         # 处理golden_cases.json格式
         elif isinstance(data, dict) and "test_cases" in data:
             test_cases = data["test_cases"]
@@ -214,47 +219,48 @@ def extract_sample_cases(json_data, max_cases=None):
                     if max_cases is not None and len(all_cases) >= max_cases:
                         all_cases = all_cases[:max_cases]
                         break
-        
+
         # 如果找不到测试用例，尝试从顶层提取
         if not all_cases and isinstance(data, list):
             all_cases = data if max_cases is None else data[:max_cases]
-        
+
         # 构建样本数据
         sample_data = {
             "success": True,
             "testcases": all_cases
         }
-        
+
         return json.dumps(sample_data, ensure_ascii=False)
     except Exception as e:
         log(f"提取样本测试用例失败: {e}")
         return json_data[:MAX_TOKEN_SIZE]  # 返回原始数据的一部分
 
+
 # --- 格式化测试用例 ---
 async def format_test_cases(session: aiohttp.ClientSession, file_content, file_type="AI"):
     """
     调用LLM格式化测试用例
-    
+
     :param session: aiohttp会话
     :param file_content: 文件内容
     :param file_type: 文件类型，"AI"或"Golden"
     :return: 格式化后的测试用例
     """
     log(f"开始格式化{file_type}测试用例", important=True)
-    
+
     try:
         # 先尝试解析原始JSON数据
         data = json.loads(file_content)
         log(f"{file_type}测试用例JSON解析成功")
-        
+
         # 如果是Golden测试用例，直接返回原始数据
         if file_type == "Golden":
             log(f"{file_type}测试用例无需格式化，保持原格式", important=True)
             return data
-        
+
         # 提取所有测试用例，不限制数量
         all_test_cases = []
-        
+
         # 从原始数据中提取测试用例
         if isinstance(data, dict):
             if "testcases" in data:
@@ -275,41 +281,41 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
                         all_test_cases.extend(cases)
         elif isinstance(data, list):
             all_test_cases = data
-            
+
         log(f"从原始数据中提取到{len(all_test_cases)}个测试用例", important=True)
-        
+
         # 由于LLM可能处理不了大量测试用例，先自行处理所有测试用例
         formatted_test_cases = []
         for i, case in enumerate(all_test_cases):
             # 确保case_id字段
-            case_id = case.get("case_id", f"TC-FUNC-{i+1:03d}")
+            case_id = case.get("case_id", f"TC-FUNC-{i + 1:03d}")
             if not case_id.startswith("TC-"):
                 case_id = f"TC-FUNC-{case_id}"
-            
+
             # 转换步骤和预期结果为字符串
             steps = case.get("steps", [])
             if isinstance(steps, list):
                 steps = "\n".join(steps)
-            
+
             expected_results = case.get("expected_results", [])
             if isinstance(expected_results, list):
                 expected_results = "\n".join(expected_results)
-            
+
             # 转换前置条件为字符串
             preconditions = case.get("preconditions", "") or case.get("前置条件", "")
             if isinstance(preconditions, list):
                 preconditions = "\n".join(preconditions)
-            
+
             # 构建格式化后的测试用例
             formatted_case = {
                 "case_id": case_id,
-                "title": case.get("title", "") or case.get("标题", f"测试用例{i+1}"),
+                "title": case.get("title", "") or case.get("标题", f"测试用例{i + 1}"),
                 "preconditions": preconditions,
                 "steps": steps,
                 "expected_results": expected_results
             }
             formatted_test_cases.append(formatted_case)
-        
+
         # 构建最终格式
         final_data = {
             "test_suite": "B端产品登录功能模块",
@@ -317,10 +323,10 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
                 "functional_test_cases": formatted_test_cases
             }
         }
-        
+
         log(f"成功格式化{len(formatted_test_cases)}个{file_type}测试用例", important=True)
         return final_data
-        
+
     except json.JSONDecodeError as e:
         log(f"解析{file_type}原始JSON数据失败: {e}", important=True)
         return None
@@ -330,12 +336,13 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
         log(f"错误详情: {traceback.format_exc()}")
         return None
 
+
 def find_duplicate_test_cases(test_cases):
     """
-    查找重复的测试用例
-    
+    查找重复的测试用例，并提供合并建议
+
     :param test_cases: 测试用例列表
-    :return: 重复的测试用例信息和重复率
+    :return: 重复的测试用例信息、重复率和合并建议
     """
     # 存储标题、步骤和预期结果的哈希值
     title_hash = {}
@@ -346,31 +353,78 @@ def find_duplicate_test_cases(test_cases):
         "duplicate_rate": 0.0,
         "title_duplicates": [],
         "steps_duplicates": [],
-        "mixed_duplicates": []  # 步骤和预期结果高度相似但标题不同的测试用例
+        "mixed_duplicates": [],  # 步骤和预期结果高度相似但标题不同的测试用例
+        "merge_suggestions": []  # 新增：测试用例合并建议
     }
-    
+
     total_cases = len(test_cases)
     if total_cases <= 1:
         return duplicate_info
-    
+
     # 查找标题重复的测试用例
     title_counter = Counter([case.get("title", "") for case in test_cases])
     for title, count in title_counter.items():
         if count > 1 and title:
-            duplicate_info["title_duplicates"].append({"title": title, "count": count})
-    
+            # 查找具有相同标题的测试用例
+            same_title_cases = [case for case in test_cases if case.get("title", "") == title]
+            case_ids = [case.get("case_id", "unknown") for case in same_title_cases]
+
+            duplicate_info["title_duplicates"].append({
+                "title": title,
+                "count": count,
+                "case_ids": case_ids
+            })
+
+            # 为标题重复的测试用例生成合并建议
+            if count > 1:
+                # 提取所有相同标题测试用例的步骤和预期结果
+                all_steps = []
+                all_expected_results = []
+
+                for case in same_title_cases:
+                    steps = case.get("steps", "")
+                    if isinstance(steps, list):
+                        all_steps.extend(steps)
+                    elif steps:
+                        all_steps.append(steps)
+
+                    expected = case.get("expected_results", "")
+                    if isinstance(expected, list):
+                        all_expected_results.extend(expected)
+                    elif expected:
+                        all_expected_results.append(expected)
+
+                # 去重
+                unique_steps = list(dict.fromkeys([step.strip() for step in all_steps if step.strip()]))
+                unique_expected = list(
+                    dict.fromkeys([result.strip() for result in all_expected_results if result.strip()]))
+
+                # 生成合并建议
+                duplicate_info["merge_suggestions"].append({
+                    "type": "title_duplicate",
+                    "title": title,
+                    "case_ids": case_ids,
+                    "merged_case": {
+                        "title": title,
+                        "case_id": f"MERGED-{case_ids[0]}",
+                        "preconditions": same_title_cases[0].get("preconditions", ""),
+                        "steps": unique_steps,
+                        "expected_results": unique_expected
+                    }
+                })
+
     # 查找步骤或预期结果高度相似的测试用例
     for i, case in enumerate(test_cases):
         case_id = case.get("case_id", str(i))
         title = case.get("title", "")
-        
+
         # 处理步骤
         steps = case.get("steps", "")
         if steps:
             # 如果是列表，转换为字符串
             if isinstance(steps, list):
                 steps = "\n".join(steps)
-            
+
             # 计算步骤的哈希值
             for existing_steps, existing_ids in steps_hash.items():
                 # 使用序列匹配算法比较相似度
@@ -380,14 +434,14 @@ def find_duplicate_test_cases(test_cases):
                     break
             else:
                 steps_hash[steps] = [(case_id, title)]
-        
+
         # 处理预期结果
         expected_results = case.get("expected_results", "")
         if expected_results:
             # 如果是列表，转换为字符串
             if isinstance(expected_results, list):
                 expected_results = "\n".join(expected_results)
-            
+
             # 计算预期结果的哈希值
             for existing_results, existing_ids in expected_results_hash.items():
                 # 使用序列匹配算法比较相似度
@@ -397,59 +451,110 @@ def find_duplicate_test_cases(test_cases):
                     break
             else:
                 expected_results_hash[expected_results] = [(case_id, title)]
-    
-    # 统计步骤重复的测试用例
+
+    # 统计步骤重复的测试用例并生成合并建议
     for steps, ids in steps_hash.items():
         if len(ids) > 1:
+            case_ids = [id[0] for id in ids]
+            titles = [id[1] for id in ids]
+
             duplicate_info["steps_duplicates"].append({
                 "count": len(ids),
-                "case_ids": [id[0] for id in ids],
-                "titles": [id[1] for id in ids]
+                "case_ids": case_ids,
+                "titles": titles
             })
-    
+
+            # 查找具有相似步骤的测试用例详情
+            similar_cases = []
+            for case_id in case_ids:
+                for case in test_cases:
+                    if case.get("case_id", "") == case_id:
+                        similar_cases.append(case)
+                        break
+
+            if similar_cases:
+                # 为步骤相似的测试用例生成合并建议
+                # 合并标题：使用最长或最具描述性的标题
+                titles_sorted = sorted(titles, key=len, reverse=True)
+                merged_title = titles_sorted[0]
+
+                # 合并预期结果
+                all_expected_results = []
+                for case in similar_cases:
+                    expected = case.get("expected_results", "")
+                    if isinstance(expected, list):
+                        all_expected_results.extend(expected)
+                    elif expected:
+                        all_expected_results.append(expected)
+
+                # 去重
+                unique_expected = list(
+                    dict.fromkeys([result.strip() for result in all_expected_results if result.strip()]))
+
+                # 生成合并建议
+                duplicate_info["merge_suggestions"].append({
+                    "type": "steps_duplicate",
+                    "case_ids": case_ids,
+                    "titles": titles,
+                    "merged_case": {
+                        "title": merged_title,
+                        "case_id": f"MERGED-STEPS-{case_ids[0]}",
+                        "preconditions": similar_cases[0].get("preconditions", ""),
+                        "steps": similar_cases[0].get("steps", ""),  # 使用相似的步骤
+                        "expected_results": unique_expected
+                    }
+                })
+
     # 计算重复测试用例数量和比率
     duplicate_count = len(duplicate_info["title_duplicates"]) + len(duplicate_info["steps_duplicates"])
     duplicate_info["duplicate_count"] = duplicate_count
     duplicate_info["duplicate_rate"] = round(duplicate_count / total_cases * 100, 2) if total_cases > 0 else 0
-    
+
     return duplicate_info
+
 
 async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_cases):
     """
     评测测试用例质量
-    
+
     :param session: aiohttp会话
     :param ai_cases: AI生成的测试用例
     :param golden_cases: 黄金标准测试用例
     :return: 评测结果
     """
     log("开始测试用例评测", important=True)
-    
+
     # 获取所有测试用例
     ai_testcases = []
     golden_testcases = []
-    
+
     # 提取AI测试用例
     if "test_cases" in ai_cases and isinstance(ai_cases["test_cases"], dict):
         # 新格式
         for category, cases in ai_cases["test_cases"].items():
             ai_testcases.extend(cases)
-    
+
     # 提取黄金标准测试用例
     if "test_cases" in golden_cases and isinstance(golden_cases["test_cases"], dict):
         # 新格式
         for category, cases in golden_cases["test_cases"].items():
             golden_testcases.extend(cases)
-    
+
     log(f"AI测试用例数量: {len(ai_testcases)}, 黄金标准测试用例数量: {len(golden_testcases)}", important=True)
-    
+
     # 检查重复的测试用例
     ai_duplicate_info = find_duplicate_test_cases(ai_testcases)
     golden_duplicate_info = find_duplicate_test_cases(golden_testcases)
-    
-    log(f"AI测试用例重复率: {ai_duplicate_info['duplicate_rate']}% ({ai_duplicate_info['duplicate_count']}个)", important=True)
-    log(f"黄金标准测试用例重复率: {golden_duplicate_info['duplicate_rate']}% ({golden_duplicate_info['duplicate_count']}个)", important=True)
-    
+
+    log(f"AI测试用例重复率: {ai_duplicate_info['duplicate_rate']}% ({ai_duplicate_info['duplicate_count']}个)",
+        important=True)
+    log(f"黄金标准测试用例重复率: {golden_duplicate_info['duplicate_rate']}% ({golden_duplicate_info['duplicate_count']}个)",
+        important=True)
+
+    # 提取合并建议
+    merge_suggestions_count = len(ai_duplicate_info.get("merge_suggestions", []))
+    log(f"生成了 {merge_suggestions_count} 条AI测试用例合并建议", important=True)
+
     # 构建评测提示
     duplicate_info_text = f"""
 # 测试用例重复情况
@@ -458,6 +563,7 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
 - 重复测试用例数量: {ai_duplicate_info['duplicate_count']}个
 - 标题重复的测试用例数量: {len(ai_duplicate_info['title_duplicates'])}个
 - 步骤高度相似的测试用例数量: {len(ai_duplicate_info['steps_duplicates'])}个
+- 合并建议数量: {merge_suggestions_count}个
 
 ## 黄金标准测试用例重复情况
 - 重复率: {golden_duplicate_info['duplicate_rate']}%
@@ -467,7 +573,36 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
 
 如果AI测试用例的重复率明显高于黄金标准，请在改进建议中提出减少重复测试用例的建议。
 """
-    
+
+    # 如果有合并建议，添加到提示中
+    if merge_suggestions_count > 0:
+        duplicate_info_text += "\n## AI测试用例合并建议\n"
+        for i, suggestion in enumerate(ai_duplicate_info.get("merge_suggestions", [])):
+            suggestion_type = "标题重复" if suggestion["type"] == "title_duplicate" else "步骤相似"
+            case_ids = ", ".join(suggestion["case_ids"][:3])
+            if len(suggestion["case_ids"]) > 3:
+                case_ids += f" 等{len(suggestion['case_ids'])}个用例"
+
+            merged_case = suggestion["merged_case"]
+            duplicate_info_text += f"\n### 合并建议 {i + 1}（{suggestion_type}）\n"
+            duplicate_info_text += f"- 涉及用例: {case_ids}\n"
+            duplicate_info_text += f"- 合并后标题: {merged_case['title']}\n"
+
+            # 添加步骤和预期结果摘要
+            steps = merged_case.get("steps", "")
+            if isinstance(steps, list) and len(steps) > 0:
+                steps_preview = steps[0]
+                if len(steps) > 1:
+                    steps_preview += f" ... 等{len(steps)}个步骤"
+                duplicate_info_text += f"- 合并后步骤: {steps_preview}\n"
+
+            expected = merged_case.get("expected_results", "")
+            if isinstance(expected, list) and len(expected) > 0:
+                expected_preview = expected[0]
+                if len(expected) > 1:
+                    expected_preview += f" ... 等{len(expected)}个预期结果"
+                duplicate_info_text += f"- 合并后预期结果: {expected_preview}\n"
+
     prompt = f"""
 # 任务
 评估AI生成的测试用例与黄金标准测试用例的质量对比。
@@ -502,7 +637,7 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
 {{
   "evaluation_summary": {{
     "overall_score": "分数（1-5之间的一位小数）",
-    "final_suggestion": "如何改进测试用例生成的建议，如有较高的重复率，请提出降低重复的建议"
+    "final_suggestion": "如何改进测试用例生成的建议，如有较高的重复率，请提出降低重复的建议，并参考我提供的具体合并建议"
   }},
   "detailed_report": {{
     "format_compliance": {{
@@ -549,33 +684,39 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
     "security_economy": {{
       "score": "安全与经济性得分（1-5之间的一位小数）",
       "reason": "得分理由，如有较高的重复率，请在此处提及冗余率"
+    }},
+    "duplicate_analysis": {{
+      "score": "测试用例重复分析得分（1-5之间的一位小数）",
+      "reason": "分析重复测试用例的影响",
+      "merge_suggestions": "具体如何合并重复测试用例的建议，可以参考我提供的合并建议"
     }}
   }}
 }}
 ```
 """
-    
+
     system_prompt = "你是一位专业的软件测试专家，擅长评估测试用例的质量和有效性。请基于给定的标准进行客观评价，并特别注意测试用例的重复情况。"
     result = await async_call_llm(session, prompt, system_prompt)
-    
+
     if not result:
         log("测试用例评测失败", important=True)
         return None
-    
+
     log("测试用例评测完成", important=True)
     return result
+
 
 # --- 生成Markdown报告 ---
 async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_result):
     """
     生成Markdown格式的评测报告
-    
+
     :param session: aiohttp会话
     :param evaluation_result: 评测结果
     :return: Markdown格式的报告
     """
     log("开始生成Markdown报告", important=True)
-    
+
     prompt = f"""
 # 任务
 基于提供的测试用例评估结果，生成一份详细的Markdown格式评估报告。
@@ -597,45 +738,52 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
    - 工程效率分析
    - 语义质量分析
    - 安全与经济性分析
-5. **优缺点对比**：列出AI生成测试用例相对于人工标准的优势和劣势
-6. **改进建议**：给出3-5条具体可行的改进AI生成测试用例的建议
-7. **综合结论**：总结AI测试用例的整体表现和适用场景
+5. **重复测试用例分析**：
+   - 重复测试用例比率
+   - 重复类型分析
+   - 测试用例合并建议
+6. **优缺点对比**：列出AI生成测试用例相对于人工标准的优势和劣势
+7. **改进建议**：给出3-5条具体可行的改进AI生成测试用例的建议，包括如何减少重复
+8. **综合结论**：总结AI测试用例的整体表现和适用场景
 
 请直接输出Markdown内容，不要包含其他解释。
 """
-    
+
     system_prompt = "你是一位精通软件测试和技术文档写作的专家。请根据评估结果生成一份专业、清晰的Markdown格式报告。"
     result = await async_call_llm(session, prompt, system_prompt)
-    
+
     if not result:
         log("生成Markdown报告失败", important=True)
         return "# 评测报告生成失败\n\n无法生成详细报告，请检查评测结果或重试。"
-    
+
     # 检查是否返回的是文本还是已解析的JSON
     if isinstance(result, dict) and "text" in result:
         return result["text"]
-    
+
     # 如果返回的是JSON对象，将其转换为Markdown
     try:
         if isinstance(result, dict):
             md_content = "# AI测试用例评估报告\n\n"
-            
+
             if "evaluation_summary" in result:
                 summary = result["evaluation_summary"]
                 md_content += f"## 摘要\n\n"
                 md_content += f"**总体评分**: {summary.get('overall_score', 'N/A')}\n\n"
                 md_content += f"**改进建议**: {summary.get('final_suggestion', 'N/A')}\n\n"
-            
+
             if "detailed_report" in result:
                 md_content += f"## 详细评估\n\n"
                 detailed = result["detailed_report"]
-                
+
                 for key, value in detailed.items():
                     if isinstance(value, dict) and "score" in value:
                         md_content += f"### {key.replace('_', ' ').title()}\n\n"
                         md_content += f"**评分**: {value.get('score', 'N/A')}\n\n"
                         md_content += f"**理由**: {value.get('reason', 'N/A')}\n\n"
-                        
+
+                        if key == "duplicate_analysis" and "merge_suggestions" in value:
+                            md_content += f"**合并建议**: {value.get('merge_suggestions', 'N/A')}\n\n"
+
                         if "analysis" in value and isinstance(value["analysis"], dict):
                             analysis = value["analysis"]
                             if "covered_features" in analysis:
@@ -643,37 +791,38 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                                 for feature in analysis["covered_features"]:
                                     md_content += f"- {feature}\n"
                                 md_content += "\n"
-                            
+
                             if "missed_features_or_scenarios" in analysis:
                                 md_content += "**未覆盖的功能或场景**:\n\n"
                                 for feature in analysis["missed_features_or_scenarios"]:
                                     md_content += f"- {feature}\n"
                                 md_content += "\n"
-                            
+
                             if "scenario_types_found" in analysis:
                                 md_content += "**发现的场景类型**:\n\n"
                                 for scenario in analysis["scenario_types_found"]:
                                     md_content += f"- {scenario}\n"
                                 md_content += "\n"
-            
+
             return md_content
     except Exception as e:
         log(f"处理JSON报告失败: {e}")
-    
+
     log("Markdown报告生成完成", important=True)
     return "# 评测报告生成失败\n\n无法解析评测结果，请检查数据格式。"
+
 
 # --- 主程序 ---
 async def async_main(ai_cases_data=None, golden_cases_data=None):
     """
     主程序的异步版本
-    
+
     :param ai_cases_data: AI生成的测试用例数据（可选），JSON字符串
     :param golden_cases_data: 黄金标准测试用例数据（可选），JSON字符串
     """
     start_logging()
     log("启动测试用例评测流程", important=True)
-    
+
     # 1. 加载用例数据
     try:
         # 如果没有提供AI测试用例数据，则从文件读取
@@ -683,7 +832,7 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
                 with open(AI_CASES_FILE, 'r', encoding='utf-8') as f:
                     ai_cases_raw_text = f.read()
                     log(f"AI测试用例文件大小: {len(ai_cases_raw_text)} 字节")
-                    
+
                     # 尝试检测文件编码
                     encoding_result = chardet.detect(ai_cases_raw_text[:1000].encode())
                     log(f"检测到的文件编码: {encoding_result}")
@@ -694,22 +843,22 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
         else:
             log("使用传入的AI测试用例数据", important=True)
             ai_cases_raw_text = ai_cases_data
-        
+
         # 如果没有提供黄金标准测试用例数据，则从文件读取
         if golden_cases_data is None:
             log("从文件加载黄金标准测试用例", important=True)
             # 查找goldenset文件夹中的所有golden_cases*.json文件
             golden_files = glob.glob("goldenset/golden_cases*.json")
-            
+
             if not golden_files:
                 log(f"错误：在goldenset文件夹中找不到黄金标准测试用例文件。请确保文件存在。", important=True)
                 end_logging()
                 return None
-            
+
             # 默认使用第一个找到的文件
             golden_file = golden_files[0]
             log(f"使用黄金标准测试用例文件: {golden_file}", important=True)
-            
+
             try:
                 with open(golden_file, 'r', encoding='utf-8') as f:
                     golden_cases_raw_text = f.read()
@@ -721,7 +870,7 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
         else:
             log("使用传入的黄金标准测试用例数据", important=True)
             golden_cases_raw_text = golden_cases_data
-        
+
         log(f"成功加载测试用例数据", important=True)
     except Exception as e:
         log(f"加载数据时发生未知错误: {e}", important=True)
@@ -729,65 +878,65 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
         log(f"错误详情: {traceback.format_exc()}")
         end_logging()
         return None
-    
+
     # 确保输出目录存在
     os.makedirs(os.path.dirname(REPORT_FILE), exist_ok=True)
     os.makedirs(os.path.dirname(REPORT_JSON_FILE), exist_ok=True)
-    
+
     async with aiohttp.ClientSession() as session:
         try:
             # 2. 格式化测试用例
             log("开始格式化测试用例", important=True)
-            
+
             # 格式化AI测试用例
             formatted_ai_cases = await format_test_cases(session, ai_cases_raw_text, "AI")
             if not formatted_ai_cases:
                 log("格式化AI测试用例失败，退出评测", important=True)
                 end_logging()
                 return None
-            
+
             # 保存格式化后的AI测试用例
             os.makedirs(os.path.dirname(FORMATTED_AI_CASES_FILE), exist_ok=True)
             with open(FORMATTED_AI_CASES_FILE, 'w', encoding='utf-8') as f:
                 json.dump(formatted_ai_cases, f, ensure_ascii=False, indent=2)
             log(f"格式化后的AI测试用例已保存到 {FORMATTED_AI_CASES_FILE}", important=True)
-            
+
             # 格式化黄金标准测试用例
             formatted_golden_cases = await format_test_cases(session, golden_cases_raw_text, "Golden")
             if not formatted_golden_cases:
                 log("格式化黄金标准测试用例失败，退出评测", important=True)
                 end_logging()
                 return None
-            
+
             # 保存格式化后的黄金标准测试用例
             os.makedirs(os.path.dirname(FORMATTED_GOLDEN_CASES_FILE), exist_ok=True)
             with open(FORMATTED_GOLDEN_CASES_FILE, 'w', encoding='utf-8') as f:
                 json.dump(formatted_golden_cases, f, ensure_ascii=False, indent=2)
             log(f"格式化后的黄金标准测试用例已保存到 {FORMATTED_GOLDEN_CASES_FILE}", important=True)
-            
+
             # 3. 评测测试用例
             evaluation_result = await evaluate_test_cases(session, formatted_ai_cases, formatted_golden_cases)
             if not evaluation_result:
                 log("评测测试用例失败，退出评测", important=True)
                 end_logging()
                 return None
-            
+
             # 保存JSON格式的评测结果
             with open(REPORT_JSON_FILE, 'w', encoding='utf-8') as f:
                 json.dump(evaluation_result, f, ensure_ascii=False, indent=2)
             log(f"JSON格式的评测结果已保存到 {REPORT_JSON_FILE}", important=True)
-            
+
             # 4. 生成Markdown格式的报告
             markdown_report = await generate_markdown_report(session, evaluation_result)
-            
+
             # 保存Markdown格式的报告
             with open(REPORT_FILE, 'w', encoding='utf-8') as f:
                 f.write(markdown_report)
             log(f"Markdown格式的评测报告已保存到 {REPORT_FILE}", important=True)
-            
+
             log("测试用例评测流程完成！", important=True)
             end_logging()
-            
+
             return {
                 "success": True,
                 "evaluation_result": evaluation_result,
@@ -807,10 +956,11 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
                 "error": str(e)
             }
 
+
 def main(ai_cases_file=None, golden_cases_file=None):
     """
     兼容原有入口点的主函数
-    
+
     :param ai_cases_file: AI测试用例文件路径（可选）
     :param golden_cases_file: 黄金标准测试用例文件路径（可选）
     """
@@ -818,10 +968,10 @@ def main(ai_cases_file=None, golden_cases_file=None):
     if os.name == 'nt':
         log("设置Windows事件循环策略")
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
+
     ai_cases_data = None
     golden_cases_data = None
-    
+
     # 如果提供了文件路径，则从指定文件读取数据
     if ai_cases_file:
         try:
@@ -831,7 +981,7 @@ def main(ai_cases_file=None, golden_cases_file=None):
         except Exception as e:
             log(f"读取AI测试用例文件 {ai_cases_file} 失败: {e}", important=True)
             return {"success": False, "error": f"读取AI测试用例文件失败: {e}"}
-    
+
     if golden_cases_file:
         try:
             with open(golden_cases_file, 'r', encoding='utf-8') as f:
@@ -840,9 +990,10 @@ def main(ai_cases_file=None, golden_cases_file=None):
         except Exception as e:
             log(f"读取黄金标准测试用例文件 {golden_cases_file} 失败: {e}", important=True)
             return {"success": False, "error": f"读取黄金标准测试用例文件失败: {e}"}
-    
+
     # 运行异步主函数
     return asyncio.run(async_main(ai_cases_data, golden_cases_data))
+
 
 # --- API接口部分 ---
 try:
@@ -850,14 +1001,16 @@ try:
     from fastapi.responses import JSONResponse
     from pydantic import BaseModel
     from fastapi.middleware.cors import CORSMiddleware
-    
+
+
     # 定义API请求模型
     class TestCaseComparisonRequest(BaseModel):
         ai_test_cases: str  # AI生成的测试用例，JSON字符串
         golden_test_cases: Optional[str] = None  # 黄金标准测试用例，JSON字符串，可选
         model_name: str = MODEL_NAME  # 可选，使用的模型名称
         save_results: bool = True  # 可选，是否保存结果文件
-    
+
+
     # 定义API响应模型
     class ApiResponse(BaseModel):
         success: bool
@@ -866,14 +1019,15 @@ try:
         evaluation_result: dict = None
         report: str = None
         files: dict = None
-    
+
+
     # 创建FastAPI应用
     app = FastAPI(
         title="测试用例比较工具API",
         description="比较AI生成的测试用例与黄金标准测试用例，评估测试用例质量",
         version="1.0.0"
     )
-    
+
     # 允许跨域请求
     app.add_middleware(
         CORSMiddleware,
@@ -882,26 +1036,27 @@ try:
         allow_methods=["*"],  # 允许所有HTTP方法
         allow_headers=["*"],  # 允许所有HTTP头
     )
-    
+
     # 状态追踪
     evaluation_tasks = {}
-    
+
+
     # 评测任务执行函数
     async def run_evaluation_task(task_id: str, request_data: TestCaseComparisonRequest):
         """
         后台执行评测任务
-        
+
         :param task_id: 任务ID
         :param request_data: 请求数据
         """
         try:
             start_logging()
             log(f"开始任务 {task_id}，使用模型 {request_data.model_name}", important=True)
-            
+
             # 更新全局变量
             global MODEL_NAME
             MODEL_NAME = request_data.model_name
-            
+
             # 准备黄金标准测试用例数据
             golden_test_cases = request_data.golden_test_cases
             if golden_test_cases is None:
@@ -918,7 +1073,7 @@ try:
                     }
                     end_logging()
                     return
-                    
+
                 try:
                     with open(golden_files[0], 'r', encoding='utf-8') as f:
                         golden_test_cases = f.read()
@@ -933,10 +1088,10 @@ try:
                     }
                     end_logging()
                     return
-            
+
             # 执行评测任务
             result = await async_main(request_data.ai_test_cases, golden_test_cases)
-            
+
             if result and result["success"]:
                 evaluation_tasks[task_id] = {
                     "success": True,
@@ -951,7 +1106,7 @@ try:
                     "error": result.get("error", "未知错误"),
                     "message": "评测失败"
                 }
-                
+
         except Exception as e:
             log(f"任务 {task_id} 发生未知错误: {str(e)}", important=True)
             import traceback
@@ -962,53 +1117,56 @@ try:
                 "message": "评测过程中发生未知错误"
             }
             end_logging()
-    
+
+
     @app.post("/compare-test-cases")
     async def compare_test_cases_api(request: TestCaseComparisonRequest, background_tasks: BackgroundTasks):
         """
         比较AI生成的测试用例与黄金标准测试用例
-        
+
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
         :param background_tasks: 后台任务
         :return: 任务ID
         """
         # 生成任务ID
         task_id = f"task_{int(time.time())}_{os.getpid()}"
-        
+
         # 初始化任务状态
         evaluation_tasks[task_id] = {"success": False, "message": "任务已提交，正在处理中"}
-        
+
         # 添加后台任务
         background_tasks.add_task(run_evaluation_task, task_id, request)
-        
+
         # 返回任务ID
         return JSONResponse(content={
             "success": True,
             "message": "任务已提交",
             "task_id": task_id
         })
-    
+
+
     @app.get("/task-status/{task_id}")
     async def get_task_status(task_id: str):
         """
         获取任务状态
-        
+
         :param task_id: 任务ID
         :return: 任务状态和结果
         """
         if task_id not in evaluation_tasks:
             raise HTTPException(status_code=404, detail="找不到指定任务")
-        
+
         return JSONResponse(content=evaluation_tasks[task_id])
-    
+
+
     @app.post("/upload-test-cases")
     async def upload_test_cases(
-        file: UploadFile = File(...),
-        file_type: str = Form(...),  # "ai" 或 "golden"
+            file: UploadFile = File(...),
+            file_type: str = Form(...),  # "ai" 或 "golden"
     ):
         """
         上传测试用例文件
-        
+
         :param file: 上传的测试用例文件
         :param file_type: 文件类型，"ai"表示AI生成的测试用例，"golden"表示黄金标准测试用例
         :return: 上传结果
@@ -1016,7 +1174,7 @@ try:
         try:
             contents = await file.read()
             file_content = contents.decode("utf-8")
-            
+
             if file_type.lower() == "ai":
                 save_path = "testset/test_cases.json"
                 dir_path = "testset"
@@ -1028,14 +1186,14 @@ try:
                     status_code=400,
                     content={"success": False, "error": "无效的文件类型，必须是'ai'或'golden'"}
                 )
-            
+
             # 确保目录存在
             os.makedirs(dir_path, exist_ok=True)
-            
+
             # 保存文件
             with open(save_path, "w", encoding="utf-8") as f:
                 f.write(file_content)
-            
+
             return JSONResponse(
                 content={
                     "success": True,
@@ -1048,19 +1206,21 @@ try:
                 status_code=500,
                 content={"success": False, "error": f"文件上传失败：{str(e)}"}
             )
-    
+
+
     @app.post("/evaluate-from-json")
     async def evaluate_from_json(request: TestCaseComparisonRequest, background_tasks: BackgroundTasks):
         """
         从JSON数据评测测试用例（与/compare-test-cases相同）
-        
+
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
         :param background_tasks: 后台任务
         :return: 任务ID
         """
         # 直接调用compare_test_cases_api
         return await compare_test_cases_api(request, background_tasks)
-    
+
+
     @app.get("/")
     async def root():
         """API根路径，返回基本信息"""
@@ -1088,6 +1248,7 @@ if __name__ == "__main__":
         # API模式（默认）
         if app:
             import uvicorn
+
             log("启动API服务器...", important=True)
             uvicorn.run("compare:app", host="127.0.0.1", port=8000, reload=True)
         else:
