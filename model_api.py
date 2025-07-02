@@ -2,12 +2,12 @@ import os
 import httpx
 from typing import List, Optional
 
-ARK_API_KEY = os.environ.get("ARK_API_KEY") or "ac7c2d46-edf5-4a90-b83e-c89cf078d5b9"
-ARK_MODEL_ID = "doubao-seed-1-6-250615"
+ARK_API_KEY = os.environ.get("ARK_API_KEY") or "fbddbe4a-8479-4866-8e6a-fff1ec1effc7"
+ARK_MODEL_ID = "deepseek-r1-250528"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 
 
-async def call_doubao_model(prompt: str, img_urls: Optional[List[str]] = None) -> str:
+async def call_model(prompt: str, img_urls: Optional[List[str]] = None) -> str:
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {ARK_API_KEY}"
