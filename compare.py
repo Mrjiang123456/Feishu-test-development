@@ -24,11 +24,14 @@ os.makedirs("output_evaluation/evaluation_markdown", exist_ok=True)
 # --- 配置区 ---
 # API的URL，从curl命令中获取
 API_URL = "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
+# API_URL = "https://api.siliconflow.cn/v1/chat/completions"
 
-MODEL_NAME = "deepseek-r1-250528"
+MODEL_NAME = "deepseek-v3-250324"
+# MODEL_NAME = "deepseek-ai/DeepSeek-R1"
 
 # VOLC_BEARER_TOKEN = os.getenv("VOLC_BEARER_TOKEN")
 VOLC_BEARER_TOKEN = "82cb3741-9d83-46fe-aeee-faad19eaf765"  # 直接在这里写入你的密钥
+# VOLC_BEARER_TOKEN = "sk-tcjwmakxpmqtggsqiwrufqwazoggqjdutrzojmbsmchteehx"
 
 # 输入文件名
 AI_CASES_FILE = "testset/test_cases.json"  # 从testset文件夹读取
@@ -253,16 +256,12 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
         data = json.loads(file_content)
         log(f"{file_type}测试用例JSON解析成功")
 
-        # 如果是Golden测试用例，直接返回原始数据
-        if file_type == "Golden":
-            log(f"{file_type}测试用例无需格式化，保持原格式", important=True)
-            return data
-
         # 提取所有测试用例，不限制数量
         all_test_cases = []
 
-        # 从原始数据中提取测试用例
+        # 从原始数据中提取测试用例，处理各种可能的格式
         if isinstance(data, dict):
+            # 情况1：顶层有testcases字段
             if "testcases" in data:
                 if isinstance(data["testcases"], dict) and "test_cases" in data["testcases"]:
                     all_test_cases = data["testcases"]["test_cases"]
@@ -272,55 +271,134 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
                     # 特殊情况，可能有嵌套结构
                     if "test_cases" in data["testcases"]:
                         all_test_cases = data["testcases"]["test_cases"]
+            # 情况2：顶层有test_cases字段
             elif "test_cases" in data:
                 if isinstance(data["test_cases"], list):
                     all_test_cases = data["test_cases"]
                 elif isinstance(data["test_cases"], dict):
                     # 合并所有分类下的测试用例
                     for category, cases in data["test_cases"].items():
-                        all_test_cases.extend(cases)
+                        if isinstance(cases, list):
+                            all_test_cases.extend(cases)
+            # 情况3：可能有其他命名的字段包含测试用例
+            elif any(key for key in data.keys() if "case" in key.lower() or "test" in key.lower()):
+                for key in data.keys():
+                    if "case" in key.lower() or "test" in key.lower():
+                        if isinstance(data[key], list):
+                            all_test_cases.extend(data[key])
+                        elif isinstance(data[key], dict):
+                            all_test_cases.append(data[key])
+        # 情况4：顶层直接是测试用例列表
         elif isinstance(data, list):
             all_test_cases = data
 
         log(f"从原始数据中提取到{len(all_test_cases)}个测试用例", important=True)
 
-        # 由于LLM可能处理不了大量测试用例，先自行处理所有测试用例
+        # 格式化所有测试用例到统一格式
         formatted_test_cases = []
         for i, case in enumerate(all_test_cases):
+            if not isinstance(case, dict):
+                log(f"警告：跳过非字典格式的测试用例 {case}")
+                continue
+
             # 确保case_id字段
-            case_id = case.get("case_id", f"TC-FUNC-{i + 1:03d}")
-            if not case_id.startswith("TC-"):
-                case_id = f"TC-FUNC-{case_id}"
+            case_id = case.get("case_id", "")
+            if not case_id:
+                case_id = case.get("id", "")
+                if not case_id:
+                    case_id = f"TC-FUNC-{i + 1:03d}"
+            if not case_id.startswith("TC-") and not case_id.startswith("FUNC-"):
+                case_id = f"FUNC-SCEN-{i + 1:03d}"
 
-            # 转换步骤和预期结果为字符串
-            steps = case.get("steps", [])
-            if isinstance(steps, list):
-                steps = "\n".join(steps)
+            # 确保title字段
+            title_candidates = ["title", "标题", "测试标题", "test_title", "name", "测试名称"]
+            title = None
+            for candidate in title_candidates:
+                if candidate in case:
+                    title = case[candidate]
+                    break
+            if not title:
+                title = f"Test Case {i + 1}"
 
-            expected_results = case.get("expected_results", [])
-            if isinstance(expected_results, list):
-                expected_results = "\n".join(expected_results)
+            # 确保preconditions字段
+            preconditions_candidates = ["preconditions", "前置条件", "pre_conditions", "prerequisites", "前提条件"]
+            preconditions = None
+            for candidate in preconditions_candidates:
+                if candidate in case and case[candidate]:
+                    preconditions = case[candidate]
+                    break
+            if not preconditions:
+                preconditions = ""
 
             # 转换前置条件为字符串
-            preconditions = case.get("preconditions", "") or case.get("前置条件", "")
             if isinstance(preconditions, list):
-                preconditions = "\n".join(preconditions)
+                preconditions = "\n".join([str(item) for item in preconditions if item])
+
+            # 确保steps字段
+            steps_candidates = ["steps", "步骤", "test_steps", "测试步骤", "操作步骤", "actions"]
+            steps = None
+            for candidate in steps_candidates:
+                if candidate in case and case[candidate]:
+                    steps = case[candidate]
+                    break
+            if not steps:
+                steps = []
+
+            # 转换步骤为列表
+            if not isinstance(steps, list):
+                if isinstance(steps, str) and steps.strip():
+                    # 尝试分割字符串成为列表
+                    if "\n" in steps:
+                        steps = steps.split("\n")
+                    else:
+                        steps = [steps]
+                else:
+                    steps = []
+
+            # 确保expected_results字段
+            expected_candidates = ["expected_results", "预期结果", "expected", "assertions", "expected_outcome", "结果"]
+            expected_results = None
+            for candidate in expected_candidates:
+                if candidate in case and case[candidate]:
+                    expected_results = case[candidate]
+                    break
+            if not expected_results:
+                expected_results = []
+
+            # 转换预期结果为列表
+            if not isinstance(expected_results, list):
+                if isinstance(expected_results, str) and expected_results.strip():
+                    # 尝试分割字符串成为列表
+                    if "\n" in expected_results:
+                        expected_results = expected_results.split("\n")
+                    else:
+                        expected_results = [expected_results]
+                else:
+                    expected_results = []
 
             # 构建格式化后的测试用例
             formatted_case = {
                 "case_id": case_id,
-                "title": case.get("title", "") or case.get("标题", f"测试用例{i + 1}"),
+                "title": title,
                 "preconditions": preconditions,
-                "steps": steps,
-                "expected_results": expected_results
+                "steps": [str(step).strip() for step in steps if step],
+                "expected_results": [str(result).strip() for result in expected_results if result]
             }
             formatted_test_cases.append(formatted_case)
 
         # 构建最终格式
+        test_suite_name = "B端产品登录功能测试用例"
+        if isinstance(data, dict) and "test_suite" in data:
+            test_suite_name = data["test_suite"]
+        elif isinstance(data, dict) and "testcases" in data and isinstance(data["testcases"], dict) and "test_suite" in \
+                data["testcases"]:
+            test_suite_name = data["testcases"]["test_suite"]
+
         final_data = {
-            "test_suite": "B端产品登录功能模块",
-            "test_cases": {
-                "functional_test_cases": formatted_test_cases
+            "success": True,
+            "testcases": {
+                "test_suite": test_suite_name,
+                "test_cases": formatted_test_cases
             }
         }
 
@@ -528,17 +606,37 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
     ai_testcases = []
     golden_testcases = []
 
-    # 提取AI测试用例
-    if "test_cases" in ai_cases and isinstance(ai_cases["test_cases"], dict):
-        # 新格式
-        for category, cases in ai_cases["test_cases"].items():
-            ai_testcases.extend(cases)
+    # 提取AI测试用例，适配新的格式化结构
+    if isinstance(ai_cases, dict):
+        if "testcases" in ai_cases and isinstance(ai_cases["testcases"], dict) and "test_cases" in ai_cases[
+            "testcases"]:
+            # 新的统一格式
+            ai_testcases = ai_cases["testcases"]["test_cases"]
+        elif "test_cases" in ai_cases:
+            if isinstance(ai_cases["test_cases"], dict):
+                # 旧格式，分类测试用例
+                for category, cases in ai_cases["test_cases"].items():
+                    if isinstance(cases, list):
+                        ai_testcases.extend(cases)
+            elif isinstance(ai_cases["test_cases"], list):
+                # 旧格式，直接列表
+                ai_testcases = ai_cases["test_cases"]
 
-    # 提取黄金标准测试用例
-    if "test_cases" in golden_cases and isinstance(golden_cases["test_cases"], dict):
-        # 新格式
-        for category, cases in golden_cases["test_cases"].items():
-            golden_testcases.extend(cases)
+    # 提取黄金标准测试用例，适配新的格式化结构
+    if isinstance(golden_cases, dict):
+        if "testcases" in golden_cases and isinstance(golden_cases["testcases"], dict) and "test_cases" in golden_cases[
+            "testcases"]:
+            # 新的统一格式
+            golden_testcases = golden_cases["testcases"]["test_cases"]
+        elif "test_cases" in golden_cases:
+            if isinstance(golden_cases["test_cases"], dict):
+                # 旧格式，分类测试用例
+                for category, cases in golden_cases["test_cases"].items():
+                    if isinstance(cases, list):
+                        golden_testcases.extend(cases)
+            elif isinstance(golden_cases["test_cases"], list):
+                # 旧格式，直接列表
+                golden_testcases = golden_cases["test_cases"]
 
     log(f"AI测试用例数量: {len(ai_testcases)}, 黄金标准测试用例数量: {len(golden_testcases)}", important=True)
 
@@ -1098,13 +1196,15 @@ try:
                     "message": "测试用例评测完成",
                     "evaluation_result": result["evaluation_result"],
                     "report": result["markdown_report"],
-                    "files": result["files"]
+                    "files": result["files"],
+                    "finish_task": True
                 }
             else:
                 evaluation_tasks[task_id] = {
                     "success": False,
                     "error": result.get("error", "未知错误"),
-                    "message": "评测失败"
+                    "message": "评测失败",
+                    "finish_task": True
                 }
 
         except Exception as e:
@@ -1114,35 +1214,97 @@ try:
             evaluation_tasks[task_id] = {
                 "success": False,
                 "error": str(e),
-                "message": "评测过程中发生未知错误"
+                "message": "评测过程中发生未知错误",
+                "finish_task": True
             }
             end_logging()
 
 
     @app.post("/compare-test-cases")
-    async def compare_test_cases_api(request: TestCaseComparisonRequest, background_tasks: BackgroundTasks):
+    async def compare_test_cases_api(request: TestCaseComparisonRequest):
         """
         比较AI生成的测试用例与黄金标准测试用例
 
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
-        :param background_tasks: 后台任务
-        :return: 任务ID
+        :return: 评测结果
         """
-        # 生成任务ID
-        task_id = f"task_{int(time.time())}_{os.getpid()}"
+        log("接收到评测测试用例请求", important=True)
 
-        # 初始化任务状态
-        evaluation_tasks[task_id] = {"success": False, "message": "任务已提交，正在处理中"}
+        try:
+            # 更新全局变量
+            global MODEL_NAME
+            MODEL_NAME = request.model_name
 
-        # 添加后台任务
-        background_tasks.add_task(run_evaluation_task, task_id, request)
+            # 准备黄金标准测试用例数据
+            golden_test_cases = request.golden_test_cases
+            if golden_test_cases is None:
+                # 如果请求中没有提供黄金标准测试用例，则从文件读取
+                log("从goldenset文件夹读取黄金标准测试用例", important=True)
+                golden_files = glob.glob("goldenset/golden_cases*.json")
+                if not golden_files:
+                    error_msg = "在goldenset文件夹中找不到黄金标准测试用例文件"
+                    log(f"错误：{error_msg}", important=True)
+                    return JSONResponse(
+                        content={
+                            "success": False,
+                            "error": error_msg,
+                            "message": "评测失败：找不到黄金标准测试用例",
+                            "finish_task": True
+                        }
+                    )
 
-        # 返回任务ID
-        return JSONResponse(content={
-            "success": True,
-            "message": "任务已提交",
-            "task_id": task_id
-        })
+                try:
+                    with open(golden_files[0], 'r', encoding='utf-8') as f:
+                        golden_test_cases = f.read()
+                    log(f"成功从文件 {golden_files[0]} 读取黄金标准测试用例", important=True)
+                except Exception as e:
+                    error_msg = f"读取黄金标准测试用例文件失败: {str(e)}"
+                    log(f"错误：{error_msg}", important=True)
+                    return JSONResponse(
+                        content={
+                            "success": False,
+                            "error": error_msg,
+                            "message": "评测失败：读取黄金标准测试用例出错",
+                            "finish_task": True
+                        }
+                    )
+
+            # 直接执行评测任务
+            result = await async_main(request.ai_test_cases, golden_test_cases)
+
+            if result and result["success"]:
+                return JSONResponse(
+                    content={
+                        "success": True,
+                        "message": "测试用例评测完成",
+                        "evaluation_result": result["evaluation_result"],
+                        "report": result["markdown_report"],
+                        "files": result["files"],
+                        "finish_task": True
+                    }
+                )
+            else:
+                return JSONResponse(
+                    content={
+                        "success": False,
+                        "error": result.get("error", "未知错误"),
+                        "message": "评测失败",
+                        "finish_task": True
+                    }
+                )
+
+        except Exception as e:
+            log(f"评测过程中发生未知错误: {str(e)}", important=True)
+            import traceback
+            log(f"错误详情: {traceback.format_exc()}")
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "error": str(e),
+                    "message": "评测过程中发生未知错误",
+                    "finish_task": True
+                }
+            )
 
 
     @app.get("/task-status/{task_id}")
@@ -1156,7 +1318,10 @@ try:
         if task_id not in evaluation_tasks:
             raise HTTPException(status_code=404, detail="找不到指定任务")
 
-        return JSONResponse(content=evaluation_tasks[task_id])
+        response_content = evaluation_tasks[task_id]
+        # 添加finish_task字段
+        response_content["finish_task"] = True
+        return JSONResponse(content=response_content)
 
 
     @app.post("/upload-test-cases")
@@ -1209,16 +1374,15 @@ try:
 
 
     @app.post("/evaluate-from-json")
-    async def evaluate_from_json(request: TestCaseComparisonRequest, background_tasks: BackgroundTasks):
+    async def evaluate_from_json(request: TestCaseComparisonRequest):
         """
         从JSON数据评测测试用例（与/compare-test-cases相同）
 
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
-        :param background_tasks: 后台任务
-        :return: 任务ID
+        :return: 评测结果
         """
         # 直接调用compare_test_cases_api
-        return await compare_test_cases_api(request, background_tasks)
+        return await compare_test_cases_api(request)
 
 
     @app.get("/")

@@ -45,7 +45,7 @@ Content-Type: application/json
 {
   "ai_test_cases": "AI测试用例的JSON字符串",
   "golden_test_cases": "黄金标准测试用例的JSON字符串(可选)",
-  "model_name": "deepseek-r1-250528",
+  "model_name": "deepseek-ai/DeepSeek-R1",
   "save_results": true
 }
 ```
@@ -53,23 +53,8 @@ Content-Type: application/json
 **参数说明**:
 - `ai_test_cases`: 必填，AI生成的测试用例JSON字符串
 - `golden_test_cases`: 可选，黄金标准测试用例JSON字符串。如果不提供，系统会自动从goldenset目录读取
-- `model_name`: 可选，使用的模型名称，默认为"deepseek-r1-250528"
+- `model_name`: 可选，使用的模型名称，默认为"deepseek-ai/DeepSeek-R1"
 - `save_results`: 可选，是否保存结果文件，默认为true
-
-**返回示例**:
-```json
-{
-  "success": true,
-  "message": "任务已提交",
-  "task_id": "task_1625147890_12345"
-}
-```
-
-##### 1.2 查询评测任务状态和结果
-
-```http
-GET http://127.0.0.1:8000/task-status/{task_id}
-```
 
 **返回示例**:
 ```json
@@ -87,13 +72,19 @@ GET http://127.0.0.1:8000/task-status/{task_id}
   },
   "report": "# 测试用例评估报告\n\n...",
   "files": {
-    "report_md": "output_evaluation/evaluation_markdown/evaluation_report-deepseek-r1-250528.md",
-    "report_json": "output_evaluation/evaluation_json/evaluation_report-deepseek-r1-250528.json"
-  }
+    "report_md": "output_evaluation/evaluation_markdown/evaluation_report-deepseek-ai/DeepSeek-R1.md",
+    "report_json": "output_evaluation/evaluation_json/evaluation_report-deepseek-ai/DeepSeek-R1.json"
+  },
+  "finish_task": true
 }
 ```
 
-##### 1.3 上传测试用例文件
+**说明**:
+- API现在直接返回评测结果，不再需要通过任务ID查询状态
+- `finish_task`: 为true表示任务已完成
+- 评测可能需要一些时间，服务器会等待评测完成后再返回结果
+
+##### 1.2 上传测试用例文件
 
 ```http
 POST http://127.0.0.1:8000/upload-test-cases
@@ -116,7 +107,7 @@ file_type: "ai"  # 或 "golden"
 }
 ```
 
-##### 1.4 从JSON数据评测测试用例
+##### 1.3 从JSON数据评测测试用例
 
 ```http
 POST http://127.0.0.1:8000/evaluate-from-json
@@ -127,6 +118,8 @@ Content-Type: application/json
   "golden_test_cases": "黄金标准测试用例的JSON字符串(可选)"
 }
 ```
+
+**说明**: 功能与/compare-test-cases相同，也会直接返回评测结果。
 
 ### 2. 命令行方式
 
@@ -154,7 +147,6 @@ python compare.py --cli
 ```python
 import requests
 import json
-import time
 
 # 1. 从外部系统获取测试用例
 response = requests.post("http://127.0.0.1:8000/generate-json", json={
@@ -162,34 +154,14 @@ response = requests.post("http://127.0.0.1:8000/generate-json", json={
 })
 test_cases = response.json()
 
-# 2. 发送评测请求
+# 2. 发送评测请求并直接获取评测结果
 eval_response = requests.post("http://127.0.0.1:8000/compare-test-cases", json={
     "ai_test_cases": json.dumps(test_cases)  # 自动从goldenset中读取黄金标准
 })
 
-# 3. 获取任务ID
-task_id = eval_response.json().get("task_id")
-print(f"评测任务已提交，任务ID: {task_id}")
-
-# 4. 等待并查询评测结果
-status = "processing"
-result = None
-while status == "processing":
-    time.sleep(2)  # 等待2秒
-    result_response = requests.get(f"http://127.0.0.1:8000/task-status/{task_id}")
-    result = result_response.json()
-    
-    if result.get("success") == True and result.get("message") != "任务已提交，正在处理中":
-        status = "completed"
-    elif "error" in result:
-        status = "failed"
-        print(f"评测失败: {result.get('error')}")
-        break
-    else:
-        print("评测中...")
-
-# 5. 处理评测结果
-if status == "completed":
+# 3. 处理评测结果
+result = eval_response.json()
+if result.get("success") and result.get("finish_task"):
     print("评测完成!")
     evaluation_result = result.get("evaluation_result")
     report = result.get("report")
@@ -202,6 +174,8 @@ if status == "completed":
     with open("evaluation_report.md", "w", encoding="utf-8") as f:
         f.write(report)
     print("报告已保存到 evaluation_report.md")
+else:
+    print(f"评测失败: {result.get('error')}")
 ```
 
 ## 注意事项
