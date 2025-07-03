@@ -2,7 +2,7 @@ import os
 import httpx
 from typing import List, Optional
 
-ARK_API_KEY = os.environ.get("ARK_API_KEY") or "fbddbe4a-8479-4866-8e6a-fff1ec1effc7"
+ARK_API_KEY = os.environ.get("ARK_API_KEY") or "82cb3741-9d83-46fe-aeee-faad19eaf765"
 ARK_MODEL_ID = "deepseek-r1-250528"
 ARK_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3"
 
@@ -38,7 +38,7 @@ async def call_model(prompt: str, img_urls: Optional[List[str]] = None) -> str:
     }
 
     try:
-        async with httpx.AsyncClient(timeout=1000.0) as client:
+        async with httpx.AsyncClient(timeout=100.0) as client:
             response = await client.post(f"{ARK_BASE_URL}/chat/completions", json=payload, headers=headers)
             response.raise_for_status()
             data = response.json()

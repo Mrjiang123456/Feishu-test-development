@@ -47,12 +47,11 @@ async def extract_prd_title(state: GraphState) -> GraphState:
 async def extract_requirements(state: GraphState) -> GraphState:
     logger.info("[Step 2] 提取测试点")
     prompt = f"""你是一位资深测试工程师，根据以下产品需求文档，文中包含顺序图文，图片通过 Markdown 格式插入。请综合文本和图片内容，提取详细测试点（功能、易用、异常等维度），并按模块分类输出：
-{state['prd_text']}
-
+    {state['prd_text']}
 请按如下格式：
 - 模块名：
-  - 测试点1：
-  - 测试点2：
+- 测试点1：
+- 测试点2：
 """
     try:
         requirements = await call_model(prompt)
@@ -65,12 +64,11 @@ async def extract_requirements(state: GraphState) -> GraphState:
 async def optimize_requirements(state: GraphState) -> GraphState:
     logger.info("[Step 3] 优化测试点")
     prompt = f"""你是一位测试专家，请对以下功能测试点内容进行检查和优化。产品需求文档包含顺序图文，图片以 Markdown 格式插入，请结合文本和图片内容理解：
+请优化以下测试点内容，补充遗漏，分类清晰，并注明测试维度：{state['requirements']}
 目标：
 1. 查漏补缺；
 2. 确保测试点覆盖功能、易用性、兼容性、安全性、性能等；
 3. 分类清晰，每个测试点都归属到模块，并注明测试维度（功能/异常/边界/兼容/安全等）。
-请优化以下测试点内容，补充遗漏，分类清晰，并注明测试维度：
-{state['requirements']}
 """
     try:
         optimized = await call_model(prompt)
@@ -80,7 +78,7 @@ async def optimize_requirements(state: GraphState) -> GraphState:
         raise
 
 
-MAX_CONCURRENT = 10
+MAX_CONCURRENT = 30
 MAX_RETRIES = 3
 
 
@@ -91,14 +89,12 @@ async def generate_case(point: str, idx: int, semaphore: asyncio.Semaphore) -> d
                 start = time.time()
                 logger.info(f"生成第 {idx} 个用例，第 {attempt} 次尝试")
                 prompt = f"""你是一个测试用例生成专家。根据以下测试点，结合产品需求文档中的顺序图文（图片通过 Markdown 格式插入），生成格式规范的测试用例，输出 JSON 格式，字段包括：
-
 {{
   "title": "简洁明确的测试标题",
   "precondition": "按点列出前置条件，例如 1. 系统正常运行；2. 测试账号已登录",
   "steps": ["1. 打开页面", "2. 输入信息", "3. 点击提交"],
   "expected_results": ["1. 页面跳转成功", "2. 显示欢迎信息"]
 }}
-
 请仅返回 JSON，不要附加文字。测试点如下：
 {point}"""
                 resp = await call_model(prompt)
@@ -136,14 +132,10 @@ async def generate_testcases(state: GraphState) -> GraphState:
     tasks = [generate_case(p, i + 1, semaphore) for i, p in enumerate(raw_points)]
     all_results = await asyncio.gather(*tasks)
 
-    # 成功用例
     test_cases = [c for c in all_results if c is not None]
-
-    # 统一重新编号，避免跳号
     for new_idx, case in enumerate(test_cases, start=1):
         case["case_id"] = f"{new_idx:03d}"
 
-    # 失败的保留原位信息（供重试）
     failed_cases = [
         {"case_id": f"{i + 1:03d}", "requirement": p}
         for i, (p, r) in enumerate(zip(raw_points, all_results)) if r is None
@@ -182,14 +174,11 @@ async def validate_testcases(state: GraphState) -> GraphState:
         else:
             logger.info(f"移除重复用例: {case['title']}")
 
-    # 重新编号
     for idx, case in enumerate(unique_testcases, start=1):
         case["case_id"] = f"{idx:03d}"
 
     removed_count = len(testcases) - len(unique_testcases)
     validated_msg = f"共去除重复用例 {removed_count} 条" if removed_count else "未发现重复用例"
-    logger.info(validated_msg)
-
     logger.info(f"[Step 5] 校验完成：{validated_msg}")
 
     return {
@@ -207,12 +196,10 @@ workflow.add_node("step2_extract_requirements", extract_requirements)
 workflow.add_node("step3_optimize_requirements", optimize_requirements)
 workflow.add_node("step4_generate_testcases", generate_testcases)
 workflow.add_node("step5_validate_testcases", validate_testcases)
-
 workflow.set_entry_point("step1_extract_title")
 workflow.add_edge("step1_extract_title", "step2_extract_requirements")
 workflow.add_edge("step2_extract_requirements", "step3_optimize_requirements")
 workflow.add_edge("step3_optimize_requirements", "step4_generate_testcases")
 workflow.add_edge("step4_generate_testcases", "step5_validate_testcases")
 workflow.set_finish_point("step5_validate_testcases")
-
 graph = workflow.compile()

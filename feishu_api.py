@@ -1,4 +1,5 @@
 import httpx
+import re
 
 FEISHU_API_BASE = "https://open.feishu.cn/open-apis"
 
@@ -55,51 +56,51 @@ def extract_text(elements):
 
 def parse_block(block, blocks_map, image_url_map):
     block_type = block.get("block_type")
-    md = ""
+    prd = ""
 
     if block_type == 1:  # 页面 Block，递归子块
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
-                md += parse_block(child, blocks_map, image_url_map)
+                prd += parse_block(child, blocks_map, image_url_map)
 
     elif 3 <= block_type <= 9:  # heading2~heading8
         level = block_type - 2
         heading_key = f"heading{level}"
         if heading_key in block:
             text = extract_text(block[heading_key]["elements"])
-            md += f"{'#' * level} {text}\n\n"
+            prd += f"{'#' * level} {text}\n\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
-                md += parse_block(child, blocks_map, image_url_map)
+                prd += parse_block(child, blocks_map, image_url_map)
 
     elif block_type == 2:  # 文本 Block
         if "text" in block:
             text = extract_text(block["text"]["elements"])
-            md += f"{text}\n\n"
+            prd += f"{text}\n\n"
 
     elif block_type == 10:  # 无序列表 bullet
         if "bullet" in block:
             text = extract_text(block["bullet"]["elements"])
-            md += f"- {text}\n"
+            prd += f"- {text}\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
                 child_md = parse_block(child, blocks_map, image_url_map)
                 child_md = "\n".join("  " + line if line.strip() else line for line in child_md.splitlines())
-                md += child_md + "\n"
+                prd += child_md + "\n"
 
     elif block_type == 11:  # 有序列表 ordered
         if "ordered" in block:
             text = extract_text(block["ordered"]["elements"])
-            md += f"1. {text}\n"
+            prd += f"1. {text}\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
                 child_md = parse_block(child, blocks_map, image_url_map)
                 child_md = "\n".join("  " + line if line.strip() else line for line in child_md.splitlines())
-                md += child_md + "\n"
+                prd += child_md + "\n"
 
     elif block_type == 27:  # 图片块
         image = block.get("image", {})
@@ -107,30 +108,30 @@ def parse_block(block, blocks_map, image_url_map):
         if not file_token and "origin" in image:
             file_token = image["origin"].get("file_token") or image["origin"].get("token")
         url = image_url_map.get(file_token, "")
-        md += f"![image]({url})\n\n"
+        prd += f"![image]({url})\n\n"
 
     elif block_type == 14:  # 代码块
         if "code" in block:
             text = extract_text(block["code"]["elements"])
-            md += f"```\n{text}\n```\n\n"
+            prd += f"```\n{text}\n```\n\n"
 
     elif block_type == 15:  # 引用块
         if "quote" in block:
             text = extract_text(block["quote"]["elements"])
-            md += f"> {text}\n\n"
+            prd += f"> {text}\n\n"
 
-    return md
+    return prd
 
 
 def blocks_to_markdown(blocks, image_url_map):
     blocks_map = {b["block_id"]: b for b in blocks}
     roots = [b for b in blocks if not b.get("parent_id")]
 
-    md_all = ""
+    prd_all = ""
     for root in roots:
-        md_all += parse_block(root, blocks_map, image_url_map)
+        prd_all += parse_block(root, blocks_map, image_url_map)
 
-    return md_all
+    return prd_all
 
 
 async def get_feishu_doc_content(document_id: str, user_access_token: str):
@@ -156,7 +157,6 @@ async def get_feishu_doc_content(document_id: str, user_access_token: str):
 
     markdown = blocks_to_markdown(blocks, image_url_map)
 
-    import re
     text_only = re.sub(r"!\[image\]\([^)]+\)", "", markdown).strip()
 
     return {
