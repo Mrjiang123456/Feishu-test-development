@@ -1,237 +1,215 @@
-# 测试用例评测工具使用指南
+# 测试用例评测工具
 
-本工具用于评测AI生成的测试用例与黄金标准测试用例的质量对比，支持API接口和命令行两种使用方式。
+## 项目概述
 
-## 目录结构
+测试用例评测工具是一个用于比较AI生成的测试用例与黄金标准测试用例的工具，能够评估测试用例的质量、覆盖度和有效性。本工具支持命令行模式和API服务模式，可以灵活应对不同使用场景。同时，工具集成了frp服务，可以将本地API服务映射到外网，方便远程访问。
 
+## 主要功能
+
+- 自动格式化各种格式的测试用例，统一为标准JSON格式
+- 分析测试用例重复情况，提供合并建议
+- 评估测试用例质量，包括功能覆盖度、缺陷发现能力等多个维度
+- 生成详细的评测报告（JSON和Markdown格式），包含可视化图表
+- 提供REST API接口，支持远程调用
+- **新增：** 集成frp服务，自动将本地API服务映射到外网
+
+## 文件结构
+
+工具已经被重构为模块化设计，主要包含以下文件：
+
+- `config.py` - 配置参数和常量
+- `logger.py` - 日志记录功能
+- `llm_api.py` - 与LLM API的通信
+- `formatter.py` - 测试用例格式化
+- `analyzer.py` - 测试用例重复分析
+- `evaluator.py` - 测试用例质量评估
+- `api_server.py` - API服务接口
+- `core.py` - 主要程序逻辑
+- `main.py` - 程序入口点，包含frp服务启动功能
+- `compare.py` - 向后兼容的入口点
+- `frpc.toml` - frp客户端配置文件
+
+## 安装步骤
+
+1. 克隆仓库到本地
+2. 安装依赖库：
 ```
-- goldenset/           # 黄金标准测试用例目录
-  - golden_cases.json  # 黄金标准测试用例文件
-- testset/             # 待评测测试用例目录
-  - test_cases.json    # 待评测测试用例文件
-- log/                 # 日志文件目录
-  - evaluation_log.txt # 评测日志
-- output_evaluation/   # 评测结果输出目录
-  - evaluation_json/   # JSON格式评测结果
-  - evaluation_markdown/ # Markdown格式评测报告
-```
-
-## 安装依赖
-
-```bash
 pip install fastapi uvicorn aiohttp chardet python-multipart
 ```
+3. 下载frp客户端：
+   - 从[frp官方GitHub](https://github.com/fatedier/frp/releases)下载适合您系统的frp客户端
+   - 将`frpc`可执行文件放置在项目根目录，或确保它在系统PATH中
 
 ## 使用方法
 
-### 1. API服务方式（默认）
+### API模式（推荐）
 
-#### 启动服务
-
-```bash
-python compare.py
+1. 启动API服务器和frp服务：
+```
+python main.py
 ```
 
-服务将在 http://127.0.0.1:8000 上运行，自动创建所需目录。
+2. 服务器将在本地启动（http://127.0.0.1:8000）并通过frp映射到外网
+3. 控制台会显示本地和外网访问地址
+4. 调用API接口进行评测
 
-#### API接口
+### 命令行模式（不启动API和frp）
 
-##### 1.1 评测测试用例
+```
+python main.py --cli --ai [AI测试用例文件路径] --golden [黄金标准测试用例文件路径]
+```
 
-```http
-POST http://127.0.0.1:8000/compare-test-cases
-Content-Type: application/json
+### 向后兼容模式
 
+```
+python compare.py --ai [AI测试用例文件路径] --golden [黄金标准测试用例文件路径]
+```
+
+## frp服务配置
+
+frp服务配置位于`frpc.toml`文件中，您可以根据需要修改以下参数：
+
+```toml
+serverAddr = "x.x.x.x"  # frp服务器地址
+serverPort = 7000               # frp服务器端口
+
+auth.method = "token"           # 认证方式
+auth.token = "xxxxxxxxxx"  # 认证令牌
+
+[[proxies]]
+name = "feishu-tcp"             # 代理名称
+type = "tcp"                    # 代理类型
+localIP = "127.0.0.1"           # 本地IP
+localPort = 8000                # 本地端口
+remotePort = 8000               # 远程端口
+```
+
+如需使用自己的frp服务器，请修改`serverAddr`、`serverPort`和`auth.token`参数。
+
+## API接口文档
+
+### 1. 比较测试用例
+
+**请求：** `POST http://x.x.x.x:8000/compare-test-cases`
+
+**参数：**
+```json
 {
-  "ai_test_cases": "AI测试用例的JSON字符串",
-  "golden_test_cases": "黄金标准测试用例的JSON字符串(可选)",
-  "model_name": "deepseek-ai/DeepSeek-R1",
+  "ai_test_cases": "JSON字符串",
+  "golden_test_cases": "JSON字符串（可选）",
+  "model_name": "deepseek-r1-250528（可选）",
   "save_results": true
 }
 ```
 
-**参数说明**:
-- `ai_test_cases`: 必填，AI生成的测试用例JSON字符串
-- `golden_test_cases`: 可选，黄金标准测试用例JSON字符串。如果不提供，系统会自动从goldenset目录读取
-- `model_name`: 可选，使用的模型名称，默认为"deepseek-ai/DeepSeek-R1"
-- `save_results`: 可选，是否保存结果文件，默认为true
-
-**返回示例**:
+**响应：**
 ```json
 {
   "success": true,
   "message": "测试用例评测完成",
-  "evaluation_result": {
-    "evaluation_summary": {
-      "overall_score": "4.2",
-      "final_suggestion": "..."
-    },
-    "detailed_report": {
-      // 详细评测数据
-    }
-  },
-  "report": "# 测试用例评估报告\n\n...",
+  "evaluation_result": { /* 评测结果 */ },
+  "report": "Markdown格式的报告",
   "files": {
-    "report_md": "output_evaluation/evaluation_markdown/evaluation_report-deepseek-ai/DeepSeek-R1.md",
-    "report_json": "output_evaluation/evaluation_json/evaluation_report-deepseek-ai/DeepSeek-R1.json"
+    "report_md": "报告文件路径",
+    "report_json": "JSON报告文件路径"
   },
   "finish_task": true
 }
 ```
 
-**说明**:
-- API现在直接返回评测结果，不再需要通过任务ID查询状态
-- `finish_task`: 为true表示任务已完成
-- 评测可能需要一些时间，服务器会等待评测完成后再返回结果
+### 2. 上传测试用例
 
-##### 1.2 上传测试用例文件
+**请求：** `POST http://x.x.x.x:8000/upload-test-cases`
 
-```http
-POST http://127.0.0.1:8000/upload-test-cases
-Content-Type: multipart/form-data
+**参数：**
+- `file`: 文件上传
+- `file_type`: "ai" 或 "golden"
 
-file: [测试用例文件]
-file_type: "ai"  # 或 "golden"
-```
-
-**参数说明**:
-- `file`: 上传的测试用例文件
-- `file_type`: 文件类型，"ai"表示AI生成的测试用例，"golden"表示黄金标准测试用例
-
-**返回示例**:
+**响应：**
 ```json
 {
   "success": true,
-  "message": "ai测试用例文件上传成功",
-  "file_path": "testset/test_cases.json"
+  "message": "测试用例文件上传成功",
+  "file_path": "保存路径"
 }
 ```
 
-##### 1.3 从JSON数据评测测试用例
+### 3. 健康检查
 
-```http
-POST http://127.0.0.1:8000/evaluate-from-json
-Content-Type: application/json
+**请求：** `GET http://x.x.x.x:8000/health`
 
+**响应：**
+```json
 {
-  "ai_test_cases": "AI测试用例的JSON字符串",
-  "golden_test_cases": "黄金标准测试用例的JSON字符串(可选)"
+  "status": "healthy",
+  "timestamp": 1689123456.789,
+  "dirs_status": { /* 目录状态 */ },
+  "model_info": { /* 模型信息 */ }
 }
 ```
 
-**说明**: 功能与/compare-test-cases相同，也会直接返回评测结果。
+## 配置说明
 
-### 2. 命令行方式
+主要配置参数位于 `config.py` 文件中，包括：
 
-如果您想直接在命令行使用工具而不启动API服务，可以使用：
+- API_URL：LLM API的URL
+- MODEL_NAME：使用的模型名称（当前默认为"deepseek-r1-250528"）
+- VOLC_BEARER_TOKEN：API认证令牌
+- 输入/输出文件路径设置
+- 并行处理配置
 
-```bash
-python compare.py --cli [--ai AI测试用例文件路径] [--golden 黄金标准测试用例文件路径]
-```
+## 目录结构
 
-**示例**:
-```bash
-# 使用自定义文件路径
-python compare.py --cli --ai ./my_test_cases.json --golden ./my_golden_cases.json
+程序会自动创建以下目录：
+- `goldenset/`：存放黄金标准测试用例
+- `testset/`：存放AI生成的测试用例
+- `log/`：存放日志文件
+- `output_evaluation/evaluation_json/`：存放JSON格式评测结果
+- `output_evaluation/evaluation_markdown/`：存放Markdown格式评测报告
 
-# 使用默认文件路径
-python compare.py --cli
-```
+## 评测报告特性
 
-如果不指定文件路径，将使用默认的`testset/test_cases.json`和`goldenset/golden_cases.json`。
+- 树状评估框架图：直观展示评估维度的层次结构
+- 综合评分表格：使用星号评分可视化展示各维度得分
+- 重复率对比图：比较AI测试用例与黄金标准的重复率
+- 重复类型分布图：展示不同类型重复的分布情况
+- 测试覆盖流程图：可视化测试用例覆盖的关键流程
+- 实时生成时间：每次生成报告时自动更新时间戳
+- 自定义评估中心：显示"gogogo出发喽评估中心"品牌
 
-## 与外部系统集成示例
+## 测试用例格式
 
-以下是一个Python示例，展示如何将本工具与外部测试用例生成系统集成：
+工具会自动将各种格式的测试用例标准化为统一格式，包含以下字段：
+- `case_id`：测试用例ID
+- `title`：测试用例标题
+- `preconditions`：前置条件
+- `steps`：测试步骤
+- `expected_results`：预期结果
 
-```python
-import requests
-import json
+## 常见问题解答
 
-# 1. 从外部系统获取测试用例
-response = requests.post("http://127.0.0.1:8000/generate-json", json={
-    # 您的参数
-})
-test_cases = response.json()
+1. **frp服务无法启动怎么办？**
+   - 检查frpc可执行文件是否存在于项目根目录
+   - 确认frpc.toml配置是否正确
+   - 查看日志文件了解具体错误信息
 
-# 2. 发送评测请求并直接获取评测结果
-eval_response = requests.post("http://127.0.0.1:8000/compare-test-cases", json={
-    "ai_test_cases": json.dumps(test_cases)  # 自动从goldenset中读取黄金标准
-})
+2. **如何更改外网映射端口？**
+   - 修改frpc.toml文件中的remotePort参数
 
-# 3. 处理评测结果
-result = eval_response.json()
-if result.get("success") and result.get("finish_task"):
-    print("评测完成!")
-    evaluation_result = result.get("evaluation_result")
-    report = result.get("report")
-    
-    # 输出总体得分
-    overall_score = evaluation_result.get("evaluation_summary", {}).get("overall_score")
-    print(f"总体得分: {overall_score}")
-    
-    # 保存报告到文件
-    with open("evaluation_report.md", "w", encoding="utf-8") as f:
-        f.write(report)
-    print("报告已保存到 evaluation_report.md")
-else:
-    print(f"评测失败: {result.get('error')}")
-```
+3. **如何使用自己的frp服务器？**
+   - 修改frpc.toml中的serverAddr、serverPort和auth.token参数
+
+4. **评测报告中的图表无法显示？**
+   - 确保使用支持Mermaid图表的Markdown查看器
+   - 或使用支持Mermaid的在线Markdown编辑器查看
 
 ## 注意事项
 
-1. 首次运行时，系统会自动创建所需的目录结构
-2. 黄金标准测试用例应当放在`goldenset`文件夹中，命名为`golden_cases*.json`（如`golden_cases.json`、`golden_cases_v2.json`等）
-3. 评测结果将保存在`output_evaluation`文件夹的对应子文件夹中
-4. 日志文件将保存在`log`文件夹中
-5. API接口支持跨域请求，可以从前端页面直接调用
+1. 首次运行前请确保配置文件中的API密钥已正确设置
+2. 评测结果会自动保存到指定目录
+3. 如需使用API模式，请确保已安装FastAPI和uvicorn
+4. 使用frp服务需要确保frpc可执行文件存在且配置正确
 
-## 测试用例文件格式示例
+## 许可证
 
-### AI测试用例格式示例
-
-```json
-{
-  "testcases": [
-    {
-      "case_id": "TC-FUNC-001",
-      "title": "测试用户注册功能-有效输入",
-      "preconditions": "系统处于注册页面",
-      "steps": "1. 输入有效用户名\n2. 输入有效密码\n3. 输入有效邮箱\n4. 点击注册按钮",
-      "expected_results": "1. 注册成功\n2. 跳转到首页\n3. 收到欢迎邮件"
-    },
-    {
-      "case_id": "TC-FUNC-002",
-      "title": "测试用户注册功能-无效用户名",
-      "preconditions": "系统处于注册页面",
-      "steps": "1. 输入无效用户名（少于3个字符）\n2. 输入有效密码\n3. 输入有效邮箱\n4. 点击注册按钮",
-      "expected_results": "1. 提示用户名无效\n2. 注册失败"
-    }
-  ]
-}
-```
-
-### 黄金标准测试用例格式示例
-
-```json
-{
-  "test_cases": {
-    "functional_test_cases": [
-      {
-        "case_id": "TC-FUNC-001",
-        "title": "验证用户注册-有效数据",
-        "preconditions": "用户位于注册页面",
-        "steps": "1. 输入有效用户名\n2. 输入有效密码\n3. 确认密码\n4. 输入有效邮箱\n5. 点击提交按钮",
-        "expected_results": "1. 用户成功注册\n2. 系统显示注册成功消息\n3. 系统发送确认邮件到用户邮箱"
-      },
-      {
-        "case_id": "TC-FUNC-002",
-        "title": "验证用户注册-用户名已存在",
-        "preconditions": "用户位于注册页面\n系统中已存在用户名'existinguser'",
-        "steps": "1. 输入用户名'existinguser'\n2. 输入有效密码\n3. 确认密码\n4. 输入有效邮箱\n5. 点击提交按钮",
-        "expected_results": "1. 系统显示错误消息'用户名已存在'\n2. 注册失败"
-      }
-    ]
-  }
-}
-``` 
+本项目采用MIT许可证 

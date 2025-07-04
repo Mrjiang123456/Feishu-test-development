@@ -1,99 +1,123 @@
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from langgraph_use import graph
-from regenerate import regenerate_graph
-from feishu_api import get_feishu_doc_content
-import logging
+import os
+import sys
+import argparse
 import uvicorn
+import subprocess
+import time
+import signal
+import threading
+from logger import log
+from core import main
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
-
-app = FastAPI()
-
-
-class GenerateRequest(BaseModel):
-    document_id: str
-    user_access_token: str
-
-
-class RegenerateRequest(BaseModel):
-    document_id: str
-    user_access_token: str
-    current_testcases: list
-    review_report: str
-    reason: str
-
-
-@app.post("/generate-cases")
-async def generate_testcases_api(request_data: GenerateRequest):
+# 启动frp服务的函数
+def start_frp_service():
+    """启动frp服务，将本地服务映射到外网"""
+    log("正在启动frp服务...", important=True)
     try:
-        logger.info(f"收到飞书请求，document_id={request_data.document_id}")
-
-        # 获取飞书文档内容
-        result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
-        prd_text = result.get("markdown")
-        logger.info(prd_text)
-
-        if not prd_text:
-            return JSONResponse({"success": False, "error": "文档内容为空"}, status_code=400)
-
-        initial_state = {
-            "prd_text": prd_text,
-            "prd_title": "",
-            "requirements": "",
-            "testcases": {},
-            "validated": ""
-        }
-
-        logger.info("开始调用图谱生成测试用例")
-        result_graph = await graph.ainvoke(initial_state)
-        logger.info("图谱调用完成，生成测试用例成功")
-
-        return JSONResponse({
-            "success": True,
-            "testcases": result_graph.get("testcases")
-        })
-
+        # 检查frpc可执行文件是否存在
+        frpc_path = "./frpc"
+        if not os.path.exists(frpc_path):
+            log("未找到frpc可执行文件，尝试使用系统frpc命令", important=True)
+            frpc_path = "frpc"
+        
+        # 启动frp客户端
+        frp_process = subprocess.Popen(
+            [frpc_path, "-c", "frpc.toml"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # 检查frp是否成功启动
+        time.sleep(2)
+        if frp_process.poll() is None:
+            log("frp服务启动成功，本地服务已映射到外网", important=True)
+            return frp_process
+        else:
+            stdout, stderr = frp_process.communicate()
+            log(f"frp服务启动失败: {stderr}", important=True)
+            return None
     except Exception as e:
-        logger.error("生成测试用例失败", exc_info=True)
-        return JSONResponse({"success": False, "error": f"生成测试用例失败: {str(e)}"}, status_code=500)
+        log(f"启动frp服务时出错: {str(e)}", important=True)
+        return None
 
-
-@app.post("/regenerate-cases")
-async def regenerate_testcases_api(request_data: RegenerateRequest):
-    try:
-        # 重新从飞书获取 PRD 文本
-        result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
-        prd_text = result.get("markdown")
-        logger.info(prd_text)
-
-        if not prd_text:
-            return JSONResponse({"success": False, "error": "飞书文档内容为空"}, status_code=400)
-
-        logger.info("开始调用重新生成图谱")
-        initial_state = {
-            "prd_text": prd_text,
-            "current_testcases": request_data.current_testcases,
-            "review_report": request_data.review_report,
-            "reason": request_data.reason,
-            "new_requirements": "",
-            "new_testcases": {}
-        }
-
-        result_graph = await regenerate_graph.ainvoke(initial_state)
-        logger.info("重新生成成功")
-
-        return JSONResponse({
-            "success": True,
-            "testcases": result_graph.get("new_testcases")
-        })
-
-    except Exception as e:
-        logger.error("重新生成失败", exc_info=True)
-        return JSONResponse({"success": False, "error": str(e)}, status_code=500)
-
+# 监控frp服务输出的线程函数
+def monitor_frp_output(process):
+    """监控frp服务的输出"""
+    while process and process.poll() is None:
+        try:
+            output = process.stdout.readline()
+            if output:
+                log(f"FRP: {output.strip()}")
+        except:
+            break
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    if len(sys.argv) > 1 and sys.argv[1] == "--cli":
+        # 命令行模式
+        log("以命令行模式运行...", important=True)
+        parser = argparse.ArgumentParser(description="测试用例比较工具")
+        parser.add_argument("--ai", help="AI生成的测试用例文件路径")
+        parser.add_argument("--golden", help="黄金标准测试用例文件路径")
+        args = parser.parse_args(sys.argv[2:])
+        main(args.ai, args.golden)
+    else:
+        # API模式（默认）
+        try:
+            from api_server import app
+            if app:
+                log("启动API服务器...", important=True)
+                
+                # 启动frp服务
+                frp_process = start_frp_service()
+                
+                # 如果frp服务启动成功，创建监控线程
+                if frp_process:
+                    monitor_thread = threading.Thread(
+                        target=monitor_frp_output,
+                        args=(frp_process,),
+                        daemon=True
+                    )
+                    monitor_thread.start()
+                    
+                    # 注册清理函数，确保在程序退出时关闭frp进程
+                    def cleanup(signum, frame):
+                        log("正在关闭frp服务...", important=True)
+                        if frp_process and frp_process.poll() is None:
+                            frp_process.terminate()
+                            frp_process.wait(timeout=5)
+                        sys.exit(0)
+                    
+                    # 注册信号处理
+                    signal.signal(signal.SIGINT, cleanup)
+                    signal.signal(signal.SIGTERM, cleanup)
+                
+                # 启动uvicorn服务器
+                log("本地API服务地址: http://127.0.0.1:8000", important=True)
+                if frp_process:
+                    with open("frpc.toml", "r") as f:
+                        content = f.read()
+                        server_addr = None
+                        server_port = None
+                        remote_port = None
+                        
+                        # 解析frpc.toml文件获取服务器地址和端口
+                        for line in content.split("\n"):
+                            if "serverAddr" in line and "=" in line:
+                                server_addr = line.split("=")[1].strip().strip('"')
+                            elif "serverPort" in line and "=" in line:
+                                server_port = line.split("=")[1].strip().strip('"')
+                            elif "remotePort" in line and "=" in line:
+                                remote_port = line.split("=")[1].strip().strip('"')
+                        
+                        if server_addr and remote_port:
+                            log(f"外网访问地址: http://{server_addr}:{remote_port}", important=True)
+                
+                uvicorn.run("api_server:app", host="127.0.0.1", port=8000, reload=True)
+            else:
+                log("错误：API服务器初始化失败", important=True)
+                log("请确保已安装所需库: pip install fastapi uvicorn aiohttp chardet python-multipart", important=True)
+        except ImportError:
+            log("错误：未安装FastAPI和uvicorn，无法启动API服务", important=True)
+            log("请安装所需库: pip install fastapi uvicorn aiohttp chardet python-multipart", important=True)
+            log("如需以命令行模式运行，请使用: python main.py --cli", important=True) 

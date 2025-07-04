@@ -242,3 +242,215 @@
 [2025-07-03 15:38:31] [模型: deepseek-r1-250528] [总计: 419.3s] 评测完成，总执行时间: 419.3秒
 === 评测日志结束 [deepseek-r1-250528] 2025-07-03 15:38:31，总执行时间: 419.3秒 ===
 
+[2025-07-04 23:42:35] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 启动API服务器...
+[2025-07-04 23:42:35] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 正在启动frp服务...
+[2025-07-04 23:42:35] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 未找到frpc可执行文件，尝试使用系统frpc命令
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] frp服务启动成功，本地服务已映射到外网
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] 本地API服务地址: http://127.0.0.1:8000
+oot.go:149] start frpc service for config file [frpc.toml]
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] FRP: [0m[1;34m2025-07-04 23:42:35.710 [I] [client/service.go:314] try to connect to server...
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] FRP: [0m[1;34m2025-07-04 23:42:35.953 [I] [client/service.go:306] [70d4d9b354482ed5] login to server success, get run id [70d4d9b354482ed5]
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] 外网访问地址: http://124.220.155.193:8000
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] FRP: [0m[1;34m2025-07-04 23:42:35.953 [I] [proxy/proxy_manager.go:177] [70d4d9b354482ed5] proxy added: [feishu-tcp]
+[2025-07-04 23:42:37] [INFO] [模型: deepseek-r1-250528] [总计: 2.1s] FRP: [0m[1;33m2025-07-04 23:42:36.014 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:43:09] [INFO] [模型: deepseek-r1-250528] [总计: 33.4s] FRP: [0m[1;33m2025-07-04 23:43:09.024 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] API请求开始: req-1751643791719 - POST /compare-test-cases
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 接收到评测测试用例请求: task-1751643791929
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 使用模型: deepseek-r1-250528
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 从goldenset文件夹读取黄金标准测试用例
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 成功从文件 goldenset\golden_cases.json 读取黄金标准测试用例
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 开始执行评测任务: task-1751643791929
+
+=== 评测日志开始 [deepseek-r1-250528] 2025-07-04 23:43:11 ===
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 日志记录开始
+[2025-07-04 23:43:11] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 启动测试用例评测流程
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测报告将保存为: output_evaluation/evaluation_markdown/evaluation_report-20250704234312.md
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测JSON结果将保存为: output_evaluation/evaluation_json/evaluation_report-20250704234312.json
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 系统环境信息: {"platform": "Windows-10-10.0.22000-SP0", "python_version": "3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)]", "api_url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions", "model": "deepseek-r1-250528"}
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的AI测试用例数据
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的黄金标准测试用例数据
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功加载测试用例数据
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化AI测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] AI测试用例JSON解析成功
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到98个测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化98个AI测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的AI测试用例已保存到 testset/formatted_test_cases.json
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化Golden测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] Golden测试用例JSON解析成功
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到67个测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化67个Golden测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的黄金标准测试用例已保存到 goldenset/formatted_golden_cases.json
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始评测测试用例
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 开始测试用例评测
+[2025-07-04 23:43:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.3s] AI测试用例数量: 98, 黄金标准测试用例数量: 67
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例重复率: 3.06% (3个)
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] 黄金标准测试用例重复率: 10.45% (7个)
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例重复类型分布: {"title": 4, "steps": 3, "expected_results": 0, "mixed": 0}
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例按类别重复率: {"未分类": {"total": 98, "title_duplicates": 4, "steps_duplicates": 0, "duplicate_rate": 4.08}}
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 生成了 3 条AI测试用例合并建议
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 调用LLM: prompt长度=71503
+[2025-07-04 23:43:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:43:42] [INFO] [模型: deepseek-r1-250528] [总计: 66.5s] FRP: [0m[1;33m2025-07-04 23:43:42.117 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:44:15] [INFO] [模型: deepseek-r1-250528] [总计: 99.5s] FRP: [0m[1;33m2025-07-04 23:44:15.078 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:44:48] [INFO] [模型: deepseek-r1-250528] [总计: 132.4s] FRP: [0m[1;33m2025-07-04 23:44:48.052 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:45:21] [INFO] [模型: deepseek-r1-250528] [总计: 165.4s] FRP: [0m[1;33m2025-07-04 23:45:21.042 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.4s] LLM调用成功，耗时=131.5秒
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.4s] 测试用例评测完成
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.4s] JSON格式的评测结果已保存到 output_evaluation/evaluation_json/evaluation_report-20250704234312.json
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.5s] 开始生成Markdown格式报告
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.6s] 开始生成Markdown报告
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.7s] 调用LLM: prompt长度=4270
+[2025-07-04 23:45:25] [INFO] [模型: deepseek-r1-250528] [总计: 133.7s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:45:54] [INFO] [模型: deepseek-r1-250528] [总计: 198.4s] FRP: [0m[1;33m2025-07-04 23:45:54.057 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:46:27] [INFO] [模型: deepseek-r1-250528] [总计: 231.5s] FRP: [0m[1;33m2025-07-04 23:46:27.071 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.2s] LLM调用成功，耗时=90.5秒
+[2025-07-04 23:46:56] [ERROR] [模型: deepseek-r1-250528] [总计: 224.2s] JSON解析错误，返回原始文本: JSONDecodeError - Expecting value: line 1 column 1 (char 0)
+[2025-07-04 23:46:56] [ERROR] [模型: deepseek-r1-250528] [总计: 224.2s] 详细错误信息: {"error_type": "JSONDecodeError", "error_message": "Expecting value: line 1 column 1 (char 0)", "content_preview": "mermaid\ngraph TD\n    A[测试用例评估] --> B[格式合规性]\n    A --> C[内容质量]\n    A --> D[功能覆盖]\n    A --> E[工程效率]\n  ...", "traceback": "Traceback (most recent call last):\n  File \"F:\\python学习\\Feishu-test3\\llm_api.py\", line 170, in async_call_llm\n    parsed_json = json.loads(json_content)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n"}
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.3s] 成功生成Markdown报告
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.5s] 已更新报告页脚为实时时间和自定义评估中心名称
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.5s] Markdown格式的评测报告已保存到 output_evaluation/evaluation_markdown/evaluation_report-20250704234312.md
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.6s] 测试用例评测流程完成！
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.7s] 评测完成，总执行时间: 224.7秒
+=== 评测日志结束 [deepseek-r1-250528] 2025-07-04 23:46:56，总执行时间: 224.7秒 ===
+
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 评测任务 task-1751643791929 完成
+[2025-07-04 23:46:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] API请求完成: req-1751643791719 - 状态码: 200, 耗时: 225.00秒
+[2025-07-04 23:47:00] [INFO] [模型: deepseek-r1-250528] [总计: 264.5s] FRP: [0m[1;33m2025-07-04 23:47:00.070 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:47:33] [INFO] [模型: deepseek-r1-250528] [总计: 297.5s] FRP: [0m[1;33m2025-07-04 23:47:33.082 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:48:06] [INFO] [模型: deepseek-r1-250528] [总计: 330.5s] FRP: [0m[1;33m2025-07-04 23:48:06.100 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:48:39] [INFO] [模型: deepseek-r1-250528] [总计: 363.5s] FRP: [0m[1;33m2025-07-04 23:48:39.095 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:49:12] [INFO] [模型: deepseek-r1-250528] [总计: 396.5s] FRP: [0m[1;33m2025-07-04 23:49:12.118 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:49:45] [INFO] [模型: deepseek-r1-250528] [总计: 429.5s] FRP: [0m[1;33m2025-07-04 23:49:45.142 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:50:18] [INFO] [模型: deepseek-r1-250528] [总计: 462.5s] FRP: [0m[1;33m2025-07-04 23:50:18.137 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:50:51] [INFO] [模型: deepseek-r1-250528] [总计: 495.5s] FRP: [0m[1;33m2025-07-04 23:50:51.148 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:51:24] [INFO] [模型: deepseek-r1-250528] [总计: 528.5s] FRP: [0m[1;33m2025-07-04 23:51:24.157 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:51:57] [INFO] [模型: deepseek-r1-250528] [总计: 561.6s] FRP: [0m[1;33m2025-07-04 23:51:57.171 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.1s] API请求开始: req-1751644332047 - POST /compare-test-cases
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.3s] 接收到评测测试用例请求: task-1751644332181
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.3s] 使用模型: deepseek-r1-250528
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.3s] 从goldenset文件夹读取黄金标准测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.3s] 成功从文件 goldenset\golden_cases.json 读取黄金标准测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 540.3s] 开始执行评测任务: task-1751644332181
+
+=== 评测日志开始 [deepseek-r1-250528] 2025-07-04 23:52:12 ===
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 日志记录开始
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 启动测试用例评测流程
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测报告将保存为: output_evaluation/evaluation_markdown/evaluation_report-20250704235212.md
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测JSON结果将保存为: output_evaluation/evaluation_json/evaluation_report-20250704235212.json
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 系统环境信息: {"platform": "Windows-10-10.0.22000-SP0", "python_version": "3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)]", "api_url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions", "model": "deepseek-r1-250528"}
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的AI测试用例数据
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的黄金标准测试用例数据
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功加载测试用例数据
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化AI测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] AI测试用例JSON解析成功
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到98个测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化98个AI测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的AI测试用例已保存到 testset/formatted_test_cases.json
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化Golden测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] Golden测试用例JSON解析成功
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到67个测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化67个Golden测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的黄金标准测试用例已保存到 goldenset/formatted_golden_cases.json
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始评测测试用例
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 开始测试用例评测
+[2025-07-04 23:52:12] [INFO] [模型: deepseek-r1-250528] [总计: 0.3s] AI测试用例数量: 98, 黄金标准测试用例数量: 67
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例重复率: 3.06% (3个)
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] 黄金标准测试用例重复率: 10.45% (7个)
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例重复类型分布: {"title": 4, "steps": 3, "expected_results": 0, "mixed": 0}
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] AI测试用例按类别重复率: {"未分类": {"total": 98, "title_duplicates": 4, "steps_duplicates": 0, "duplicate_rate": 4.08}}
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] 生成了 3 条AI测试用例合并建议
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] 调用LLM: prompt长度=71503
+[2025-07-04 23:52:13] [INFO] [模型: deepseek-r1-250528] [总计: 1.8s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:52:30] [INFO] [模型: deepseek-r1-250528] [总计: 594.6s] FRP: [0m[1;33m2025-07-04 23:52:30.177 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:53:03] [INFO] [模型: deepseek-r1-250528] [总计: 627.6s] FRP: [0m[1;33m2025-07-04 23:53:03.172 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:53:36] [INFO] [模型: deepseek-r1-250528] [总计: 660.6s] FRP: [0m[1;33m2025-07-04 23:53:36.188 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:53:52] [INFO] [模型: deepseek-r1-250528] [总计: 100.6s] LLM调用成功，耗时=98.8秒
+[2025-07-04 23:53:52] [INFO] [模型: deepseek-r1-250528] [总计: 100.6s] 测试用例评测完成
+[2025-07-04 23:53:52] [INFO] [模型: deepseek-r1-250528] [总计: 100.6s] JSON格式的评测结果已保存到 output_evaluation/evaluation_json/evaluation_report-20250704235212.json
+[2025-07-04 23:53:52] [INFO] [模型: deepseek-r1-250528] [总计: 100.7s] 开始生成Markdown格式报告
+[2025-07-04 23:53:52] [INFO] [模型: deepseek-r1-250528] [总计: 100.8s] 开始生成Markdown报告
+[2025-07-04 23:53:53] [INFO] [模型: deepseek-r1-250528] [总计: 100.9s] 调用LLM: prompt长度=4329
+[2025-07-04 23:53:53] [INFO] [模型: deepseek-r1-250528] [总计: 100.9s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:54:09] [INFO] [模型: deepseek-r1-250528] [总计: 693.6s] FRP: [0m[1;33m2025-07-04 23:54:09.181 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.2s] LLM调用成功，耗时=40.3秒
+[2025-07-04 23:54:33] [ERROR] [模型: deepseek-r1-250528] [总计: 141.2s] JSON解析错误，返回原始文本: JSONDecodeError - Expecting value: line 1 column 1 (char 0)
+[2025-07-04 23:54:33] [ERROR] [模型: deepseek-r1-250528] [总计: 141.2s] 详细错误信息: {"error_type": "JSONDecodeError", "error_message": "Expecting value: line 1 column 1 (char 0)", "content_preview": "mermaid\ngraph TD\n    A[测试用例评估] --> B[格式合规性]\n    A --> C[内容质量]\n    A --> D[功能覆盖]\n    A --> E[工程效率]\n  ...", "traceback": "Traceback (most recent call last):\n  File \"F:\\python学习\\Feishu-test3\\llm_api.py\", line 170, in async_call_llm\n    parsed_json = json.loads(json_content)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n"}
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.3s] 成功生成Markdown报告
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.4s] 已更新报告页脚为实时时间和自定义评估中心名称
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.4s] Markdown格式的评测报告已保存到 output_evaluation/evaluation_markdown/evaluation_report-20250704235212.md
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.6s] 测试用例评测流程完成！
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.7s] 评测完成，总执行时间: 141.7秒
+=== 评测日志结束 [deepseek-r1-250528] 2025-07-04 23:54:33，总执行时间: 141.7秒 ===
+
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.8s] 评测任务 task-1751644332181 完成
+[2025-07-04 23:54:33] [INFO] [模型: deepseek-r1-250528] [总计: 141.8s] API请求完成: req-1751644332047 - 状态码: 200, 耗时: 141.92秒
+[2025-07-04 23:54:42] [INFO] [模型: deepseek-r1-250528] [总计: 726.6s] FRP: [0m[1;33m2025-07-04 23:54:42.190 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:55:15] [INFO] [模型: deepseek-r1-250528] [总计: 759.6s] FRP: [0m[1;33m2025-07-04 23:55:15.190 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:55:48] [INFO] [模型: deepseek-r1-250528] [总计: 792.6s] FRP: [0m[1;33m2025-07-04 23:55:48.265 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:55:56] [INFO] [模型: deepseek-r1-250528] [总计: 224.6s] API请求开始: req-1751644556826 - POST /compare-test-cases
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 接收到评测测试用例请求: task-1751644557019
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 使用模型: deepseek-r1-250528
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 从goldenset文件夹读取黄金标准测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 成功从文件 goldenset\golden_cases.json 读取黄金标准测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 224.8s] 开始执行评测任务: task-1751644557019
+
+=== 评测日志开始 [deepseek-r1-250528] 2025-07-04 23:55:57 ===
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 日志记录开始
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.0s] 启动测试用例评测流程
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测报告将保存为: output_evaluation/evaluation_markdown/evaluation_report-20250704235557.md
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 本次评测JSON结果将保存为: output_evaluation/evaluation_json/evaluation_report-20250704235557.json
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 系统环境信息: {"platform": "Windows-10-10.0.22000-SP0", "python_version": "3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)]", "api_url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions", "model": "deepseek-r1-250528"}
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的AI测试用例数据
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 使用传入的黄金标准测试用例数据
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功加载测试用例数据
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化AI测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] AI测试用例JSON解析成功
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到98个测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化98个AI测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的AI测试用例已保存到 testset/formatted_test_cases.json
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始格式化Golden测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] Golden测试用例JSON解析成功
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 从原始数据中提取到67个测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 成功格式化67个Golden测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 格式化后的黄金标准测试用例已保存到 goldenset/formatted_golden_cases.json
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.1s] 开始评测测试用例
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.2s] 开始测试用例评测
+[2025-07-04 23:55:57] [INFO] [模型: deepseek-r1-250528] [总计: 0.3s] AI测试用例数量: 98, 黄金标准测试用例数量: 67
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] AI测试用例重复率: 3.06% (3个)
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 黄金标准测试用例重复率: 10.45% (7个)
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] AI测试用例重复类型分布: {"title": 4, "steps": 3, "expected_results": 0, "mixed": 0}
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] AI测试用例按类别重复率: {"未分类": {"total": 98, "title_duplicates": 4, "steps_duplicates": 0, "duplicate_rate": 4.08}}
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 生成了 3 条AI测试用例合并建议
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 调用LLM: prompt长度=71503
+[2025-07-04 23:55:58] [INFO] [模型: deepseek-r1-250528] [总计: 1.9s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:56:21] [INFO] [模型: deepseek-r1-250528] [总计: 825.7s] FRP: [0m[1;33m2025-07-04 23:56:21.304 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:56:54] [INFO] [模型: deepseek-r1-250528] [总计: 858.8s] FRP: [0m[1;33m2025-07-04 23:56:54.370 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.3s] LLM调用成功，耗时=56.4秒
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.3s] 测试用例评测完成
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.3s] JSON格式的评测结果已保存到 output_evaluation/evaluation_json/evaluation_report-20250704235557.json
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.4s] 开始生成Markdown格式报告
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.5s] 开始生成Markdown报告
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.6s] 调用LLM: prompt长度=4409
+[2025-07-04 23:56:55] [INFO] [模型: deepseek-r1-250528] [总计: 58.6s] 尝试调用LLM API (尝试 1/3), 目标URL: https://ark.cn-beijing.volces.com/api/v3/chat/completions
+[2025-07-04 23:57:27] [INFO] [模型: deepseek-r1-250528] [总计: 891.7s] FRP: [0m[1;33m2025-07-04 23:57:27.310 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.5s] LLM调用成功，耗时=35.9秒
+[2025-07-04 23:57:31] [ERROR] [模型: deepseek-r1-250528] [总计: 94.5s] JSON解析错误，返回原始文本: JSONDecodeError - Expecting value: line 1 column 1 (char 0)
+[2025-07-04 23:57:31] [ERROR] [模型: deepseek-r1-250528] [总计: 94.5s] 详细错误信息: {"error_type": "JSONDecodeError", "error_message": "Expecting value: line 1 column 1 (char 0)", "content_preview": "mermaid\ngraph TD\n    A[测试用例评估] --> B[格式合规性]\n    A --> C[内容质量]\n    A --> D[功能覆盖]\n    A --> E[工程效率]\n  ...", "traceback": "Traceback (most recent call last):\n  File \"F:\\python学习\\Feishu-test3\\llm_api.py\", line 170, in async_call_llm\n    parsed_json = json.loads(json_content)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\python\\Lib\\json\\decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n"}
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.6s] 成功生成Markdown报告
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.7s] 已更新报告页脚为实时时间和自定义评估中心名称
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.7s] Markdown格式的评测报告已保存到 output_evaluation/evaluation_markdown/evaluation_report-20250704235557.md
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.8s] 测试用例评测流程完成！
+[2025-07-04 23:57:31] [INFO] [模型: deepseek-r1-250528] [总计: 94.9s] 评测完成，总执行时间: 94.9秒
+=== 评测日志结束 [deepseek-r1-250528] 2025-07-04 23:57:32，总执行时间: 94.9秒 ===
+
+[2025-07-04 23:57:32] [INFO] [模型: deepseek-r1-250528] [总计: 95.0s] 评测任务 task-1751644557019 完成
+[2025-07-04 23:57:32] [INFO] [模型: deepseek-r1-250528] [总计: 95.0s] API请求完成: req-1751644556826 - 状态码: 200, 耗时: 95.22秒
+[2025-07-04 23:58:00] [INFO] [模型: deepseek-r1-250528] [总计: 924.6s] FRP: [0m[1;33m2025-07-04 23:58:00.247 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:58:33] [INFO] [模型: deepseek-r1-250528] [总计: 957.7s] FRP: [0m[1;33m2025-07-04 23:58:33.284 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:59:06] [INFO] [模型: deepseek-r1-250528] [总计: 990.7s] FRP: [0m[1;33m2025-07-04 23:59:06.297 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-04 23:59:39] [INFO] [模型: deepseek-r1-250528] [总计: 1023.6s] FRP: [0m[1;33m2025-07-04 23:59:39.258 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-05 00:00:12] [INFO] [模型: deepseek-r1-250528] [总计: 1056.7s] FRP: [0m[1;33m2025-07-05 00:00:12.352 [W] [client/control.go:170] [70d4d9b354482ed5] [feishu-tcp] start error: proxy [feishu-tcp] already exists
+[2025-07-05 00:00:29] [INFO] [模型: deepseek-r1-250528] [总计: 1074.2s] FRP: [0m

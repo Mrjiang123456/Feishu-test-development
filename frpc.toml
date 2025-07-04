@@ -1,0 +1,12 @@
+serverAddr = "x.x.x.x"  # frp 服务器地址
+serverPort = 7000
+
+auth.method = "token"
+auth.token = "xxxxxxxxxxxxxxxx"  # 认证 token
+
+[[proxies]]
+name = "feishu-tcp"  # 代理名称
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8000
+remotePort = 8000
