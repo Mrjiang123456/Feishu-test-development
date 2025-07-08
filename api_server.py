@@ -5,9 +5,11 @@ import asyncio
 import aiohttp
 import json
 import traceback
+import uuid  # 添加uuid导入
 from typing import Optional
 from config import MODEL_NAME, API_URL
 from logger import log, log_error, start_logging, end_logging
+from llm_api import clear_cache  # 导入清除缓存函数
 
 try:
     from fastapi import FastAPI, HTTPException, File, UploadFile, Form, Request
@@ -111,8 +113,12 @@ try:
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
         :return: 评测结果
         """
-        request_id = f"task-{int(time.time() * 1000)}"
+        # 生成唯一请求ID
+        request_id = f"task-{str(uuid.uuid4())[:8]}-{int(time.time() * 1000)}"
         log(f"接收到评测测试用例请求: {request_id}", important=True)
+
+        # 确保清除缓存，让每个请求都是全新的评测
+        clear_cache()
 
         try:
             # 更新全局变量
@@ -307,7 +313,7 @@ try:
         :param file_type: 文件类型，"ai"表示AI生成的测试用例，"golden"表示黄金标准测试用例
         :return: 上传结果
         """
-        request_id = f"upload-{int(time.time() * 1000)}"
+        request_id = f"upload-{str(uuid.uuid4())[:8]}-{int(time.time() * 1000)}"
         log(f"接收到文件上传请求: {request_id}, 文件类型: {file_type}, 文件名: {file.filename}")
 
         try:
@@ -409,6 +415,9 @@ try:
         :param request: 请求数据，包含AI测试用例和黄金标准测试用例
         :return: 评测结果
         """
+        # 确保清除缓存，让每次请求都是全新的评测
+        clear_cache()
+
         # 直接调用compare_test_cases_api
         return await compare_test_cases_api(request)
 

@@ -21,6 +21,24 @@ MODEL_NAME = "deepseek-r1-250528"
 VOLC_BEARER_TOKEN = "0333e8a0-55c7-4597-b3c2-702ee8516cba"  # 直接在这里写入你的密钥
 #VOLC_BEARER_TOKEN = "sk-tcjwmakxpmqtggsqiwrufqwazoggqjdutrzojmbsmchteehx"
 
+# --- 多评委委员会配置 ---
+ENABLE_MULTI_JUDGES = True  # 启用多评委评测
+# 评委模型列表
+JUDGE_MODELS = [
+    "deepseek-v3-250324",       # DeepSeek-R1
+    "doubao-seed-1-6-250615",  # DoubaoSeek
+]
+# 评测维度及权重配置
+EVALUATION_DIMENSIONS = {
+    "功能覆盖度": 0.30,
+    "缺陷发现能力": 0.25,
+    "工程效率": 0.20,
+    "语义质量": 0.15,
+    "安全与经济性": 0.10
+}
+# 最大并行评委数
+MAX_JUDGES_CONCURRENCY = 2
+
 # LLM生成参数
 LLM_TEMPERATURE = 0.2  # 评测时使用低temperature确保结果一致性
 LLM_TEMPERATURE_REPORT = 0.4  # 生成报告时使用稍高的temperature

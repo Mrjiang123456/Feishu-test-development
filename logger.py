@@ -81,7 +81,7 @@ def _ensure_log_writer():
         _log_writer_thread.start()
 
 
-def log(message, step=None, important=False, level="INFO"):
+def log(message, step=None, important=False, level="INFO", model_name=None):
     """
     记录日志，包含时间信息
 
@@ -89,6 +89,7 @@ def log(message, step=None, important=False, level="INFO"):
     :param step: 步骤名称
     :param important: 是否为重要日志
     :param level: 日志级别 (INFO, WARNING, ERROR, CRITICAL)
+    :param model_name: 模型名称，如果为None则使用配置中的MODEL_NAME
     """
     global start_time, step_times
 
@@ -102,8 +103,11 @@ def log(message, step=None, important=False, level="INFO"):
     # 计算从开始到现在的总时间
     total_elapsed = current_time - start_time
 
+    # 使用传入的model_name或配置中的MODEL_NAME
+    model_display = model_name if model_name else MODEL_NAME
+
     # 构建日志信息，包含模型名称和日志级别
-    log_message = f"[{timestamp}] [{level}] [模型: {MODEL_NAME}] [总计: {total_elapsed:.1f}s] {message}"
+    log_message = f"[{timestamp}] [{level}] [模型: {model_display}] [总计: {total_elapsed:.1f}s] {message}"
 
     # 只打印重要日志或错误日志
     if important or level in ["ERROR", "CRITICAL"]:
@@ -125,13 +129,14 @@ def log(message, step=None, important=False, level="INFO"):
             print(f"写入日志文件出错: {e}")
 
 
-def log_error(message, error_details=None, important=True):
+def log_error(message, error_details=None, important=True, model_name=None):
     """
     记录错误日志，包含详细的错误信息
 
     :param message: 错误消息
     :param error_details: 错误详情，可以是异常对象或字典
     :param important: 是否为重要日志
+    :param model_name: 模型名称，如果为None则使用配置中的MODEL_NAME
     """
     if error_details:
         if isinstance(error_details, dict):
@@ -148,7 +153,7 @@ def log_error(message, error_details=None, important=True):
 
         # 记录基本错误信息
         log(f"{message}: {error_info.get('error_type', 'Error')} - {error_info.get('error_message', '')}",
-            important=important, level="ERROR")
+            important=important, level="ERROR", model_name=model_name)
 
         # 记录详细错误信息
         error_log_message = f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} [ERROR] [详细错误信息]: {json.dumps(error_info, ensure_ascii=False)}"
@@ -168,7 +173,7 @@ def log_error(message, error_details=None, important=True):
             except Exception as e:
                 print(f"写入错误日志文件出错: {e}")
     else:
-        log(message, important=important, level="ERROR")
+        log(message, important=important, level="ERROR", model_name=model_name)
 
 
 def start_logging():

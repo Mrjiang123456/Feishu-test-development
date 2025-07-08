@@ -5,6 +5,7 @@ import aiohttp
 import asyncio
 import argparse
 import traceback
+import uuid  # 添加uuid模块导入
 from config import (
     FORMATTED_AI_CASES_FILE,
     FORMATTED_GOLDEN_CASES_FILE,
@@ -19,6 +20,7 @@ from config import (
 from logger import log, log_error, start_logging, end_logging
 from formatter import format_test_cases
 from evaluator import evaluate_test_cases, generate_markdown_report
+from llm_api import clear_cache  # 导入清除缓存函数
 
 
 # --- 主程序 ---
@@ -29,6 +31,14 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
     :param ai_cases_data: AI生成的测试用例数据（可选），JSON字符串
     :param golden_cases_data: 黄金标准测试用例数据（可选），JSON字符串
     """
+    # 清除之前的LLM API调用缓存，确保每次评测都是全新的
+    clear_cache()
+
+    # 生成会话唯一标识符，避免文件缓存问题
+    session_id = str(uuid.uuid4())
+    formatted_ai_cases_file = FORMATTED_AI_CASES_FILE.replace('.json', f'_{session_id}.json')
+    formatted_golden_cases_file = FORMATTED_GOLDEN_CASES_FILE.replace('.json', f'_{session_id}.json')
+
     start_logging()
     log("启动测试用例评测流程", important=True)
 
@@ -179,18 +189,22 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
         }
 
     # 创建aiohttp会话，使用配置文件中的优化参数设置
+    # 生成唯一的会话ID，确保每次评测使用新的会话
+    session_id = str(uuid.uuid4())
+    log(f"创建新的评测会话: {session_id}", important=True)
+
     timeout = aiohttp.ClientTimeout(total=AIOHTTP_TIMEOUT)
     connector = aiohttp.TCPConnector(
         limit=AIOHTTP_CONNECTOR_LIMIT,
         ttl_dns_cache=AIOHTTP_CONNECTOR_TTL,
-        force_close=False,  # 允许连接复用
+        force_close=True,  # 强制关闭连接，避免复用
         enable_cleanup_closed=True  # 自动清理关闭的连接
     )
 
     async with aiohttp.ClientSession(
             timeout=timeout,
             connector=connector,
-            headers={"Connection": "keep-alive"}  # 添加默认的保持连接头
+            headers={"Connection": "close", "X-Session-ID": session_id}  # 修改为不保持连接
     ) as session:
         try:
             # 2. 格式化测试用例 - 并行执行
@@ -213,14 +227,14 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
                     "error": "格式化AI测试用例失败"
                 }
 
-            # 保存格式化后的AI测试用例
+            # 保存格式化后的AI测试用例（使用会话唯一文件名）
             try:
-                os.makedirs(os.path.dirname(FORMATTED_AI_CASES_FILE), exist_ok=True)
-                with open(FORMATTED_AI_CASES_FILE, 'w', encoding='utf-8') as f:
+                os.makedirs(os.path.dirname(formatted_ai_cases_file), exist_ok=True)
+                with open(formatted_ai_cases_file, 'w', encoding='utf-8') as f:
                     json.dump(formatted_ai_cases, f, ensure_ascii=False, indent=2)
-                log(f"格式化后的AI测试用例已保存到 {FORMATTED_AI_CASES_FILE}", important=True)
+                log(f"格式化后的AI测试用例已保存到 {formatted_ai_cases_file}", important=True)
             except Exception as e:
-                log_error(f"保存格式化后的AI测试用例到 {FORMATTED_AI_CASES_FILE} 失败", e)
+                log_error(f"保存格式化后的AI测试用例到 {formatted_ai_cases_file} 失败", e)
                 # 继续执行，不中断流程
 
             if not formatted_golden_cases:
@@ -231,14 +245,14 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
                     "error": "格式化黄金标准测试用例失败"
                 }
 
-            # 保存格式化后的黄金标准测试用例
+            # 保存格式化后的黄金标准测试用例（使用会话唯一文件名）
             try:
-                os.makedirs(os.path.dirname(FORMATTED_GOLDEN_CASES_FILE), exist_ok=True)
-                with open(FORMATTED_GOLDEN_CASES_FILE, 'w', encoding='utf-8') as f:
+                os.makedirs(os.path.dirname(formatted_golden_cases_file), exist_ok=True)
+                with open(formatted_golden_cases_file, 'w', encoding='utf-8') as f:
                     json.dump(formatted_golden_cases, f, ensure_ascii=False, indent=2)
-                log(f"格式化后的黄金标准测试用例已保存到 {FORMATTED_GOLDEN_CASES_FILE}", important=True)
+                log(f"格式化后的黄金标准测试用例已保存到 {formatted_golden_cases_file}", important=True)
             except Exception as e:
-                log_error(f"保存格式化后的黄金标准测试用例到 {FORMATTED_GOLDEN_CASES_FILE} 失败", e)
+                log_error(f"保存格式化后的黄金标准测试用例到 {formatted_golden_cases_file} 失败", e)
                 # 继续执行，不中断流程
 
             # 3. 评测测试用例和生成报告 - 并行执行
@@ -413,8 +427,17 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
 
             # 保存Markdown格式的报告
             try:
+                # 确保markdown_report是字符串
+                if not isinstance(markdown_report, str):
+                    markdown_report = str(markdown_report)
+
+                # 确保目录存在
+                os.makedirs(os.path.dirname(report_file), exist_ok=True)
+
+                # 使用utf-8编码保存文件
                 with open(report_file, 'w', encoding='utf-8') as f:
                     f.write(markdown_report)
+
                 log(f"Markdown格式的评测报告已保存到 {report_file}", important=True)
                 # 添加小延迟，确保日志顺序
                 await asyncio.sleep(0.1)
@@ -426,6 +449,16 @@ async def async_main(ai_cases_data=None, golden_cases_data=None):
             # 添加小延迟，确保日志顺序
             await asyncio.sleep(0.1)
             end_logging()
+
+            # 清理临时文件
+            try:
+                if os.path.exists(formatted_ai_cases_file):
+                    os.remove(formatted_ai_cases_file)
+                if os.path.exists(formatted_golden_cases_file):
+                    os.remove(formatted_golden_cases_file)
+                log("已清理临时格式化文件", level="INFO")
+            except Exception as e:
+                log_error(f"清理临时文件失败: {str(e)}", level="WARNING")
 
             return {
                 "success": True,

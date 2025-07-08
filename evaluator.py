@@ -1,12 +1,21 @@
 import json
 import aiohttp
-from logger import log, log_error
-from llm_api import async_call_llm
+from logger import log, log_error, end_logging
+from llm_api import async_call_llm, extract_valid_json
 from analyzer import find_duplicate_test_cases
 import re
 import asyncio
 import concurrent.futures
-from config import MAX_CONCURRENT_REQUESTS, LLM_TEMPERATURE, LLM_TEMPERATURE_REPORT
+from config import MAX_CONCURRENT_REQUESTS, LLM_TEMPERATURE, LLM_TEMPERATURE_REPORT, ENABLE_MULTI_JUDGES
+
+# 在文件顶部导入委员会评测功能
+try:
+    from committee import evaluate_with_committee
+
+    COMMITTEE_IMPORTED = True
+except ImportError:
+    log_error("无法导入评委委员会模块，将使用单一模型评测", level="WARNING")
+    COMMITTEE_IMPORTED = False
 
 
 async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_cases):
@@ -164,6 +173,56 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
                     expected_preview += f" ... 等{len(expected)}个预期结果"
                 duplicate_info_text += f"- 合并后预期结果: {expected_preview}\n"
 
+    # 判断是否使用多评委委员会评测
+    if ENABLE_MULTI_JUDGES and COMMITTEE_IMPORTED:
+        log("启用多评委委员会评测", important=True)
+        try:
+            # 调用委员会评测
+            evaluation_result = await evaluate_with_committee(
+                session,
+                ai_testcases,
+                golden_testcases,
+                duplicate_info_text
+            )
+
+            if evaluation_result:
+                log("多评委委员会评测完成", important=True)
+
+                # 将重复测试用例信息添加到评测结果中
+                evaluation_result["duplicate_types"] = ai_duplicate_info['duplicate_types']
+                evaluation_result["duplicate_categories"] = ai_duplicate_info.get('duplicate_categories', {})
+                evaluation_result["duplicate_info"] = {
+                    "ai_duplicate_rate": ai_duplicate_info['duplicate_rate'],
+                    "golden_duplicate_rate": golden_duplicate_info['duplicate_rate'],
+                    "merge_suggestions": ai_duplicate_info.get("merge_suggestions", [])
+                }
+
+                # 明确标记为综合评测结果
+                if "evaluation_summary" in evaluation_result:
+                    if "final_suggestion" in evaluation_result["evaluation_summary"]:
+                        evaluation_result["evaluation_summary"]["final_suggestion"] = "【多评委综合评测结果】" + \
+                                                                                      evaluation_result[
+                                                                                          "evaluation_summary"][
+                                                                                          "final_suggestion"]
+
+                    # 添加综合评测标记
+                    evaluation_result["is_committee_result"] = True
+                    evaluation_result["committee_info"] = {
+                        "judge_count": len(evaluation_result.get("committee_summary", {}).get("judge_scores", {})),
+                        "judges": list(evaluation_result.get("committee_summary", {}).get("judge_scores", {}).keys())
+                    }
+
+                return evaluation_result
+            else:
+                log_error("多评委委员会评测失败，回退到单一模型评测", important=True)
+                # 如果委员会评测失败，回退到单一模型评测
+        except Exception as e:
+            log_error(f"多评委委员会评测出错: {e}", important=True)
+            log("回退到单一模型评测", important=True)
+
+    # 单一模型评测流程
+    log("使用单一模型进行评测", important=True)
+
     # 构建完整提示
     prompt = f"""
 # 任务
@@ -271,7 +330,8 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
         session,
         prompt,
         system_prompt,
-        temperature=LLM_TEMPERATURE  # 使用配置中的低temperature值
+        temperature=LLM_TEMPERATURE,  # 使用配置中的低temperature值
+        use_cache=False  # 禁用缓存，确保每次评测都是全新的
     )
 
     if not result:
@@ -772,7 +832,7 @@ graph TD
 # 报告要求
 请生成一份专业、详细的Markdown格式评估报告，包含以下内容：
 
-1. **报告标题与摘要**：简要总结评估结果
+1. **报告标题与摘要**：{"【多评委综合评测】" if evaluation_result.get("is_committee_result", False) else ""}简要总结评估结果
 2. **评估指标与方法**：说明使用的评估标准和方法，并包含评估框架图
 {evaluation_framework_chart}
 3. **综合评分**：使用提供的表格和饼图展示各维度评分
@@ -818,7 +878,8 @@ graph TD
         session,
         prompt,
         system_prompt,
-        temperature=LLM_TEMPERATURE_REPORT  # 使用配置中的较高temperature值
+        temperature=LLM_TEMPERATURE_REPORT,  # 使用配置中的较高temperature值
+        use_cache=False  # 禁用缓存，确保每次评测都是全新的
     )
 
     if not result:
@@ -905,6 +966,101 @@ graph TD
             await asyncio.sleep(0.1)
         return result
 
+    # 尝试使用extract_valid_json函数从结果中提取有效的JSON
+    try:
+        log("尝试从LLM响应中提取有效的JSON", important=True)
+        extracted_json = extract_valid_json(str(result))
+        if extracted_json:
+            log("成功从LLM响应中提取有效的JSON", important=True)
+
+            # 将提取的JSON转换为Markdown
+            try:
+                md_content = "# AI测试用例评估报告\n\n"
+
+                if "evaluation_summary" in extracted_json:
+                    summary = extracted_json["evaluation_summary"]
+                    md_content += f"## 摘要\n\n"
+                    md_content += f"**总体评分**: {summary.get('overall_score', 'N/A')}\n\n"
+                    md_content += f"**改进建议**: {summary.get('final_suggestion', 'N/A')}\n\n"
+
+                if "detailed_report" in extracted_json:
+                    md_content += f"## 详细评估\n\n"
+                    detailed = extracted_json["detailed_report"]
+
+                    for key, value in detailed.items():
+                        if isinstance(value, dict) and "score" in value:
+                            md_content += f"### {key.replace('_', ' ').title()}\n\n"
+                            md_content += f"**评分**: {value.get('score', 'N/A')}\n\n"
+                            md_content += f"**理由**: {value.get('reason', 'N/A')}\n\n"
+
+                log("成功从提取的JSON生成Markdown报告", important=True)
+                return md_content
+            except Exception as e:
+                log_error(f"从提取的JSON生成Markdown报告失败: {e}")
+        else:
+            log_error("从LLM响应中提取有效的JSON失败")
+    except Exception as e:
+        log_error(f"尝试提取JSON时出错: {e}")
+
     # 其他情况，返回错误信息
     log_error("无法处理LLM返回的结果类型", {"result_type": type(result).__name__})
-    return "# 评测报告生成失败\n\n无法解析评测结果，请检查数据格式。" 
+    return "# 评测报告生成失败\n\n无法解析评测结果，请检查数据格式。"
+
+
+async def evaluate_and_generate_report(session: aiohttp.ClientSession, ai_cases, golden_cases, report_file):
+    """
+    评估测试用例并生成Markdown报告
+
+    :param session: aiohttp会话
+    :param ai_cases: AI生成的测试用例
+    :param golden_cases: 黄金标准测试用例
+    :param report_file: 报告文件路径
+    :return: 评估结果和Markdown报告
+    """
+    log("开始测试用例评测流程", important=True)
+
+    # 评估测试用例
+    evaluation_result = await evaluate_test_cases(session, ai_cases, golden_cases)
+
+    if not evaluation_result:
+        log("测试用例评测失败", important=True)
+        return {
+            "success": False,
+            "error": "测试用例评测失败"
+        }
+
+    # 生成Markdown报告
+    markdown_report = await generate_markdown_report(session, evaluation_result)
+
+    if not markdown_report:
+        log("生成Markdown报告失败", important=True)
+        return {
+            "success": False,
+            "error": "生成Markdown报告失败"
+        }
+
+    # 保存Markdown格式的报告
+    try:
+        with open(report_file, 'w', encoding='utf-8') as f:
+            f.write(markdown_report)
+        log(f"Markdown格式的评测报告已保存到 {report_file}", important=True)
+        # 添加小延迟，确保日志顺序
+        await asyncio.sleep(0.1)
+    except Exception as e:
+        log_error(f"保存Markdown格式的评测报告到 {report_file} 失败", e)
+        # 继续执行，不中断流程
+
+    log("测试用例评测流程完成！", important=True)
+    # 添加小延迟，确保日志顺序
+    await asyncio.sleep(0.1)
+    end_logging()
+
+    return {
+        "success": True,
+        "evaluation_result": evaluation_result,
+        "markdown_report": markdown_report,
+        "files": {
+            "report_md": report_file,
+            "report_json": report_file.replace(".md", ".json")
+        }
+    }
