@@ -5,73 +5,117 @@ from llm_api import async_call_llm
 from analyzer import find_duplicate_test_cases
 import re
 import asyncio
+import concurrent.futures
+from config import MAX_CONCURRENT_REQUESTS, LLM_TEMPERATURE, LLM_TEMPERATURE_REPORT
+
 
 async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_cases):
     """
     评测测试用例质量
-    
+
     :param session: aiohttp会话
     :param ai_cases: AI生成的测试用例
     :param golden_cases: 黄金标准测试用例
     :return: 评测结果
     """
     log("开始测试用例评测", important=True)
-    
+
     # 添加小延迟，确保日志顺序
     await asyncio.sleep(0.1)
-    
+
     # 获取所有测试用例
     ai_testcases = []
     golden_testcases = []
-    
-    # 提取AI测试用例，适配新的格式化结构
-    if isinstance(ai_cases, dict):
-        if "testcases" in ai_cases and isinstance(ai_cases["testcases"], dict) and "test_cases" in ai_cases["testcases"]:
-            # 新的统一格式
-            ai_testcases = ai_cases["testcases"]["test_cases"]
-        elif "test_cases" in ai_cases:
-            if isinstance(ai_cases["test_cases"], dict):
-                # 旧格式，分类测试用例
-                for category, cases in ai_cases["test_cases"].items():
-                    if isinstance(cases, list):
-                        ai_testcases.extend(cases)
-            elif isinstance(ai_cases["test_cases"], list):
-                # 旧格式，直接列表
-                ai_testcases = ai_cases["test_cases"]
-    
-    # 提取黄金标准测试用例，适配新的格式化结构
-    if isinstance(golden_cases, dict):
-        if "testcases" in golden_cases and isinstance(golden_cases["testcases"], dict) and "test_cases" in golden_cases["testcases"]:
-            # 新的统一格式
-            golden_testcases = golden_cases["testcases"]["test_cases"]
-        elif "test_cases" in golden_cases:
-            if isinstance(golden_cases["test_cases"], dict):
-                # 旧格式，分类测试用例
-                for category, cases in golden_cases["test_cases"].items():
-                    if isinstance(cases, list):
-                        golden_testcases.extend(cases)
-            elif isinstance(golden_cases["test_cases"], list):
-                # 旧格式，直接列表
-                golden_testcases = golden_cases["test_cases"]
-    
+
+    # 定义格式化函数，便于并行处理
+    def extract_ai_testcases(ai_cases):
+        result = []
+        # 提取AI测试用例，适配新的格式化结构
+        if isinstance(ai_cases, dict):
+            if "testcases" in ai_cases and isinstance(ai_cases["testcases"], dict):
+                # 新的统一格式
+                if "test_cases" in ai_cases["testcases"]:
+                    # 处理test_cases可能是字典(包含不同类别的测试用例)的情况
+                    if isinstance(ai_cases["testcases"]["test_cases"], dict):
+                        for category, cases in ai_cases["testcases"]["test_cases"].items():
+                            if isinstance(cases, list):
+                                for case in cases:
+                                    if isinstance(case, dict):
+                                        case["category"] = category
+                                    result.append(case)
+                    # 处理test_cases是列表的情况
+                    elif isinstance(ai_cases["testcases"]["test_cases"], list):
+                        result = ai_cases["testcases"]["test_cases"]
+            elif "test_cases" in ai_cases:
+                if isinstance(ai_cases["test_cases"], dict):
+                    # 旧格式，分类测试用例
+                    for category, cases in ai_cases["test_cases"].items():
+                        if isinstance(cases, list):
+                            result.extend(cases)
+                elif isinstance(ai_cases["test_cases"], list):
+                    # 旧格式，直接列表
+                    result = ai_cases["test_cases"]
+        return result
+
+    def extract_golden_testcases(golden_cases):
+        result = []
+        # 提取黄金标准测试用例，适配新的格式化结构
+        if isinstance(golden_cases, dict):
+            if "testcases" in golden_cases and isinstance(golden_cases["testcases"], dict):
+                # 新的统一格式
+                if "test_cases" in golden_cases["testcases"]:
+                    # 处理test_cases可能是字典(包含不同类别的测试用例)的情况
+                    if isinstance(golden_cases["testcases"]["test_cases"], dict):
+                        for category, cases in golden_cases["testcases"]["test_cases"].items():
+                            if isinstance(cases, list):
+                                for case in cases:
+                                    if isinstance(case, dict):
+                                        case["category"] = category
+                                    result.append(case)
+                    # 处理test_cases是列表的情况
+                    elif isinstance(golden_cases["testcases"]["test_cases"], list):
+                        result = golden_cases["testcases"]["test_cases"]
+            elif "test_cases" in golden_cases:
+                if isinstance(golden_cases["test_cases"], dict):
+                    # 旧格式，分类测试用例
+                    for category, cases in golden_cases["test_cases"].items():
+                        if isinstance(cases, list):
+                            result.extend(cases)
+                elif isinstance(golden_cases["test_cases"], list):
+                    # 旧格式，直接列表
+                    result = golden_cases["test_cases"]
+        return result
+
+    # 并行执行AI测试用例和黄金标准测试用例的格式化处理
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        ai_future = executor.submit(extract_ai_testcases, ai_cases)
+        golden_future = executor.submit(extract_golden_testcases, golden_cases)
+
+        ai_testcases = ai_future.result()
+        golden_testcases = golden_future.result()
+
     log(f"AI测试用例数量: {len(ai_testcases)}, 黄金标准测试用例数量: {len(golden_testcases)}", important=True)
-    
+
     # 检查重复的测试用例
     ai_duplicate_info = find_duplicate_test_cases(ai_testcases)
     golden_duplicate_info = find_duplicate_test_cases(golden_testcases)
-    
-    log(f"AI测试用例重复率: {ai_duplicate_info['duplicate_rate']}% ({ai_duplicate_info['duplicate_count']}个)", important=True)
-    log(f"黄金标准测试用例重复率: {golden_duplicate_info['duplicate_rate']}% ({golden_duplicate_info['duplicate_count']}个)", important=True)
-    
+
+    log(f"AI测试用例重复率: {ai_duplicate_info['duplicate_rate']}% ({ai_duplicate_info['duplicate_count']}个)",
+        important=True)
+    log(f"黄金标准测试用例重复率: {golden_duplicate_info['duplicate_rate']}% ({golden_duplicate_info['duplicate_count']}个)",
+        important=True)
+
     # 记录重复类型分布
-    log(f"AI测试用例重复类型分布: {json.dumps(ai_duplicate_info['duplicate_types'], ensure_ascii=False)}", important=True)
+    log(f"AI测试用例重复类型分布: {json.dumps(ai_duplicate_info['duplicate_types'], ensure_ascii=False)}",
+        important=True)
     if ai_duplicate_info['duplicate_categories']:
-        log(f"AI测试用例按类别重复率: {json.dumps(ai_duplicate_info['duplicate_categories'], ensure_ascii=False)}", important=True)
-    
+        log(f"AI测试用例按类别重复率: {json.dumps(ai_duplicate_info['duplicate_categories'], ensure_ascii=False)}",
+            important=True)
+
     # 提取合并建议
     merge_suggestions_count = len(ai_duplicate_info.get("merge_suggestions", []))
     log(f"生成了 {merge_suggestions_count} 条AI测试用例合并建议", important=True)
-    
+
     # 构建评测提示
     duplicate_info_text = f"""
 # 测试用例重复情况
@@ -99,12 +143,12 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
             case_ids = ", ".join(suggestion["case_ids"][:3])
             if len(suggestion["case_ids"]) > 3:
                 case_ids += f" 等{len(suggestion['case_ids'])}个用例"
-                
+
             merged_case = suggestion["merged_case"]
-            duplicate_info_text += f"\n### 合并建议 {i+1}（{suggestion_type}）\n"
+            duplicate_info_text += f"\n### 合并建议 {i + 1}（{suggestion_type}）\n"
             duplicate_info_text += f"- 涉及用例: {case_ids}\n"
             duplicate_info_text += f"- 合并后标题: {merged_case['title']}\n"
-            
+
             # 添加步骤和预期结果摘要
             steps = merged_case.get("steps", "")
             if isinstance(steps, list) and len(steps) > 0:
@@ -112,14 +156,14 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
                 if len(steps) > 1:
                     steps_preview += f" ... 等{len(steps)}个步骤"
                 duplicate_info_text += f"- 合并后步骤: {steps_preview}\n"
-            
+
             expected = merged_case.get("expected_results", "")
             if isinstance(expected, list) and len(expected) > 0:
                 expected_preview = expected[0]
                 if len(expected) > 1:
                     expected_preview += f" ... 等{len(expected)}个预期结果"
                 duplicate_info_text += f"- 合并后预期结果: {expected_preview}\n"
-    
+
     # 构建完整提示
     prompt = f"""
 # 任务
@@ -219,45 +263,53 @@ async def evaluate_test_cases(session: aiohttp.ClientSession, ai_cases, golden_c
 }}
 ```
 """
-    
+
     system_prompt = "你是一位精通软件测试和技术文档写作的专家。请根据评估结果生成一份专业、清晰的Markdown格式报告，并使用Mermaid图表可视化关键数据。请直接保留并使用我提供的评分表格格式，不要修改其结构。请直接输出Markdown格式，不要尝试输出JSON。严格禁止在文档开头添加'markdown'这个词，直接以'# '开头的标题开始。不要在内容外包含```或```markdown标记，完全避免使用代码块，但保留提供的Mermaid图表语法。"
-    result = await async_call_llm(session, prompt, system_prompt)
-    
+
+    # 使用较低的temperature值，确保评测结果的一致性和准确性
+    result = await async_call_llm(
+        session,
+        prompt,
+        system_prompt,
+        temperature=LLM_TEMPERATURE  # 使用配置中的低temperature值
+    )
+
     if not result:
         log("测试用例评测失败", important=True)
         return None
-    
+
     log("测试用例评测完成", important=True)
     return result
+
 
 # 添加测试覆盖流程图生成函数
 def generate_test_coverage_flow_chart(test_cases):
     """
     根据测试用例内容动态生成测试覆盖流程图
-    
+
     :param test_cases: 测试用例列表
     :return: Mermaid格式的流程图
     """
     # 提取测试用例ID中的功能模块信息
     modules = {}
     submodules = {}
-    
+
     for case in test_cases:
         case_id = case.get("case_id", "")
         title = case.get("title", "")
-        
+
         # 提取主要功能模块和子功能模块
         parts = case_id.split('-')
         if len(parts) >= 2:
             main_module = parts[0]
             if len(parts) >= 3:
                 sub_module = parts[1]
-                
+
                 # 记录模块
                 if main_module not in modules:
                     modules[main_module] = 0
                 modules[main_module] += 1
-                
+
                 # 记录子模块
                 module_key = f"{main_module}-{sub_module}"
                 if module_key not in submodules:
@@ -267,7 +319,7 @@ def generate_test_coverage_flow_chart(test_cases):
                         "count": 0
                     }
                 submodules[module_key]["count"] += 1
-    
+
     # 提取主要功能和子功能的关系
     # 如果测试用例标题中包含类似"xx流程"、"xx功能"、"xx验证"等词语，提取为功能点
     features = {}
@@ -275,7 +327,7 @@ def generate_test_coverage_flow_chart(test_cases):
         title = case.get("title", "")
         if not title:
             continue
-            
+
         # 尝试提取功能点
         feature = None
         if "流程" in title:
@@ -295,7 +347,7 @@ def generate_test_coverage_flow_chart(test_cases):
                 feature = words[0]
                 if len(words) > 1:
                     feature += words[1]
-        
+
         if feature and len(feature) <= 20:  # 限制功能点名称长度
             if feature not in features:
                 features[feature] = {
@@ -303,7 +355,7 @@ def generate_test_coverage_flow_chart(test_cases):
                     "subfeatures": set()
                 }
             features[feature]["count"] += 1
-            
+
             # 尝试提取子功能点
             steps = case.get("steps", [])
             for step in steps:
@@ -315,80 +367,81 @@ def generate_test_coverage_flow_chart(test_cases):
                         if "点击" in word or "输入" in word or "选择" in word or "验证" in word:
                             action = word
                             break
-                    
+
                     # 将if语句移到for循环外部，修复缩进
                     if action and len(action) <= 15:
                         features[feature]["subfeatures"].add(action)
-    
+
     # 按测试用例数量排序功能点
     sorted_features = sorted(features.items(), key=lambda x: x[1]["count"], reverse=True)
-    
+
     # 生成Mermaid图表
     chart = "```mermaid\ngraph TD\n"
-    
+
     # 添加主节点
     chart += "    A[测试覆盖范围] --> B[功能验证]\n"
     chart += "    A --> C[异常处理]\n"
     chart += "    A --> D[边界测试]\n"
-    
+
     # 添加主要功能点（最多8个，避免图表过大）
     node_id = 0
     node_map = {}
     edge_set = set()  # 避免重复的边
-    
+
     for i, (feature, info) in enumerate(sorted_features[:8]):
         if i >= 8:
             break
-            
+
         node_id += 1
         feature_node = f"F{node_id}"
         node_map[feature] = feature_node
-        
+
         # 添加功能点节点
         chart += f"    B --> {feature_node}[{feature}]\n"
-        
+
         # 添加子功能点（每个功能点最多添加5个子功能）
         subfeatures = list(info["subfeatures"])[:5]
         for j, subfeature in enumerate(subfeatures):
             if j >= 5:
                 break
-                
+
             node_id += 1
             subfeature_node = f"SF{node_id}"
-            
+
             # 创建边的标识
             edge = f"{feature_node}->{subfeature_node}"
-            
+
             # 避免添加重复的边
             if edge not in edge_set:
                 chart += f"    {feature_node} --> {subfeature_node}[{subfeature}]\n"
                 edge_set.add(edge)
-    
+
     # 添加异常处理示例节点
     chart += "    C --> E1[输入验证]\n"
     chart += "    C --> E2[超时处理]\n"
     chart += "    C --> E3[安全检查]\n"
-    
+
     # 添加边界测试示例节点
     chart += "    D --> B1[最大值测试]\n"
     chart += "    D --> B2[最小值测试]\n"
-    
+
     chart += "```\n"
     return chart
+
 
 async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_result):
     """
     生成Markdown格式的评测报告
-    
+
     :param session: aiohttp会话
     :param evaluation_result: 评测结果
     :return: Markdown格式的报告
     """
     log("开始生成Markdown报告", important=True)
-    
+
     # 确保日志记录按照正确的顺序执行
     await asyncio.sleep(0.1)  # 添加小延迟，确保日志顺序
-    
+
     # 从评估结果中提取关键数据用于可视化
     mermaid_data = {
         "scores": {},
@@ -396,9 +449,10 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
             "ai": 0,
             "golden": 0
         },
+        "duplicate_types": {},
         "coverage": []
     }
-    
+
     # 尝试从评估结果获取测试用例数据
     ai_testcases = []
     if isinstance(evaluation_result, dict):
@@ -412,16 +466,16 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                 if "covered_features" in coverage_analysis:
                     covered_features = coverage_analysis["covered_features"]
                     # 将覆盖的功能点转换为简单的测试用例结构
-                    ai_testcases = [{"case_id": f"FEAT-{i+1}", "title": feature} 
-                                   for i, feature in enumerate(covered_features)]
-    
+                    ai_testcases = [{"case_id": f"FEAT-{i + 1}", "title": feature}
+                                    for i, feature in enumerate(covered_features)]
+
     # 动态生成测试覆盖流程图
     coverage_chart = generate_test_coverage_flow_chart(ai_testcases)
-    
+
     # 提取各维度评分
     if isinstance(evaluation_result, dict) and "detailed_report" in evaluation_result:
         detailed = evaluation_result["detailed_report"]
-        
+
         # 提取评分数据
         for key, value in detailed.items():
             if isinstance(value, dict) and "score" in value:
@@ -431,19 +485,19 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                     mermaid_data["scores"][score_key] = score_value
                 except (ValueError, TypeError):
                     mermaid_data["scores"][score_key] = value["score"]
-    
+
     # 获取整体评分
     overall_score = "N/A"
     if isinstance(evaluation_result, dict) and "evaluation_summary" in evaluation_result:
         overall_score = evaluation_result["evaluation_summary"].get("overall_score", "N/A")
         mermaid_data["scores"]["Overall Score"] = overall_score
-    
+
     # 生成评分雷达图
     # 由于Mermaid不支持真正的雷达图，改用Markdown表格和评分表示
-    radar_chart = f"## 综合评分 (总体: {overall_score}/5.0)\n\n"
+    radar_chart = f"## 📊 综合评分 (总体: {overall_score}/5.0)\n\n"
     radar_chart += "| 评估维度 | 得分 | 评分可视化 |\n"
     radar_chart += "|---------|------|------------|\n"
-    
+
     # 获取维度数据
     dimension_scores = []
     for name, score in mermaid_data["scores"].items():
@@ -475,10 +529,10 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
             except (ValueError, TypeError):
                 # 如果无法转换为数值，跳过
                 continue
-    
+
     # 按评分从高到低排序
     dimension_scores.sort(key=lambda x: x[1], reverse=True)
-    
+
     # 添加数据行
     if dimension_scores:
         for name, score in dimension_scores:
@@ -486,22 +540,26 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
             score_int = int(score)
             stars = "★" * score_int + "☆" * (5 - score_int)
             radar_chart += f"| {name} | {score} | {stars} |\n"
-    
+
     radar_chart += "\n"
-    
+
     # 添加专门的评分图
     radar_chart += "```mermaid\npie\n    title 各维度评分分布\n"
     for name, score in dimension_scores:
         short_name = name.replace("Coverage", "覆盖").replace("Analysis", "分析")
         radar_chart += f"    \"{short_name}\" : {score}\n"
     radar_chart += "```\n\n"
-    
-    # 生成重复率对比图模板
-    duplicate_chart = "```mermaid\npie\n    title 测试用例重复率对比\n"
-    
+
+    # 提取重复率和重复类型数据
+    ai_duplicate_rate = 0
+    golden_duplicate_rate = 0
+    duplicate_types = {}
+
     # 尝试从评估结果中找到重复率数据
     if "duplicate_types" in evaluation_result:
-        # 从evaluation_result直接获取重复率数据，不使用硬编码的固定值
+        duplicate_types = evaluation_result.get("duplicate_types", {})
+
+        # 从evaluation_result直接获取重复率数据
         try:
             # 尝试从具体数据中提取重复率
             duplicate_info = evaluation_result.get("duplicate_info", {})
@@ -521,22 +579,17 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                 # 尝试从原因描述中提取数字
                 ai_rates = re.findall(r"AI[^0-9]*([0-9.]+)%", dup_analysis["reason"])
                 golden_rates = re.findall(r"黄金[^0-9]*([0-9.]+)%", dup_analysis["reason"])
-                
+
                 if ai_rates:
                     mermaid_data["duplicate_rates"]["ai"] = float(ai_rates[0])
+                    ai_duplicate_rate = float(ai_rates[0])
                 if golden_rates:
                     mermaid_data["duplicate_rates"]["golden"] = float(golden_rates[0])
-    
-    duplicate_chart += f"    \"AI测试用例重复率\" : {mermaid_data['duplicate_rates']['ai']}\n"
-    duplicate_chart += f"    \"黄金标准重复率\" : {mermaid_data['duplicate_rates']['golden']}\n"
-    duplicate_chart += "```\n\n"
-    
-    # 生成重复类型分布图
-    duplicate_types_chart = "```mermaid\npie\n    title AI测试用例重复类型分布\n"
-    
+                    golden_duplicate_rate = float(golden_rates[0])
+
     # 尝试从评估结果中提取重复类型数据
     dup_types = {"标题重复": 0, "步骤重复": 0, "预期结果重复": 0, "混合重复": 0}
-    
+
     # 如果evaluation_result中有具体的duplicate_types数据，则使用它
     if "duplicate_types" in evaluation_result:
         try:
@@ -545,50 +598,163 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                 dup_types = {
                     "标题重复": duplicate_types.get("title", 0),
                     "步骤重复": duplicate_types.get("steps", 0),
-                    "预期结果重复": duplicate_types.get("expected_results", 0)
+                    "预期结果重复": duplicate_types.get("expected_results", 0),
+                    "混合重复": duplicate_types.get("mixed", 0)
                 }
+                # 保存到mermaid_data
+                mermaid_data["duplicate_types"] = dup_types
         except:
             pass
     else:
         # 尝试从原因描述中提取重复类型分布
         if "duplicate_analysis" in evaluation_result.get("detailed_report", {}):
             reason = evaluation_result["detailed_report"]["duplicate_analysis"].get("reason", "")
-            
+
             # 尝试从reason中提取数据
             title_dup = re.findall(r"标题重复[^0-9]*([0-9]+)个", reason)
             steps_dup = re.findall(r"步骤[相似|重复][^0-9]*([0-9]+)个", reason)
-            
+
             if title_dup:
                 dup_types["标题重复"] = int(title_dup[0])
             if steps_dup:
                 dup_types["步骤重复"] = int(steps_dup[0])
-    
+
+            # 保存到mermaid_data
+            mermaid_data["duplicate_types"] = dup_types
+
+    # 合并生成重复测试用例分析图
+    duplicate_combined_chart = "## 🔄 重复测试用例分析\n\n"
+
+    # 使用文字描述替代图表
+    duplicate_combined_chart += "> ### 重复情况统计摘要\n>\n"
+
+    # 添加重复率数据
+    duplicate_combined_chart += f"> **AI测试用例重复率**: {ai_duplicate_rate}%\n>\n"
+    duplicate_combined_chart += f"> **黄金标准重复率**: {golden_duplicate_rate}%\n>\n"
+
+    # 添加重复类型数据
+    duplicate_combined_chart += "> **重复类型明细**:\n"
+    has_duplicates = False
     for dup_type, count in dup_types.items():
         if count > 0:
-            duplicate_types_chart += f"    \"{dup_type}\" : {count}\n"
-    
-    duplicate_types_chart += "```\n\n"
-    
+            has_duplicates = True
+            duplicate_combined_chart += f"> - {dup_type}: **{count}个**\n"
+
+    # 如果所有数据都是0，添加无重复说明
+    if not has_duplicates:
+        duplicate_combined_chart += "> - 未发现重复测试用例\n"
+
+    # 添加模块分布的文字描述
+    if "duplicate_categories" in evaluation_result:
+        duplicate_categories = evaluation_result.get("duplicate_categories", {})
+        if duplicate_categories:
+            duplicate_combined_chart += ">\n> **重复用例模块分布**:\n"
+            for category, value in duplicate_categories.items():
+                # 检查value是否为字典（analyzer.py中的结构）或整数
+                if isinstance(value, dict) and "total" in value:
+                    # 如果是字典，提取duplicate_rate或计算重复率
+                    duplicate_count = value.get("title_duplicates", 0) + value.get("steps_duplicates", 0)
+                    if duplicate_count > 0:
+                        duplicate_combined_chart += f"> - {category}: **{duplicate_count}个**\n"
+                elif isinstance(value, (int, float)) and value > 0:
+                    # 如果是数字且大于0
+                    duplicate_combined_chart += f"> - {category}: **{value}个**\n"
+                # 忽略其他类型或零值
+
+    duplicate_combined_chart += "\n\n"
+
+    # 生成合并建议方案图
+    merge_suggestions = []
+    if isinstance(evaluation_result, dict) and "detailed_report" in evaluation_result:
+        detailed = evaluation_result["detailed_report"]
+        if "duplicate_analysis" in detailed and "merge_suggestions" in detailed["duplicate_analysis"]:
+            merge_suggestions = detailed["duplicate_analysis"]["merge_suggestions"]
+
+    # 从duplicate_info中获取合并建议
+    if "duplicate_info" in evaluation_result and "merge_suggestions" in evaluation_result["duplicate_info"]:
+        merge_suggestions = evaluation_result["duplicate_info"]["merge_suggestions"]
+
+    # 如果有合并建议，生成图表
+    if merge_suggestions and isinstance(merge_suggestions, str) and len(merge_suggestions) > 10:
+        # 如果merge_suggestions是字符串，尝试提取有用信息
+        merge_chart = "### 🛠️ 合并建议方案\n\n"
+        merge_chart += "> " + merge_suggestions.replace("\n", "\n> ") + "\n\n"
+    elif merge_suggestions and (isinstance(merge_suggestions, list) and len(merge_suggestions) > 0):
+        # 如果有结构化的合并建议，生成流程图
+        merge_chart = "### 🛠️ 合并建议方案\n```mermaid\ngraph LR\n"
+        merge_chart += "    A[重复用例] --> B[合并方案]\n"
+
+        for i, suggestion in enumerate(merge_suggestions[:4]):  # 限制最多显示4个建议
+            index = i + 1
+            case_ids = ""
+            title = ""
+
+            if isinstance(suggestion, dict):
+                # 提取案例ID
+                if "case_ids" in suggestion:
+                    if isinstance(suggestion["case_ids"], list):
+                        case_ids = "/".join(suggestion["case_ids"][:2])
+                        if len(suggestion["case_ids"]) > 2:
+                            case_ids += "..."
+                    else:
+                        case_ids = str(suggestion["case_ids"])
+
+                # 提取标题
+                if "merged_case" in suggestion and "title" in suggestion["merged_case"]:
+                    title = suggestion["merged_case"]["title"]
+                elif "title" in suggestion:
+                    title = suggestion["title"]
+                else:
+                    title = f"合并用例 {index}"
+
+            # 防止标题过长
+            if len(title) > 30:
+                title = title[:27] + "..."
+
+            # 去除特殊字符，避免Mermaid语法错误
+            title = title.replace("(", "").replace(")", "").replace("[", "").replace("]", "")
+
+            # 添加到图表中
+            merge_chart += f"    Case{index}[\"用例组 {case_ids}\"] --> Merge{index}[\"{title}\"]\n"
+
+        merge_chart += "```\n\n"
+    else:
+        # 没有合并建议或合并建议格式不适合生成图表
+        merge_chart = "### 🛠️ 合并建议方案\n\n"
+        merge_chart += "> 当前测试用例不需要合并或没有提供合并建议信息\n\n"
+
+    # 将合并建议图添加到重复分析后面
+    duplicate_combined_chart += merge_chart
+
     # 添加树状评估框架图模板
-    evaluation_framework_chart = """```mermaid
+    evaluation_framework_chart = """## 🌳 测试用例评估框架
+```mermaid
 graph TD
     A[测试用例评估] --> B[格式合规性]
     A --> C[内容质量]
     A --> D[功能覆盖]
     A --> E[工程效率]
     A --> F[安全性]
-    
+
     C --> C1[内容准确性]
     C --> C2[语义质量]
-    
+
     D --> D1[测试覆盖度]
     D --> D2[功能覆盖度]
     D --> D3[缺陷发现能力]
-    
+
     E --> E1[重复性分析]
     E --> E2[工程效率]
-    
+
     F --> F1[安全与经济性]
+
+    classDef important fill:#f9d77e,stroke:#f9a11b,stroke-width:2px;
+    classDef quality fill:#a8d6ff,stroke:#4a86e8,stroke-width:2px;
+    classDef coverage fill:#b6d7a8,stroke:#6aa84f,stroke-width:2px;
+
+    class A,D important;
+    class B,C,F quality;
+    class D1,D2,D3 coverage;
 ```
 
 """
@@ -618,28 +784,15 @@ graph TD
    - 语义质量分析
    - 安全与经济性分析
 5. **重复测试用例分析**：
-   - 重复测试用例比率
-   - 重复类型分析
+   - 重复测试用例比率与类型的综合分析
    - 测试用例合并建议
-6. **优缺点对比**：列出AI生成测试用例相对于人工标准的优势和劣势
-7. **改进建议**：给出3-5条具体可行的改进AI生成测试用例的建议，包括如何减少重复
-8. **综合结论**：总结AI测试用例的整体表现和适用场景
-
-# 可视化图表要求
-请在报告中包含以下Mermaid图表，使用下方提供的模板（已包含数据），或者根据评估结果创建更准确的图表：
-
-1. **重复率对比图**：AI测试用例与黄金标准的重复率对比
-{duplicate_chart}
-
-2. **重复类型分布图**：AI测试用例重复类型分布
-{duplicate_types_chart}
-
-3. **测试覆盖率流程图**：展示测试用例覆盖的关键流程或功能
+{duplicate_combined_chart}
+6. **测试覆盖率分析**：
+   - 关键流程和功能覆盖情况
 {coverage_chart}
-
-# 页脚格式
-请在报告末尾添加一行页脚，使用以下格式：
-**生成时间：{{当前年月日时间}} • gogogo出发喽评估中心**
+7. **优缺点对比**：列出AI生成测试用例相对于人工标准的优势和劣势
+8. **改进建议**：给出3-5条具体可行的改进AI生成测试用例的建议，包括如何减少重复
+9. **综合结论**：总结AI测试用例的整体表现和适用场景
 
 # 美化要求
 1. 请使用更丰富的Markdown格式元素来增强报告的可读性，如适当使用分隔线、引用块、表情符号等
@@ -648,22 +801,30 @@ graph TD
 4. 为报告添加简洁美观的页眉页脚
 5. 添加有针对性的改进建议，使结论更具操作性
 
+# 页脚格式
+请在报告末尾添加一行页脚，使用以下格式：
+**生成时间：{{当前年月日时间}} • gogogo出发喽评估中心**
+
 请确保使用上面提供的图表模板，这些模板已经包含了从评估结果中提取的实际数据。
-这些图表使用的是较为通用的Mermaid语法 - graph和pie，确保与大多数Markdown查看器兼容。
+这些图表使用的是较为通用的Mermaid语法，确保与大多数Markdown查看器兼容。
 你可以根据评估结果调整图表内容，但要保持```mermaid语法格式。
 直接以# 开头的标题开始你的报告，不要在开头写"markdown"，不要包含其他解释。
 """
-    
+
     system_prompt = "你是一位精通软件测试和技术文档写作的专家。请根据评估结果生成一份专业、清晰的Markdown格式报告，并使用Mermaid图表可视化关键数据。请直接保留并使用我提供的评分表格格式，不要修改其结构。请直接输出Markdown格式，不要尝试输出JSON。严格禁止在文档开头添加'markdown'这个词，直接以'# '开头的标题开始。不要在内容外包含```或```markdown标记，完全避免使用代码块，但保留提供的Mermaid图表语法。"
-    result = await async_call_llm(session, prompt, system_prompt)
-    
-    # 添加小延迟，确保日志顺序
-    await asyncio.sleep(0.1)
-    
+
+    # 使用较高的temperature值，生成更有创意的报告
+    result = await async_call_llm(
+        session,
+        prompt,
+        system_prompt,
+        temperature=LLM_TEMPERATURE_REPORT  # 使用配置中的较高temperature值
+    )
+
     if not result:
         log_error("生成Markdown报告失败", important=True)
         return "# 评测报告生成失败\n\n无法生成详细报告，请检查评测结果或重试。"
-    
+
     # 检查返回的结果类型
     if isinstance(result, dict):
         # 如果返回的是字典，检查是否包含文本内容
@@ -682,26 +843,26 @@ graph TD
             # 尝试将字典转换为Markdown
             try:
                 md_content = "# AI测试用例评估报告\n\n"
-                
+
                 if "evaluation_summary" in result:
                     summary = result["evaluation_summary"]
                     md_content += f"## 摘要\n\n"
                     md_content += f"**总体评分**: {summary.get('overall_score', 'N/A')}\n\n"
                     md_content += f"**改进建议**: {summary.get('final_suggestion', 'N/A')}\n\n"
-                
+
                 if "detailed_report" in result:
                     md_content += f"## 详细评估\n\n"
                     detailed = result["detailed_report"]
-                    
+
                     for key, value in detailed.items():
                         if isinstance(value, dict) and "score" in value:
                             md_content += f"### {key.replace('_', ' ').title()}\n\n"
                             md_content += f"**评分**: {value.get('score', 'N/A')}\n\n"
                             md_content += f"**理由**: {value.get('reason', 'N/A')}\n\n"
-                            
+
                             if key == "duplicate_analysis" and "merge_suggestions" in value:
                                 md_content += f"**合并建议**: {value.get('merge_suggestions', 'N/A')}\n\n"
-                            
+
                             if "analysis" in value and isinstance(value["analysis"], dict):
                                 analysis = value["analysis"]
                                 if "covered_features" in analysis:
@@ -709,19 +870,19 @@ graph TD
                                     for feature in analysis["covered_features"]:
                                         md_content += f"- {feature}\n"
                                     md_content += "\n"
-                                
+
                                 if "missed_features_or_scenarios" in analysis:
                                     md_content += "**未覆盖的功能或场景**:\n\n"
                                     for feature in analysis["missed_features_or_scenarios"]:
                                         md_content += f"- {feature}\n"
                                     md_content += "\n"
-                                
+
                                 if "scenario_types_found" in analysis:
                                     md_content += "**发现的场景类型**:\n\n"
                                     for scenario in analysis["scenario_types_found"]:
                                         md_content += f"- {scenario}\n"
                                     md_content += "\n"
-                
+
                 log("成功从字典生成Markdown报告", important=True)
                 # 添加小延迟，确保日志顺序
                 await asyncio.sleep(0.1)
@@ -730,7 +891,7 @@ graph TD
                 log_error(f"从字典生成Markdown报告失败: {e}")
                 # 如果无法转换为Markdown，直接返回JSON字符串
                 return f"# 评测报告\n\n```\n{json.dumps(result, ensure_ascii=False, indent=2)}\n```"
-    
+
     # 如果返回的不是字典，而是字符串，直接返回
     if isinstance(result, str):
         log("LLM直接返回了Markdown文本", important=True)
@@ -743,7 +904,7 @@ graph TD
             # 添加小延迟，确保日志顺序
             await asyncio.sleep(0.1)
         return result
-    
+
     # 其他情况，返回错误信息
     log_error("无法处理LLM返回的结果类型", {"result_type": type(result).__name__})
     return "# 评测报告生成失败\n\n无法解析评测结果，请检查数据格式。" 

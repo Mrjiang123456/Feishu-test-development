@@ -21,6 +21,10 @@ MODEL_NAME = "deepseek-r1-250528"
 VOLC_BEARER_TOKEN = "0333e8a0-55c7-4597-b3c2-702ee8516cba"  # 直接在这里写入你的密钥
 #VOLC_BEARER_TOKEN = "sk-tcjwmakxpmqtggsqiwrufqwazoggqjdutrzojmbsmchteehx"
 
+# LLM生成参数
+LLM_TEMPERATURE = 0.2  # 评测时使用低temperature确保结果一致性
+LLM_TEMPERATURE_REPORT = 0.4  # 生成报告时使用稍高的temperature
+
 # 输入文件名
 AI_CASES_FILE = "testset/test_cases.json"  # 从testset文件夹读取
 GOLDEN_CASES_FILE = "goldenset/golden_cases.json"  # 从goldenset文件夹读取
@@ -40,7 +44,17 @@ LOG_FILE = "log/evaluation_log.txt"  # 日志文件保存在log文件夹
 
 # --- 优化配置 ---
 # 并行处理配置
-MAX_CONCURRENT_REQUESTS = 5  # 最大并发LLM请求数
+MAX_CONCURRENT_REQUESTS = 16  # 增加最大并发LLM请求数
 MAX_CASES_COUNT = None  # 不限制处理的测试用例数量
 FORMAT_CASES_LIMIT = None  # 格式化时不限制测试用例数量
-MAX_TOKEN_SIZE = 8000  # LLM处理的最大文本长度 
+MAX_TOKEN_SIZE = 8000  # LLM处理的最大文本长度
+
+# --- 网络优化配置 ---
+# aiohttp连接池配置
+AIOHTTP_CONNECTOR_LIMIT = 30  # 增加连接池大小
+AIOHTTP_CONNECTOR_TTL = 900  # 增加连接TTL时间（秒）
+AIOHTTP_TIMEOUT = 360  # 增加请求超时时间（秒）
+
+# --- 缓存配置 ---
+LLM_CACHE_SIZE = 200  # 增加LLM请求缓存大小
+DUPLICATE_SIMILARITY_THRESHOLD = 0.8  # 重复检测相似度阈值

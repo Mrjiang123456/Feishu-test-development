@@ -9,6 +9,7 @@ import threading
 from logger import log
 from core import main
 
+
 # 启动frp服务的函数
 def start_frp_service():
     """启动frp服务，将本地服务映射到外网"""
@@ -19,7 +20,7 @@ def start_frp_service():
         if not os.path.exists(frpc_path):
             log("未找到frpc可执行文件，尝试使用系统frpc命令", important=True)
             frpc_path = "frpc"
-        
+
         # 启动frp客户端
         frp_process = subprocess.Popen(
             [frpc_path, "-c", "frpc.toml"],
@@ -27,7 +28,7 @@ def start_frp_service():
             stderr=subprocess.PIPE,
             text=True
         )
-        
+
         # 检查frp是否成功启动
         time.sleep(2)
         if frp_process.poll() is None:
@@ -41,6 +42,7 @@ def start_frp_service():
         log(f"启动frp服务时出错: {str(e)}", important=True)
         return None
 
+
 # 监控frp服务输出的线程函数
 def monitor_frp_output(process):
     """监控frp服务的输出"""
@@ -51,6 +53,7 @@ def monitor_frp_output(process):
                 log(f"FRP: {output.strip()}")
         except:
             break
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--cli":
@@ -65,12 +68,13 @@ if __name__ == "__main__":
         # API模式（默认）
         try:
             from api_server import app
+
             if app:
                 log("启动API服务器...", important=True)
-                
+
                 # 启动frp服务
                 frp_process = start_frp_service()
-                
+
                 # 如果frp服务启动成功，创建监控线程
                 if frp_process:
                     monitor_thread = threading.Thread(
@@ -79,7 +83,8 @@ if __name__ == "__main__":
                         daemon=True
                     )
                     monitor_thread.start()
-                    
+
+
                     # 注册清理函数，确保在程序退出时关闭frp进程
                     def cleanup(signum, frame):
                         log("正在关闭frp服务...", important=True)
@@ -87,11 +92,12 @@ if __name__ == "__main__":
                             frp_process.terminate()
                             frp_process.wait(timeout=5)
                         sys.exit(0)
-                    
+
+
                     # 注册信号处理
                     signal.signal(signal.SIGINT, cleanup)
                     signal.signal(signal.SIGTERM, cleanup)
-                
+
                 # 启动uvicorn服务器
                 log("本地API服务地址: http://127.0.0.1:8000", important=True)
                 if frp_process:
@@ -100,7 +106,7 @@ if __name__ == "__main__":
                         server_addr = None
                         server_port = None
                         remote_port = None
-                        
+
                         # 解析frpc.toml文件获取服务器地址和端口
                         for line in content.split("\n"):
                             if "serverAddr" in line and "=" in line:
@@ -109,10 +115,10 @@ if __name__ == "__main__":
                                 server_port = line.split("=")[1].strip().strip('"')
                             elif "remotePort" in line and "=" in line:
                                 remote_port = line.split("=")[1].strip().strip('"')
-                        
+
                         if server_addr and remote_port:
                             log(f"外网访问地址: http://{server_addr}:{remote_port}", important=True)
-                
+
                 uvicorn.run("api_server:app", host="127.0.0.1", port=8000, reload=True)
             else:
                 log("错误：API服务器初始化失败", important=True)
