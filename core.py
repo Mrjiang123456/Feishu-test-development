@@ -531,4 +531,4 @@ def main(ai_cases_file=None, golden_cases_file=None):
             return {"success": False, "error": f"读取黄金标准测试用例文件失败: {e}"}
 
     # 运行异步主函数
-    return asyncio.run(async_main(ai_cases_data, golden_cases_data)) 
+    return asyncio.run(async_main(ai_cases_data, golden_cases_data))

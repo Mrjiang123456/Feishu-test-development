@@ -55,7 +55,27 @@ def monitor_frp_output(process):
             break
 
 
+# 确保必要的目录存在
+def ensure_directories():
+    """确保所有必要的目录存在"""
+    directories = [
+        "goldenset",
+        "testset",
+        "log",
+        "output_evaluation/evaluation_json",
+        "output_evaluation/evaluation_markdown",
+        "templates",
+        "static"
+    ]
+    for dir_path in directories:
+        os.makedirs(dir_path, exist_ok=True)
+    log("已确保所有必要的目录存在", important=True)
+
+
 if __name__ == "__main__":
+    # 确保必要的目录存在
+    ensure_directories()
+
     if len(sys.argv) > 1 and sys.argv[1] == "--cli":
         # 命令行模式
         log("以命令行模式运行...", important=True)
@@ -100,6 +120,7 @@ if __name__ == "__main__":
 
                 # 启动uvicorn服务器
                 log("本地API服务地址: http://127.0.0.1:8000", important=True)
+                log("可访问黄金标准测试用例页面: http://127.0.0.1:8000/golden-cases", important=True)
                 if frp_process:
                     with open("frpc.toml", "r") as f:
                         content = f.read()
@@ -118,6 +139,8 @@ if __name__ == "__main__":
 
                         if server_addr and remote_port:
                             log(f"外网访问地址: http://{server_addr}:{remote_port}", important=True)
+                            log(f"外网黄金标准测试用例页面: http://{server_addr}:{remote_port}/golden-cases",
+                                important=True)
 
                 uvicorn.run("api_server:app", host="127.0.0.1", port=8000, reload=True)
             else:

@@ -551,4 +551,4 @@ def extract_sample_cases(json_data, max_cases=None):
         return json.dumps(sample_data, ensure_ascii=False)
     except Exception as e:
         log_error("提取样本测试用例失败", e)
-        return json_data[:MAX_TOKEN_SIZE]  # 返回原始数据的一部分 
+        return json_data[:MAX_TOKEN_SIZE]  # 返回原始数据的一部分

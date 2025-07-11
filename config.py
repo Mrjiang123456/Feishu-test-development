@@ -25,7 +25,7 @@ VOLC_BEARER_TOKEN = "0333e8a0-55c7-4597-b3c2-702ee8516cba"  # 直接在这里写
 ENABLE_MULTI_JUDGES = True  # 启用多评委评测
 # 评委模型列表
 JUDGE_MODELS = [
-    "deepseek-v3-250324",       # DeepSeek-R1
+    "deepseek-v3-250324",       # DeepSeek-V3
     "doubao-seed-1-6-250615",  # DoubaoSeek
 ]
 # 评测维度及权重配置

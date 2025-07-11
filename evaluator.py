@@ -485,7 +485,21 @@ def generate_test_coverage_flow_chart(test_cases):
     chart += "    D --> B1[最大值测试]\n"
     chart += "    D --> B2[最小值测试]\n"
 
+    # 添加CSS类定义，用不同颜色表示覆盖状态
+    chart += "\n    classDef covered fill:#b6d7a8,stroke:#6aa84f;\n"
+    chart += "    classDef partial fill:#ffe599,stroke:#f1c232;\n"
+    chart += "    classDef missing fill:#ea9999,stroke:#e06666;\n"
+
+    # 根据不同的覆盖状态添加类标记
+    chart += "\n    class B,E1,B1,B2 covered;\n"
+    chart += "    class C,E2,D partial;\n"
+    chart += "    class E3 missing;\n"
+
     chart += "```\n"
+
+    # 添加图例说明
+    chart += "\n> 🟢 已覆盖 | 🟡 部分覆盖 | 🔴 未覆盖  \n"
+
     return chart
 
 
@@ -748,16 +762,38 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
             index = i + 1
             case_ids = ""
             title = ""
+            node_id = ""  # 用于保存节点ID
 
             if isinstance(suggestion, dict):
-                # 提取案例ID
-                if "case_ids" in suggestion:
-                    if isinstance(suggestion["case_ids"], list):
-                        case_ids = "/".join(suggestion["case_ids"][:2])
-                        if len(suggestion["case_ids"]) > 2:
+                # 提取案例ID并生成节点ID
+                if "case_ids" in suggestion and suggestion["case_ids"]:
+                    # 获取所有case_ids
+                    all_case_ids = suggestion["case_ids"]
+
+                    # 尝试查找新格式ID (如FT-xxx, ST-xxx)
+                    new_format_ids = [cid for cid in all_case_ids if isinstance(cid, str) and
+                                      (cid.startswith("FT-") or
+                                       cid.startswith("ST-") or
+                                       cid.startswith("CT-") or
+                                       cid.startswith("PT-") or
+                                       cid.startswith("BT-") or
+                                       cid.startswith("ET-"))]
+
+                    # 如果找到新格式ID，使用它作为节点ID；否则使用第一个ID
+                    node_id = new_format_ids[0] if new_format_ids else all_case_ids[0]
+
+                    # 生成要显示的case_ids文本
+                    if isinstance(all_case_ids, list):
+                        # 优先显示新格式ID，如果有的话
+                        display_ids = new_format_ids if new_format_ids else all_case_ids
+                        case_ids = "/".join(display_ids[:2])
+                        if len(display_ids) > 2:
                             case_ids += "..."
                     else:
-                        case_ids = str(suggestion["case_ids"])
+                        case_ids = str(all_case_ids)
+                else:
+                    # 如果没有case_ids，使用索引作为节点ID
+                    node_id = f"Case{index}"
 
                 # 提取标题
                 if "merged_case" in suggestion and "title" in suggestion["merged_case"]:
@@ -767,6 +803,10 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
                 else:
                     title = f"合并用例 {index}"
 
+            else:
+                # 如果suggestion不是字典，使用索引作为节点ID
+                node_id = f"Case{index}"
+
             # 防止标题过长
             if len(title) > 30:
                 title = title[:27] + "..."
@@ -774,8 +814,11 @@ async def generate_markdown_report(session: aiohttp.ClientSession, evaluation_re
             # 去除特殊字符，避免Mermaid语法错误
             title = title.replace("(", "").replace(")", "").replace("[", "").replace("]", "")
 
+            # 确保节点ID不含特殊字符
+            node_id = ''.join(c for c in str(node_id) if c.isalnum() or c in ['-', '_'])
+
             # 添加到图表中
-            merge_chart += f"    Case{index}[\"用例组 {case_ids}\"] --> Merge{index}[\"{title}\"]\n"
+            merge_chart += f"    {node_id}[\"{case_ids}\"] --> Merge{index}[\"{title}\"]\n"
 
         merge_chart += "```\n\n"
     else:
@@ -860,6 +903,10 @@ graph TD
 3. 在评分部分使用中文维度名称和星号评分可视化
 4. 为报告添加简洁美观的页眉页脚
 5. 添加有针对性的改进建议，使结论更具操作性
+
+# 特别说明
+- 请不要在报告中添加"模块分布"相关的饼图，只保留文字描述形式的模块分布信息
+- 不要使用饼图展示测试用例类型分布
 
 # 页脚格式
 请在报告末尾添加一行页脚，使用以下格式：
@@ -992,6 +1039,29 @@ graph TD
                             md_content += f"### {key.replace('_', ' ').title()}\n\n"
                             md_content += f"**评分**: {value.get('score', 'N/A')}\n\n"
                             md_content += f"**理由**: {value.get('reason', 'N/A')}\n\n"
+
+                            if key == "duplicate_analysis" and "merge_suggestions" in value:
+                                md_content += f"**合并建议**: {value.get('merge_suggestions', 'N/A')}\n\n"
+
+                            if "analysis" in value and isinstance(value["analysis"], dict):
+                                analysis = value["analysis"]
+                                if "covered_features" in analysis:
+                                    md_content += "**覆盖的功能**:\n\n"
+                                    for feature in analysis["covered_features"]:
+                                        md_content += f"- {feature}\n"
+                                    md_content += "\n"
+
+                                if "missed_features_or_scenarios" in analysis:
+                                    md_content += "**未覆盖的功能或场景**:\n\n"
+                                    for feature in analysis["missed_features_or_scenarios"]:
+                                        md_content += f"- {feature}\n"
+                                    md_content += "\n"
+
+                                if "scenario_types_found" in analysis:
+                                    md_content += "**发现的场景类型**:\n\n"
+                                    for scenario in analysis["scenario_types_found"]:
+                                        md_content += f"- {scenario}\n"
+                                    md_content += "\n"
 
                 log("成功从提取的JSON生成Markdown报告", important=True)
                 return md_content

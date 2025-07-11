@@ -13,7 +13,9 @@ from llm_api import clear_cache  # 导入清除缓存函数
 
 try:
     from fastapi import FastAPI, HTTPException, File, UploadFile, Form, Request
-    from fastapi.responses import JSONResponse
+    from fastapi.responses import JSONResponse, HTMLResponse
+    from fastapi.staticfiles import StaticFiles
+    from fastapi.templating import Jinja2Templates
     from pydantic import BaseModel
     from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,6 +26,16 @@ try:
         golden_test_cases: Optional[str] = None  # 黄金标准测试用例，JSON字符串，可选
         model_name: str = MODEL_NAME  # 可选，使用的模型名称
         save_results: bool = True  # 可选，是否保存结果文件
+
+        # 添加model_config配置，禁用保护命名空间检查
+        model_config = {
+            "protected_namespaces": ()
+        }
+
+
+    # 定义保存黄金标准测试用例的请求模型
+    class SaveGoldenCasesRequest(BaseModel):
+        golden_test_cases: str  # 黄金标准测试用例，JSON字符串
 
         # 添加model_config配置，禁用保护命名空间检查
         model_config = {
@@ -56,6 +68,20 @@ try:
         allow_methods=["*"],  # 允许所有HTTP方法
         allow_headers=["*"],  # 允许所有HTTP头
     )
+
+    # 创建模板目录和静态文件目录
+    templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+    os.makedirs(templates_dir, exist_ok=True)
+    templates = Jinja2Templates(directory=templates_dir)
+
+    static_dir = os.path.join(os.path.dirname(__file__), "static")
+    os.makedirs(static_dir, exist_ok=True)
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+    # 创建输出目录的静态文件挂载
+    output_dir = os.path.join(os.path.dirname(__file__), "output_evaluation")
+    os.makedirs(output_dir, exist_ok=True)
+    app.mount("/output_evaluation", StaticFiles(directory=output_dir), name="output_evaluation")
 
     # 状态追踪
     evaluation_tasks = {}
@@ -101,6 +127,103 @@ try:
                     "error": f"服务器内部错误: {str(e)}",
                     "request_id": request_id,
                     "finish_task": True
+                }
+            )
+
+
+    @app.get("/", response_class=HTMLResponse)
+    async def get_index(request: Request):
+        """
+        返回主页
+        """
+        log("访问主页")
+        return templates.TemplateResponse("index.html", {"request": request})
+
+
+    @app.get("/golden-cases", response_class=HTMLResponse)
+    async def get_golden_cases_page(request: Request):
+        """
+        返回黄金标准测试用例页面
+        """
+        log("访问黄金标准测试用例页面")
+        return templates.TemplateResponse("golden_cases.html", {"request": request})
+
+
+    @app.post("/api/save-golden-cases")
+    async def save_golden_cases(request: SaveGoldenCasesRequest):
+        """
+        保存黄金标准测试用例
+
+        :param request: 包含黄金标准测试用例的请求
+        :return: 保存结果
+        """
+        request_id = f"save-golden-{str(uuid.uuid4())[:8]}-{int(time.time() * 1000)}"
+        log(f"接收到保存黄金标准测试用例请求: {request_id}", important=True)
+
+        try:
+            # 验证JSON格式
+            try:
+                golden_cases_data = request.golden_test_cases
+                json.loads(golden_cases_data)  # 验证JSON格式
+                log(f"黄金标准测试用例JSON格式有效")
+            except json.JSONDecodeError as e:
+                error_info = {
+                    "request_id": request_id,
+                    "error_type": "JSON解析错误",
+                    "error_message": str(e)
+                }
+                log_error("黄金标准测试用例JSON格式无效", error_info)
+                return JSONResponse(
+                    status_code=400,
+                    content={
+                        "success": False,
+                        "error": f"黄金标准测试用例JSON格式无效: {str(e)}"
+                    }
+                )
+
+            # 确保goldenset目录存在
+            goldenset_dir = "goldenset"
+            os.makedirs(goldenset_dir, exist_ok=True)
+
+            # 保存到文件
+            golden_file_path = os.path.join(goldenset_dir, "golden_cases.json")
+
+            # 如果已有文件，备份旧文件
+            if os.path.exists(golden_file_path):
+                backup_path = os.path.join(goldenset_dir, f"golden_cases_backup_{int(time.time())}.json")
+                try:
+                    os.rename(golden_file_path, backup_path)
+                    log(f"已将旧的黄金标准测试用例备份至 {backup_path}")
+                except Exception as e:
+                    log_error(f"备份旧的黄金标准测试用例失败: {str(e)}")
+
+            # 保存新的黄金标准测试用例
+            with open(golden_file_path, "w", encoding="utf-8") as f:
+                f.write(golden_cases_data)
+
+            log(f"黄金标准测试用例已保存至 {golden_file_path}", important=True)
+
+            return JSONResponse(
+                content={
+                    "success": True,
+                    "message": "黄金标准测试用例保存成功",
+                    "file_path": golden_file_path
+                }
+            )
+
+        except Exception as e:
+            error_info = {
+                "request_id": request_id,
+                "error_type": type(e).__name__,
+                "error_message": str(e),
+                "traceback": traceback.format_exc()
+            }
+            log_error("保存黄金标准测试用例时发生错误", error_info)
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "success": False,
+                    "error": f"保存黄金标准测试用例失败: {str(e)}"
                 }
             )
 
@@ -179,26 +302,54 @@ try:
             # 检查AI测试用例数据是否有效
             try:
                 # 尝试解析JSON，确保数据有效
-                if request.ai_test_cases:
-                    # 检查是否是已经转义的JSON字符串
-                    ai_test_cases = request.ai_test_cases
+                if not request.ai_test_cases:
+                    raise ValueError("AI测试用例数据为空")
+
+                # 检查是否是已经转义的JSON字符串
+                ai_test_cases = request.ai_test_cases
+                try:
+                    # 尝试直接解析
+                    json.loads(ai_test_cases)
+                    log("成功直接解析AI测试用例JSON", important=True)
+                except json.JSONDecodeError as decode_error:
+                    # 如果解析失败，可能是双重转义的情况，尝试去除一层转义
+                    log(f"JSON解析失败({str(decode_error)})，尝试处理可能的双重转义JSON字符串", level="WARNING")
                     try:
-                        # 尝试直接解析
-                        json.loads(ai_test_cases)
-                    except json.JSONDecodeError:
-                        # 如果解析失败，可能是双重转义的情况，尝试去除一层转义
-                        log("尝试处理可能的双重转义JSON字符串", level="WARNING")
-                        try:
-                            # 将字符串解析为Python对象，然后再转回JSON字符串
-                            ai_test_cases = json.dumps(eval(ai_test_cases))
+                        # 方法1：使用eval评估字符串
+                        eval_result = eval(ai_test_cases)
+                        if isinstance(eval_result, dict):
+                            ai_test_cases = json.dumps(eval_result)
+                            log("通过eval成功处理双重转义的JSON字符串", important=True)
+                        else:
+                            # 方法2：替换转义字符
+                            ai_test_cases = ai_test_cases.replace('\\"', '"').replace('\\\\', '\\')
+                            # 再次尝试解析
                             json.loads(ai_test_cases)
-                            log("成功处理双重转义的JSON字符串", important=True)
-                        except Exception as e:
-                            log_error(f"处理双重转义JSON失败: {str(e)}")
+                            log("通过替换转义字符成功处理JSON字符串", important=True)
+                    except Exception as e:
+                        log_error(f"处理JSON字符串失败: {str(e)}")
+                        # 尝试进一步处理常见格式问题
+                        try:
+                            # 检查是否包含类别分组格式的特征（如functional、security等键）
+                            if '"functional":' in ai_test_cases or '"security":' in ai_test_cases:
+                                log("检测到可能是按类别分组的测试用例格式，尝试特殊处理", level="WARNING")
+                                # 移除外层转义
+                                cleaned_json = ai_test_cases.strip('"\'')
+                                # 替换内部转义
+                                cleaned_json = cleaned_json.replace('\\"', '"').replace('\\\\', '\\')
+                                # 解析验证
+                                json.loads(cleaned_json)
+                                ai_test_cases = cleaned_json
+                                log("成功处理类别分组格式的JSON字符串", important=True)
+                            else:
+                                # 回退到原始字符串
+                                ai_test_cases = request.ai_test_cases
+                                log("无法处理JSON格式，回退到原始字符串", level="WARNING")
+                        except Exception as special_e:
+                            log_error(f"特殊处理JSON字符串失败: {str(special_e)}")
                             # 回退到原始字符串
                             ai_test_cases = request.ai_test_cases
-                else:
-                    raise ValueError("AI测试用例数据为空")
+
             except json.JSONDecodeError as e:
                 error_info = {
                     "request_id": request_id,
@@ -420,18 +571,6 @@ try:
 
         # 直接调用compare_test_cases_api
         return await compare_test_cases_api(request)
-
-
-    @app.get("/")
-    async def root():
-        """API根路径，返回基本信息"""
-        log("访问API根路径")
-        return JSONResponse(content={
-            "name": "测试用例比较工具API",
-            "version": "1.0.0",
-            "description": "比较AI生成的测试用例与黄金标准测试用例，评估测试用例质量",
-            "model": MODEL_NAME
-        })
 
 
     @app.get("/health")

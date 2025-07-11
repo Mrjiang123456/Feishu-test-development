@@ -334,4 +334,4 @@ def find_duplicate_test_cases(test_cases):
     duplicate_info["duplicate_count"] = duplicate_count
     duplicate_info["duplicate_rate"] = round(duplicate_count / total_cases * 100, 2) if total_cases > 0 else 0
 
-    return duplicate_info 
+    return duplicate_info

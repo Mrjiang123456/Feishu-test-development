@@ -92,8 +92,18 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
 
         # 从原始数据中提取测试用例，处理各种可能的格式
         if isinstance(data, dict):
+            # 新增格式支持：按类别分组的测试用例，如{"functional":[...], "security":[...]}
+            category_keys = [key for key in data.keys() if isinstance(data[key], list)]
+            if category_keys and all(isinstance(data[key], list) for key in category_keys):
+                log(f"检测到按类别分组的测试用例格式")
+                for category in category_keys:
+                    for case in data[category]:
+                        if isinstance(case, dict):
+                            # 添加类别信息
+                            case["category"] = category
+                            all_test_cases.append(case)
             # 新增格式支持：处理test_cases.json中的特殊嵌套格式
-            if "testcases" in data and isinstance(data["testcases"], dict) and "test_cases" in data["testcases"]:
+            elif "testcases" in data and isinstance(data["testcases"], dict) and "test_cases" in data["testcases"]:
                 test_cases_obj = data["testcases"]["test_cases"]
                 # 处理test_cases是包含各类别测试用例的对象的情况
                 if isinstance(test_cases_obj, dict):
@@ -263,6 +273,8 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
             test_suite_name = data["testcases"]["test_suite"]
         elif isinstance(data, dict) and "测试用例" in data:
             test_suite_name = "测试用例集"
+        elif category_keys:  # 对于按类别分组的测试用例，使用第一个类别作为测试套件名称
+            test_suite_name = f"登录功能测试用例集({category_keys[0]}等)"
 
         final_data = {
             "success": True,
