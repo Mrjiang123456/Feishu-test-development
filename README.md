@@ -10,7 +10,7 @@ project-root/
 ├── langgraph_use.py       # 主测试用例生成工作流
 ├── regenerate.py          # 测试用例重新生成工作流
 ├── feishu_api.py          # 飞书文档API集成
-├── model_api.py           # 模型API调用（支持图像）
+├── model_api.py           # 模型API调用（doubao1.5）
 ├── model_api2.py          # 模型API调用（doubao1.6）
 ├── model_api3.py          # 模型API调用（deepseekR1）
 │
