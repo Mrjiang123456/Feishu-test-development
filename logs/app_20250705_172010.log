@@ -1,0 +1,135 @@
+2025-07-05 17:20:10,360 - __main__ - INFO - ==================================================
+2025-07-05 17:20:10,360 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-05 17:20:10,360 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250705_172010.log
+2025-07-05 17:20:10,360 - __main__ - INFO - ==================================================
+2025-07-05 17:20:10,363 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-05 17:20:10,407 - __main__ - INFO - frpc 启动成功
+2025-07-05 17:20:10,450 - main - INFO - ==================================================
+2025-07-05 17:20:10,450 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-05 17:20:10,450 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250705_172010.log
+2025-07-05 17:20:10,450 - main - INFO - ==================================================
+2025-07-05 17:20:10,452 - uvicorn.error - INFO - Started server process [17828]
+2025-07-05 17:20:10,453 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-05 17:20:10,453 - uvicorn.error - INFO - Application startup complete.
+2025-07-05 17:20:10,453 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-05 17:20:12,364 - main - INFO - 收到飞书请求，document_id=Mhu7dsNVDouXlHxkTqWcnI1Wn8H
+2025-07-05 17:20:12,523 - feishu_api - ERROR - 请求飞书文档块出错: [Errno 11001] getaddrinfo failed
+2025-07-05 17:20:12,523 - feishu_api - ERROR - 获取飞书文档块失败: 请求飞书文档块时网络错误
+2025-07-05 17:20:12,523 - main - ERROR - 生成测试用例失败
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection.py", line 101, in handle_async_request
+    raise exc
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection.py", line 78, in handle_async_request
+    stream = await self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection.py", line 124, in _connect
+    stream = await self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_backends\auto.py", line 31, in connect_tcp
+    return await self._backend.connect_tcp(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 113, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Users\HUAWEI\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [Errno 11001] getaddrinfo failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 21, in fetch_all_blocks
+    resp = await client.get(url, headers=headers, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+  File "C:\Users\HUAWEI\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 150, in get_feishu_doc_content
+    blocks = await fetch_all_blocks(document_id, user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 26, in fetch_all_blocks
+    raise RuntimeError("请求飞书文档块时网络错误")
+RuntimeError: 请求飞书文档块时网络错误
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\main.py", line 125, in generate_testcases_api
+    result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 153, in get_feishu_doc_content
+    raise RuntimeError("获取飞书文档内容失败")
+RuntimeError: 获取飞书文档内容失败
+2025-07-05 17:21:11,863 - main - INFO - 收到飞书请求，document_id=Mhu7dsNVDouXlHxkTqWcnI1Wn8H
+2025-07-05 17:21:12,037 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/Mhu7dsNVDouXlHxkTqWcnI1Wn8H/blocks?limit=100 "HTTP/1.1 400 Bad Request"
+2025-07-05 17:21:12,038 - feishu_api - ERROR - 飞书文档块接口返回状态错误: 400
+2025-07-05 17:21:12,038 - feishu_api - ERROR - 获取飞书文档块失败: 飞书文档块接口错误，状态码400
+2025-07-05 17:21:12,038 - main - ERROR - 生成测试用例失败
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 22, in fetch_all_blocks
+    resp.raise_for_status()
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '400 Bad Request' for url 'https://open.feishu.cn/open-apis/docx/v1/documents/Mhu7dsNVDouXlHxkTqWcnI1Wn8H/blocks?limit=100'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 150, in get_feishu_doc_content
+    blocks = await fetch_all_blocks(document_id, user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 29, in fetch_all_blocks
+    raise RuntimeError(f"飞书文档块接口错误，状态码{e.response.status_code}")
+RuntimeError: 飞书文档块接口错误，状态码400
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\main.py", line 125, in generate_testcases_api
+    result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 153, in get_feishu_doc_content
+    raise RuntimeError("获取飞书文档内容失败")
+RuntimeError: 获取飞书文档内容失败
+2025-07-05 17:21:22,916 - uvicorn.error - INFO - Shutting down
+2025-07-05 17:21:23,024 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-05 17:21:23,024 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-05 17:21:23,025 - uvicorn.error - INFO - Finished server process [17828]

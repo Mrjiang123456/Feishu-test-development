@@ -1,0 +1,627 @@
+2025-07-08 15:28:41,315 - __main__ - INFO - ==================================================
+2025-07-08 15:28:41,315 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-08 15:28:41,315 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250708_152841.log
+2025-07-08 15:28:41,315 - __main__ - INFO - ==================================================
+2025-07-08 15:28:41,317 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-08 15:28:41,371 - __main__ - INFO - frpc 启动成功
+2025-07-08 15:28:41,424 - main - INFO - ==================================================
+2025-07-08 15:28:41,425 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-08 15:28:41,425 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250708_152841.log
+2025-07-08 15:28:41,425 - main - INFO - ==================================================
+2025-07-08 15:28:41,427 - uvicorn.error - INFO - Started server process [27788]
+2025-07-08 15:28:41,427 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-08 15:28:41,428 - uvicorn.error - INFO - Application startup complete.
+2025-07-08 15:28:41,428 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-08 15:28:44,854 - main - INFO - 收到飞书请求，document_id=KExEdM3URoe4JdxRyU6cduwHnZd
+2025-07-08 15:28:46,942 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-08 15:28:47,476 - feishu_api - INFO - 请求飞书文档块成功，获取 62 个块
+2025-07-08 15:28:47,477 - feishu_api - INFO - 共获取文档块数量：62
+2025-07-08 15:28:47,479 - feishu_api - INFO - 文档中共发现图片数量: 6
+2025-07-08 15:28:47,902 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SZPlbksxNo9q2AxkE3TcDp3gnlb%2CJqINbXfOlofwdHxsaYecenlsnAh%2CZPq4buihSoeZrCxt6jQcMli8n2f%2CI69ubTn76oLpwRxLIP6cjz0tnWb%2CG7hCbfD1UoCXnwxK0hIcXbqhnPg%2CM5XibpflfokO3Dx25UQcS4zgnVh "HTTP/1.1 200 OK"
+2025-07-08 15:28:47,903 - feishu_api - INFO - 批量获取图片下载链接成功，数量：0
+2025-07-08 15:28:47,903 - main - INFO - 提取的 PRD 文本:
+# B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+#### 1.1.1 业务流程图
+
+![image]()
+
+#### 1.1.2 功能架构
+
+![image]()
+
+### 1.2 功能说明
+
+#### 1.2.1 账号登录
+
+##### 1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+##### 1.2.1.2 页面原型
+
+![image]()
+
+##### 1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+#### 1.2.2 重置初始密码
+
+##### 1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+##### 1.2.2.2 页面原型
+
+![image]()
+
+##### 1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+#### 1.2.3 找回密码
+
+##### 1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+##### 1.2.3.2 页面原型
+
+![image]()
+
+##### 1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+#### 1.2.4 修改密码
+
+##### 1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+##### 1.2.4.2 页面原型
+
+![image]()
+
+##### 1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+2025-07-08 15:28:47,908 - main - INFO - 开始调用图谱生成测试用例
+2025-07-08 15:28:47,916 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-08 15:28:47,916 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-08 15:28:47,917 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-08 15:28:51,159 - uvicorn.error - INFO - Shutting down
+2025-07-08 15:28:51,270 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)
+2025-07-08 15:29:16,807 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:29:16,810 - langgraph_use2 - INFO - [Step 3] 优化测试点
+2025-07-08 15:31:16,651 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:16,654 - langgraph_use2 - INFO - [Step 4] 生成测试用例
+2025-07-08 15:31:16,654 - langgraph_use2 - INFO - 生成第 1 个用例，第 1 次尝试
+2025-07-08 15:31:16,677 - langgraph_use2 - INFO - 生成第 2 个用例，第 1 次尝试
+2025-07-08 15:31:16,704 - langgraph_use2 - INFO - 生成第 3 个用例，第 1 次尝试
+2025-07-08 15:31:16,728 - langgraph_use2 - INFO - 生成第 4 个用例，第 1 次尝试
+2025-07-08 15:31:16,752 - langgraph_use2 - INFO - 生成第 5 个用例，第 1 次尝试
+2025-07-08 15:31:16,779 - langgraph_use2 - INFO - 生成第 6 个用例，第 1 次尝试
+2025-07-08 15:31:16,802 - langgraph_use2 - INFO - 生成第 7 个用例，第 1 次尝试
+2025-07-08 15:31:16,825 - langgraph_use2 - INFO - 生成第 8 个用例，第 1 次尝试
+2025-07-08 15:31:16,852 - langgraph_use2 - INFO - 生成第 9 个用例，第 1 次尝试
+2025-07-08 15:31:16,876 - langgraph_use2 - INFO - 生成第 10 个用例，第 1 次尝试
+2025-07-08 15:31:16,903 - langgraph_use2 - INFO - 生成第 11 个用例，第 1 次尝试
+2025-07-08 15:31:16,927 - langgraph_use2 - INFO - 生成第 12 个用例，第 1 次尝试
+2025-07-08 15:31:16,950 - langgraph_use2 - INFO - 生成第 13 个用例，第 1 次尝试
+2025-07-08 15:31:16,978 - langgraph_use2 - INFO - 生成第 14 个用例，第 1 次尝试
+2025-07-08 15:31:17,001 - langgraph_use2 - INFO - 生成第 15 个用例，第 1 次尝试
+2025-07-08 15:31:17,026 - langgraph_use2 - INFO - 生成第 16 个用例，第 1 次尝试
+2025-07-08 15:31:17,052 - langgraph_use2 - INFO - 生成第 17 个用例，第 1 次尝试
+2025-07-08 15:31:17,076 - langgraph_use2 - INFO - 生成第 18 个用例，第 1 次尝试
+2025-07-08 15:31:17,101 - langgraph_use2 - INFO - 生成第 19 个用例，第 1 次尝试
+2025-07-08 15:31:17,125 - langgraph_use2 - INFO - 生成第 20 个用例，第 1 次尝试
+2025-07-08 15:31:17,148 - langgraph_use2 - INFO - 生成第 21 个用例，第 1 次尝试
+2025-07-08 15:31:17,175 - langgraph_use2 - INFO - 生成第 22 个用例，第 1 次尝试
+2025-07-08 15:31:17,199 - langgraph_use2 - INFO - 生成第 23 个用例，第 1 次尝试
+2025-07-08 15:31:17,222 - langgraph_use2 - INFO - 生成第 24 个用例，第 1 次尝试
+2025-07-08 15:31:17,248 - langgraph_use2 - INFO - 生成第 25 个用例，第 1 次尝试
+2025-07-08 15:31:17,271 - langgraph_use2 - INFO - 生成第 26 个用例，第 1 次尝试
+2025-07-08 15:31:17,299 - langgraph_use2 - INFO - 生成第 27 个用例，第 1 次尝试
+2025-07-08 15:31:17,324 - langgraph_use2 - INFO - 生成第 28 个用例，第 1 次尝试
+2025-07-08 15:31:17,347 - langgraph_use2 - INFO - 生成第 29 个用例，第 1 次尝试
+2025-07-08 15:31:17,372 - langgraph_use2 - INFO - 生成第 30 个用例，第 1 次尝试
+2025-07-08 15:31:22,499 - langgraph_use2 - WARNING - 第 17 个测试点失败（第 1 次）: 
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProj
+2025-07-08 15:31:22,499 - langgraph_use2 - INFO - 生成第 31 个用例，第 1 次尝试
+2025-07-08 15:31:23,494 - langgraph_use2 - WARNING - 第 3 个测试点失败（第 1 次）: 
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProje
+2025-07-08 15:31:23,494 - langgraph_use2 - INFO - 生成第 32 个用例，第 1 次尝试
+2025-07-08 15:31:28,460 - langgraph_use2 - WARNING - 第 26 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:31:28,460 - langgraph_use2 - INFO - 生成第 33 个用例，第 1 次尝试
+2025-07-08 15:31:28,727 - langgraph_use2 - WARNING - 第 5 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+   
+2025-07-08 15:31:28,727 - langgraph_use2 - INFO - 生成第 34 个用例，第 1 次尝试
+2025-07-08 15:31:33,785 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:33,788 - langgraph_use2 - INFO -  第 28 个用例生成成功，用时 16.46s
+2025-07-08 15:31:33,789 - langgraph_use2 - INFO - 生成第 35 个用例，第 1 次尝试
+2025-07-08 15:31:35,373 - langgraph_use2 - WARNING - 第 25 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:31:35,373 - langgraph_use2 - INFO - 生成第 36 个用例，第 1 次尝试
+2025-07-08 15:31:36,051 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:36,054 - langgraph_use2 - INFO -  第 20 个用例生成成功，用时 18.93s
+2025-07-08 15:31:36,055 - langgraph_use2 - INFO - 生成第 37 个用例，第 1 次尝试
+2025-07-08 15:31:36,735 - langgraph_use2 - WARNING - 第 34 个测试点失败（第 1 次）: 
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProj
+2025-07-08 15:31:36,735 - langgraph_use2 - INFO - 生成第 38 个用例，第 1 次尝试
+2025-07-08 15:31:38,446 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:38,450 - langgraph_use2 - INFO -  第 16 个用例生成成功，用时 21.42s
+2025-07-08 15:31:38,450 - langgraph_use2 - INFO - 生成第 39 个用例，第 1 次尝试
+2025-07-08 15:31:38,472 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:38,475 - langgraph_use2 - INFO -  第 32 个用例生成成功，用时 14.98s
+2025-07-08 15:31:38,475 - langgraph_use2 - INFO - 生成第 40 个用例，第 1 次尝试
+2025-07-08 15:31:39,043 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:39,044 - langgraph_use2 - INFO -  第 10 个用例生成成功，用时 22.17s
+2025-07-08 15:31:39,044 - langgraph_use2 - INFO - 生成第 41 个用例，第 1 次尝试
+2025-07-08 15:31:39,279 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:39,282 - langgraph_use2 - INFO -  第 21 个用例生成成功，用时 22.13s
+2025-07-08 15:31:39,282 - langgraph_use2 - INFO - 生成第 42 个用例，第 1 次尝试
+2025-07-08 15:31:39,636 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:39,640 - langgraph_use2 - INFO -  第 30 个用例生成成功，用时 22.27s
+2025-07-08 15:31:39,641 - langgraph_use2 - INFO - 生成第 43 个用例，第 1 次尝试
+2025-07-08 15:31:39,849 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:39,850 - langgraph_use2 - INFO -  第 29 个用例生成成功，用时 22.50s
+2025-07-08 15:31:39,851 - langgraph_use2 - INFO - 生成第 44 个用例，第 1 次尝试
+2025-07-08 15:31:40,711 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:40,712 - langgraph_use2 - INFO -  第 31 个用例生成成功，用时 18.21s
+2025-07-08 15:31:40,712 - langgraph_use2 - INFO - 生成第 45 个用例，第 1 次尝试
+2025-07-08 15:31:43,050 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:43,053 - langgraph_use2 - INFO -  第 7 个用例生成成功，用时 26.25s
+2025-07-08 15:31:43,054 - langgraph_use2 - INFO - 生成第 46 个用例，第 1 次尝试
+2025-07-08 15:31:43,216 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:43,220 - langgraph_use2 - INFO -  第 8 个用例生成成功，用时 26.40s
+2025-07-08 15:31:43,220 - langgraph_use2 - INFO - 生成第 47 个用例，第 1 次尝试
+2025-07-08 15:31:43,628 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:43,633 - langgraph_use2 - INFO -  第 9 个用例生成成功，用时 26.78s
+2025-07-08 15:31:43,633 - langgraph_use2 - INFO - 生成第 48 个用例，第 1 次尝试
+2025-07-08 15:31:44,288 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:44,292 - langgraph_use2 - INFO -  第 23 个用例生成成功，用时 27.09s
+2025-07-08 15:31:44,292 - langgraph_use2 - INFO - 生成第 49 个用例，第 1 次尝试
+2025-07-08 15:31:46,560 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:46,567 - langgraph_use2 - INFO -  第 19 个用例生成成功，用时 29.47s
+2025-07-08 15:31:46,567 - langgraph_use2 - INFO - 生成第 50 个用例，第 1 次尝试
+2025-07-08 15:31:48,039 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:48,043 - langgraph_use2 - INFO -  第 15 个用例生成成功，用时 31.04s
+2025-07-08 15:31:48,044 - langgraph_use2 - INFO - 生成第 51 个用例，第 1 次尝试
+2025-07-08 15:31:48,221 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:48,223 - langgraph_use2 - INFO -  第 11 个用例生成成功，用时 31.32s
+2025-07-08 15:31:48,223 - langgraph_use2 - INFO - 生成第 52 个用例，第 1 次尝试
+2025-07-08 15:31:49,690 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:49,692 - langgraph_use2 - INFO -  第 22 个用例生成成功，用时 32.52s
+2025-07-08 15:31:49,692 - langgraph_use2 - INFO - 生成第 53 个用例，第 1 次尝试
+2025-07-08 15:31:49,880 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:49,883 - langgraph_use2 - INFO -  第 35 个用例生成成功，用时 16.09s
+2025-07-08 15:31:49,883 - langgraph_use2 - INFO - 生成第 54 个用例，第 1 次尝试
+2025-07-08 15:31:49,967 - langgraph_use2 - WARNING - 第 33 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:31:49,967 - langgraph_use2 - INFO - 生成第 55 个用例，第 1 次尝试
+2025-07-08 15:31:50,225 - langgraph_use2 - WARNING - 第 44 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:31:50,225 - langgraph_use2 - INFO - 生成第 56 个用例，第 1 次尝试
+2025-07-08 15:31:50,687 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:50,692 - langgraph_use2 - INFO -  第 2 个用例生成成功，用时 34.02s
+2025-07-08 15:31:50,692 - langgraph_use2 - INFO - 生成第 57 个用例，第 1 次尝试
+2025-07-08 15:31:52,909 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:52,914 - langgraph_use2 - INFO -  第 12 个用例生成成功，用时 35.99s
+2025-07-08 15:31:52,914 - langgraph_use2 - INFO - 生成第 58 个用例，第 1 次尝试
+2025-07-08 15:31:54,835 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:54,839 - langgraph_use2 - INFO -  第 24 个用例生成成功，用时 37.62s
+2025-07-08 15:31:54,840 - langgraph_use2 - INFO - 生成第 59 个用例，第 1 次尝试
+2025-07-08 15:31:54,944 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:54,948 - langgraph_use2 - INFO -  第 4 个用例生成成功，用时 38.22s
+2025-07-08 15:31:54,949 - langgraph_use2 - INFO - 生成第 60 个用例，第 1 次尝试
+2025-07-08 15:31:55,064 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:55,066 - langgraph_use2 - INFO -  第 39 个用例生成成功，用时 16.62s
+2025-07-08 15:31:55,066 - langgraph_use2 - INFO - 生成第 61 个用例，第 1 次尝试
+2025-07-08 15:31:56,819 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:56,821 - langgraph_use2 - INFO -  第 38 个用例生成成功，用时 20.09s
+2025-07-08 15:31:56,821 - langgraph_use2 - INFO - 生成第 62 个用例，第 1 次尝试
+2025-07-08 15:31:58,049 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:58,052 - langgraph_use2 - INFO -  第 42 个用例生成成功，用时 18.77s
+2025-07-08 15:31:58,053 - langgraph_use2 - INFO - 生成第 63 个用例，第 1 次尝试
+2025-07-08 15:31:59,215 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:31:59,219 - langgraph_use2 - INFO -  第 13 个用例生成成功，用时 42.27s
+2025-07-08 15:31:59,220 - langgraph_use2 - INFO - 生成第 17 个用例，第 2 次尝试
+2025-07-08 15:31:59,951 - langgraph_use2 - WARNING - 第 51 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:31:59,951 - langgraph_use2 - INFO - 生成第 3 个用例，第 2 次尝试
+2025-07-08 15:32:00,053 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:00,054 - langgraph_use2 - INFO -  第 45 个用例生成成功，用时 19.34s
+2025-07-08 15:32:00,056 - langgraph_use2 - WARNING - 第 60 个测试点失败（第 1 次）: 
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProj
+2025-07-08 15:32:00,056 - langgraph_use2 - INFO - 生成第 26 个用例，第 2 次尝试
+2025-07-08 15:32:00,078 - langgraph_use2 - INFO - 生成第 5 个用例，第 2 次尝试
+2025-07-08 15:32:00,102 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:00,110 - langgraph_use2 - INFO -  第 43 个用例生成成功，用时 20.47s
+2025-07-08 15:32:00,111 - langgraph_use2 - INFO - 生成第 25 个用例，第 2 次尝试
+2025-07-08 15:32:01,705 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:01,709 - langgraph_use2 - INFO -  第 18 个用例生成成功，用时 44.63s
+2025-07-08 15:32:01,710 - langgraph_use2 - INFO - 生成第 34 个用例，第 2 次尝试
+2025-07-08 15:32:03,806 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:03,811 - langgraph_use2 - INFO -  第 57 个用例生成成功，用时 13.12s
+2025-07-08 15:32:03,811 - langgraph_use2 - INFO - 生成第 33 个用例，第 2 次尝试
+2025-07-08 15:32:04,324 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:04,327 - langgraph_use2 - INFO -  第 48 个用例生成成功，用时 20.69s
+2025-07-08 15:32:04,327 - langgraph_use2 - INFO - 生成第 44 个用例，第 2 次尝试
+2025-07-08 15:32:05,329 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:05,331 - langgraph_use2 - INFO -  第 36 个用例生成成功，用时 29.96s
+2025-07-08 15:32:05,331 - langgraph_use2 - INFO - 生成第 51 个用例，第 2 次尝试
+2025-07-08 15:32:06,691 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:06,696 - langgraph_use2 - INFO -  第 37 个用例生成成功，用时 30.64s
+2025-07-08 15:32:06,697 - langgraph_use2 - INFO - 生成第 60 个用例，第 2 次尝试
+2025-07-08 15:32:07,120 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:07,124 - langgraph_use2 - INFO -  第 41 个用例生成成功，用时 28.08s
+2025-07-08 15:32:10,815 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:10,818 - langgraph_use2 - INFO -  第 46 个用例生成成功，用时 27.76s
+2025-07-08 15:32:11,068 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:11,069 - langgraph_use2 - INFO -  第 52 个用例生成成功，用时 22.85s
+2025-07-08 15:32:11,981 - langgraph_use2 - WARNING - 第 55 个测试点失败（第 1 次）: Server disconnected without sending a response.
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 343, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  
+2025-07-08 15:32:12,987 - langgraph_use2 - INFO - 生成第 55 个用例，第 2 次尝试
+2025-07-08 15:32:13,010 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:13,012 - langgraph_use2 - INFO -  第 61 个用例生成成功，用时 17.95s
+2025-07-08 15:32:13,120 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:13,123 - langgraph_use2 - INFO -  第 50 个用例生成成功，用时 26.56s
+2025-07-08 15:32:13,313 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:13,317 - langgraph_use2 - INFO -  第 63 个用例生成成功，用时 15.26s
+2025-07-08 15:32:13,463 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:13,467 - langgraph_use2 - INFO -  第 53 个用例生成成功，用时 23.77s
+2025-07-08 15:32:13,969 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:13,974 - langgraph_use2 - INFO -  第 56 个用例生成成功，用时 23.75s
+2025-07-08 15:32:14,784 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:14,787 - langgraph_use2 - INFO -  第 59 个用例生成成功，用时 19.95s
+2025-07-08 15:32:17,491 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:17,496 - langgraph_use2 - INFO -  第 27 个用例生成成功，用时 60.20s
+2025-07-08 15:32:18,746 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:18,749 - langgraph_use2 - INFO -  第 17 个用例生成成功，用时 19.53s
+2025-07-08 15:32:20,942 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:20,946 - langgraph_use2 - INFO -  第 54 个用例生成成功，用时 31.06s
+2025-07-08 15:32:22,645 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:22,648 - langgraph_use2 - INFO -  第 26 个用例生成成功，用时 22.59s
+2025-07-08 15:32:22,976 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:22,979 - langgraph_use2 - INFO -  第 5 个用例生成成功，用时 22.90s
+2025-07-08 15:32:24,697 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:24,702 - langgraph_use2 - INFO -  第 44 个用例生成成功，用时 20.37s
+2025-07-08 15:32:24,807 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:24,808 - langgraph_use2 - INFO -  第 34 个用例生成成功，用时 23.10s
+2025-07-08 15:32:25,650 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:25,653 - langgraph_use2 - INFO -  第 60 个用例生成成功，用时 18.96s
+2025-07-08 15:32:26,555 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:26,560 - langgraph_use2 - INFO -  第 47 个用例生成成功，用时 43.34s
+2025-07-08 15:32:28,003 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:28,008 - langgraph_use2 - INFO -  第 49 个用例生成成功，用时 43.72s
+2025-07-08 15:32:30,250 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:30,253 - langgraph_use2 - INFO -  第 62 个用例生成成功，用时 33.43s
+2025-07-08 15:32:46,871 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:46,876 - langgraph_use2 - INFO -  第 58 个用例生成成功，用时 53.96s
+2025-07-08 15:32:48,133 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:48,136 - langgraph_use2 - INFO -  第 1 个用例生成成功，用时 91.48s
+2025-07-08 15:32:53,745 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:53,750 - langgraph_use2 - INFO -  第 6 个用例生成成功，用时 96.97s
+2025-07-08 15:32:54,143 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:32:54,147 - langgraph_use2 - INFO -  第 40 个用例生成成功，用时 75.67s
+2025-07-08 15:33:06,751 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-08 15:33:06,756 - langgraph_use2 - INFO -  第 33 个用例生成成功，用时 62.95s
+2025-07-08 15:33:51,291 - uvicorn.error - ERROR - Cancel 1 running task(s), timeout graceful shutdown exceeded
+2025-07-08 15:33:51,292 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-08 15:33:51,296 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-08 15:33:51,296 - uvicorn.error - INFO - Finished server process [27788]
+2025-07-08 15:33:51,308 - uvicorn.error - ERROR - Exception in ASGI application
+Traceback (most recent call last):
+  File "D:\pythonProject\venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\fastapi\applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\pythonProject\venv\Lib\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\fastapi\routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\fastapi\routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\main.py", line 153, in generate_testcases_api
+    result_graph = await graph.ainvoke(initial_state)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\pregel\__init__.py", line 2788, in ainvoke
+    async for chunk in self.astream(
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\pregel\__init__.py", line 2655, in astream
+    async for _ in runner.atick(
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\pregel\runner.py", line 295, in atick
+    await arun_with_retry(
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\pregel\retry.py", line 136, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\utils\runnable.py", line 672, in ainvoke
+    input = await asyncio.create_task(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\langgraph\utils\runnable.py", line 440, in ainvoke
+    ret = await self.afunc(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 167, in generate_testcases
+    all_results = await asyncio.gather(*tasks)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 129, in generate_case
+    resp = await call_model2(prompt)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\model_api2.py", line 42, in call_model2
+    response = await client.post(f"{ARK_BASE_URL}/chat/completions", json=payload, headers=headers)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1859, in post
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http_proxy.py", line 316, in handle_async_request
+    stream = await stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_async\http11.py", line 376, in start_tls
+    return await self._stream.start_tls(ssl_context, server_hostname, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\httpcore\_backends\anyio.py", line 70, in start_tls
+    ssl_stream = await anyio.streams.tls.TLSStream.wrap(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\anyio\streams\tls.py", line 147, in wrap
+    await wrapper._call_sslobject_method(ssl_object.do_handshake)
+  File "D:\pythonProject\venv\Lib\site-packages\anyio\streams\tls.py", line 162, in _call_sslobject_method
+    data = await self.transport_stream.receive()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1254, in receive
+    await self._protocol.read_event.wait()
+  File "C:\Users\HUAWEI\AppData\Local\Programs\Python\Python311\Lib\asyncio\locks.py", line 213, in wait
+    await fut
+asyncio.exceptions.CancelledError: Task cancelled, timeout graceful shutdown exceeded

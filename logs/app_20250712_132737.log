@@ -1,0 +1,26 @@
+2025-07-12 13:27:37,249 - __main__ - INFO - ==================================================
+2025-07-12 13:27:37,249 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-12 13:27:37,249 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250712_132737.log
+2025-07-12 13:27:37,249 - __main__ - INFO - ==================================================
+2025-07-12 13:27:37,253 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-12 13:27:37,310 - __main__ - INFO - frpc 启动成功
+2025-07-12 13:27:37,360 - main - INFO - ==================================================
+2025-07-12 13:27:37,361 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-12 13:27:37,361 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250712_132737.log
+2025-07-12 13:27:37,361 - main - INFO - ==================================================
+2025-07-12 13:27:37,364 - uvicorn.error - INFO - Started server process [13932]
+2025-07-12 13:27:37,365 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-12 13:27:37,366 - uvicorn.error - INFO - Application startup complete.
+2025-07-12 13:27:37,366 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-12 13:27:40,438 - main - ERROR - 重新生成失败
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\main.py", line 176, in regenerate_testcases_api
+    document_id = request_data.document_id or last_document_id
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\venv\Lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'RegenerateRequest' object has no attribute 'document_id'
+2025-07-12 13:29:38,282 - uvicorn.error - INFO - Shutting down
+2025-07-12 13:29:38,391 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-12 13:29:38,391 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-12 13:29:38,391 - uvicorn.error - INFO - Finished server process [13932]

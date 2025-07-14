@@ -1,0 +1,75 @@
+2025-07-09 12:49:56,063 - main - INFO - ==================================================
+2025-07-09 12:49:56,063 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 12:49:56,063 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_124956.log
+2025-07-09 12:49:56,063 - main - INFO - ==================================================
+2025-07-09 12:49:56,066 - uvicorn.error - INFO - Started server process [6364]
+2025-07-09 12:49:56,066 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 12:49:56,066 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 12:49:56,067 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 12:49:59,339 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-09 12:49:59,782 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 12:50:00,194 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-09 12:50:00,586 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-09 12:50:00,965 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-09 12:50:01,435 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-09 12:50:01,841 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-09 12:50:01,842 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://api3-eeft-drive.feishu.cn/space/api/box/stream/download/authcode/?code=MzdiOTdmMjUyZjdjYjU1MTBkZWJmMGE5MmY0YzM3N2ZfNTg0NTkwYzY2ZjM1NGVkNzVmMDJmMGQwYjAyYzNjODdfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMDM2NjAxOjE3NTIxMjMwMDFfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTI5MjBhYWZjYTcxNGYxZGVjZWIzYzU3M2FjYWRhOWFfYjNjNWVjYTliNzUzZGE5OWUxM2E5M2ZhMDg3ZmM0OTZfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMDM2NjAyOjE3NTIxMjMwMDJfVjM)
+
+1.2.1.3 逻辑说明
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2M3N2MwNTgyNTBjNTQxNDNiMWFkOTI5N2FhOWNiOGZfMWM2Y2E4ZDNhMWNjOTc2Y2M5YjQyZWIyOGQ5NzJjZTZfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMDM2NjAyOjE3NTIxMjMwMDJfVjM)
+
+1.2.2.3 业务逻辑
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODZmMTFjZDE0ZGFiZDY4NjQ2N2MyNDk0MDQ3YjUwMzNfY2Q1MmEwNDZkZWZkZWU2MjIxN2VjNDNlYjUwNzc2NDVfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMDM2NjAyOjE3NTIxMjMwMDJfVjM)
+
+1.2.3.3 业务逻辑
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGVlOTcyZDJjMGM0ZWJkOTMwY2E5N2JjNDM3ZjUzMGFfOTczOTdlODAyZWJkNGMzYzQ3MzFjYTcyZTE0MzY5NGNfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMDM2NjAzOjE3NTIxMjMwMDNfVjM)
+
+1.2.4.3 业务逻辑
+
+
+2025-07-09 12:50:01,842 - main - INFO - 开始调用图谱生成测试用例
+2025-07-09 12:50:01,852 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-09 12:50:01,852 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-09 12:50:01,853 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-09 12:50:04,596 - uvicorn.error - INFO - Shutting down
+2025-07-09 12:50:04,703 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

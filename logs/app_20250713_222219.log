@@ -1,0 +1,22 @@
+2025-07-13 22:22:19,340 - __main__ - INFO - ==================================================
+2025-07-13 22:22:19,341 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 22:22:19,341 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_222219.log
+2025-07-13 22:22:19,341 - __main__ - INFO - ==================================================
+2025-07-13 22:22:19,346 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-13 22:22:19,402 - __main__ - INFO - frpc 启动成功
+2025-07-13 22:22:19,461 - main - INFO - ==================================================
+2025-07-13 22:22:19,462 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 22:22:19,462 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_222219.log
+2025-07-13 22:22:19,462 - main - INFO - ==================================================
+2025-07-13 22:22:19,465 - uvicorn.error - INFO - Started server process [18824]
+2025-07-13 22:22:19,465 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-13 22:22:19,466 - uvicorn.error - INFO - Application startup complete.
+2025-07-13 22:22:19,466 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-13 22:22:21,562 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 429 Too Many Requests"
+2025-07-13 22:22:21,563 - feishu_api - ERROR - 飞书文档块接口返回状态错误: 429
+2025-07-13 22:22:21,564 - feishu_api - ERROR - 获取飞书文档块失败: 飞书文档块接口错误，状态码429
+2025-07-13 22:22:21,564 - main - ERROR - 从飞书获取文档内容失败: 获取飞书文档内容失败
+2025-07-13 22:22:25,897 - uvicorn.error - INFO - Shutting down
+2025-07-13 22:22:26,010 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-13 22:22:26,010 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-13 22:22:26,010 - uvicorn.error - INFO - Finished server process [18824]

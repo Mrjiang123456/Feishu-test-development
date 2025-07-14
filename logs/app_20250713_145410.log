@@ -1,0 +1,1019 @@
+2025-07-13 14:54:10,014 - __main__ - INFO - ==================================================
+2025-07-13 14:54:10,014 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 14:54:10,014 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_145410.log
+2025-07-13 14:54:10,014 - __main__ - INFO - ==================================================
+2025-07-13 14:54:10,018 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-13 14:54:10,061 - __main__ - INFO - frpc 启动成功
+2025-07-13 14:54:10,112 - main - INFO - ==================================================
+2025-07-13 14:54:10,112 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 14:54:10,112 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_145410.log
+2025-07-13 14:54:10,112 - main - INFO - ==================================================
+2025-07-13 14:54:10,114 - uvicorn.error - INFO - Started server process [26120]
+2025-07-13 14:54:10,115 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-13 14:54:10,115 - uvicorn.error - INFO - Application startup complete.
+2025-07-13 14:54:10,115 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-13 14:54:43,933 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-13 14:54:44,332 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-13 14:54:44,777 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-13 14:54:45,102 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-13 14:54:45,546 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-13 14:54:45,897 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-13 14:54:46,254 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-13 14:54:46,255 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDRiY2IyMmYzZjk4MDA0NWYwODcyZTdhYzA1NmEyZTlfZmUwNmY0YTMyYTU3MTEwNjllNzAzNTc5ZDNiNGY3MThfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzg5Njg0OjE3NTI0NzYwODRfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTdkZjFiZDZiZWYyOGIzOTFlN2E1NzVjMzI2MWE1NTRfN2YyZWYyMWE3OWE4MTg3MzA2OGNjZTUxN2U4ZDIzYTRfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMzg5Njg0OjE3NTI0NzYwODRfVjM)
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OGIxMjlkZjUxMWFkZDJiN2M3YTM0MDAxYmZjZTI5NWFfMjgzMDEyYWJkNjJkMzA2ZTcwYWMwMGViODBjMzI2ZGFfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMzg5Njg0OjE3NTI0NzYwODRfVjM)
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTNlNzI3MGQwMTk4OWIyY2ZkZTY0NTJlNmMxZDEyMDBfZGE2OWVlYzc3YTk2ZGJmYmMzYjZhZDNkZmZiMTJmMGNfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMzg5Njg1OjE3NTI0NzYwODVfVjM)
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzIyYWI0Zjc4NTJhZDNjYmQ1MmE5MzY0MGUyYTZlODFfNWE5MTk5ODAyZTI1MWMwYjlhYzUxOGUzNzBhM2Y4MzNfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMzg5Njg1OjE3NTI0NzYwODVfVjM)
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 14:54:46,256 - main - INFO - 开始调用图谱生成测试用例
+2025-07-13 14:54:46,264 - langgraph_use2 - INFO - [Step 1] 开始处理图像内容
+2025-07-13 14:54:46,265 - langgraph_use2 - INFO - [Step 1] 发现 5 张图片，开始识别...
+2025-07-13 14:54:46,265 - langgraph_use2 - INFO -   处理图片 1/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:54:46,713 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 400 Bad Request"
+2025-07-13 14:54:46,713 - langgraph_use2 - WARNING -   图片尺寸过大，使用替代描述: https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDRiY2IyMmYzZjk4MDA0NWYwODcyZTdhYzA1NmEyZTlfZmUwNmY0YTMyYTU3MTEwNjllNzAzNTc5ZDNiNGY3MThfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzg5Njg0OjE3NTI0NzYwODRfVjM
+2025-07-13 14:54:46,713 - langgraph_use2 - INFO -   处理图片 2/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:54:53,089 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:54:53,090 - langgraph_use2 - INFO -   处理图片 3/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:54:55,963 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:54:55,964 - langgraph_use2 - INFO -   处理图片 4/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:55:00,296 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:55:00,297 - langgraph_use2 - INFO -   处理图片 5/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:55:04,135 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:55:04,136 - langgraph_use2 - INFO - [Step 1] 图像处理完成，共处理 5 张图片
+2025-07-13 14:55:04,136 - langgraph_use2 - INFO - ## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+【图像描述】页面结构示意图
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+【图像描述】1. 模块名：登录模块
+   - 核心交互：
+     - 步骤1：用户进入登录页；
+     - 步骤2：输入登录账号；
+     - 步骤3：输入登录密码；
+     - 步骤4：输入验证码；
+     - 步骤5：点击登录；
+   - 关键控件：
+     - 登录账号输入框：输入账号；
+     - 登录密码输入框：输入密码；
+     - 验证码输入框：输入验证码；
+     - 登录按钮：点击后触发登录验证；
+   - 状态提示：
+     - 正常状态：输入正确账号、密码、验证码，点击登录后，进入下一步；
+     - 异常状态：无明确提示（图中未显示）。
+
+2. 模块名：注册模块
+   - 核心交互：
+     - 步骤1：用户进入注册页；
+     - 步骤2：输入登录账号；
+     - 步骤3：输入登录密码；
+     - 步骤4：确认登录密码；
+     - 步骤5：输入验证码；
+     - 步骤6：点击获取验证码；
+     - 步骤7：点击提交；
+   - 关键控件：
+     - 登录账号输入框：输入账号；
+     - 登录密码输入框：输入密码；
+     - 确认密码输入框：确认密码；
+     - 验证码输入框：输入验证码；
+     - 获取验证码按钮：点击后获取验证码；
+     - 提交按钮：点击后触发注册验证；
+     - 取消按钮：点击后取消注册；
+   - 状态提示：
+     - 正常状态：输入正确账号、密码、确认密码、验证码，点击提交后，进入下一步；
+     - 异常状态：无明确提示（图中未显示）。
+
+3. 模块名：首次登录模块
+   - 核心交互：
+     - 步骤1：用户首次登录；
+     - 步骤2：输入登录账号；
+     - 步骤3：输入登录密码；
+     - 步骤4：输入验证码；
+     - 步骤5：点击登录；
+   - 关键控件：
+     - 登录账号输入框：输入账号；
+     - 登录密码输入框：输入密码；
+     - 验证码输入框：输入验证码；
+     - 登录按钮：点击后触发登录验证；
+   - 状态提示：
+     - 正常状态：无明确提示（图中未显示）；
+     - 异常状态：弹出提示框“账号首次登录时需要重置初始密码！”，点击“确定”后进入注册模块。
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+【图像描述】模块名：修改初始密码模块
+核心交互：
+步骤1：用户进入修改初始密码页面
+步骤2：输入新密码
+步骤3：确认密码
+步骤4：输入验证短信
+步骤5：点击“提交”按钮完成密码修改
+关键控件：
+1. 新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+2. 确认密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+3. 验证短信输入框：输入验证码
+4. 获取验证码按钮：点击获取验证码
+5. 取消按钮：点击取消修改密码操作
+6. 提交按钮：点击提交修改密码信息
+状态提示：
+- 输入密码不符合要求时，输入框下方显示提示：“至少包括数字、小写字母、大写字母、特殊符号中的两种”
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+【图像描述】模块名：找回密码表单
+核心交互：
+步骤1：用户进入找回密码页面
+步骤2：输入登录账号（手机号）
+步骤3：输入新密码（8-10位，包含至少两种：数字、小写字母、大写字母、特殊符号）
+步骤4：再次输入确认密码（与新密码一致）
+步骤5：点击“获取验证码”获取短信验证码
+步骤6：输入验证短信
+步骤7：点击“提交”按钮提交信息（或点击“取消”按钮取消操作）
+
+关键控件：
+- 登录账号输入框：输入手机号
+- 新密码输入框：输入8-10位密码，包含至少两种：数字、小写字母、大写字母、特殊符号
+- 确认密码输入框：再次输入密码以确认
+- 获取验证码按钮：点击获取短信验证码
+- 验证短信输入框：输入收到的验证码
+- 取消按钮：点击取消找回密码操作
+- 提交按钮：点击提交找回密码信息
+
+状态提示（假设）：
+- 输入不符合要求的密码时：输入框旁显示提示“至少包括数字、小写字母、大写字母、特殊符号中的两种”
+- 验证码错误时：验证短信输入框旁显示错误提示
+- 提交成功时：跳转到登录页面或提示密码重置成功
+- 提交失败时：提示相应错误信息（如“手机号不正确”“验证码错误”等）
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+【图像描述】模块名：密码修改模块
+核心交互：
+步骤1：用户进入密码修改页面；
+步骤2：输入原密码；
+步骤3：输入新密码；
+步骤4：再次输入新密码（确认密码）；
+步骤5：输入验证短信；
+步骤6：点击“提交”按钮。
+关键控件：
+原密码输入框：输入原登录密码；
+新密码输入框：输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）；
+确认密码输入框：再次输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）；
+验证短信输入框：输入验证码；
+获取验证码按钮：点击获取验证码；
+取消按钮：点击取消密码修改操作；
+提交按钮：点击提交密码修改信息。
+状态提示：
+输入新密码或确认密码不符合要求时，输入框下方显示提示：“至少包括数字、小写字母、大写字母、特殊符号中的两种”；
+提交成功时，完成密码修改；
+提交失败时，提示相应错误信息。
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 14:55:04,141 - langgraph_use2 - INFO - [Step 2] 尝试直接从 PRD 文本提取标题
+2025-07-13 14:55:04,141 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-13 14:55:04,141 - langgraph_use2 - INFO - [Step 3] 提取测试点
+2025-07-13 14:56:22,764 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:56:22,791 - langgraph_use2 - INFO - [Step 4] 优化测试点
+2025-07-13 14:57:55,795 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:57:55,798 - langgraph_use2 - INFO - [Step 5] 生成测试用例
+2025-07-13 14:57:55,807 - langgraph_use2 - INFO - 生成第 1 个用例，第 1 次尝试
+2025-07-13 14:57:55,829 - langgraph_use2 - INFO - 生成第 2 个用例，第 1 次尝试
+2025-07-13 14:57:55,846 - langgraph_use2 - INFO - 生成第 3 个用例，第 1 次尝试
+2025-07-13 14:57:55,865 - langgraph_use2 - INFO - 生成第 4 个用例，第 1 次尝试
+2025-07-13 14:57:55,884 - langgraph_use2 - INFO - 生成第 5 个用例，第 1 次尝试
+2025-07-13 14:57:55,901 - langgraph_use2 - INFO - 生成第 6 个用例，第 1 次尝试
+2025-07-13 14:57:55,916 - langgraph_use2 - INFO - 生成第 7 个用例，第 1 次尝试
+2025-07-13 14:57:55,934 - langgraph_use2 - INFO - 生成第 8 个用例，第 1 次尝试
+2025-07-13 14:57:55,955 - langgraph_use2 - INFO - 生成第 9 个用例，第 1 次尝试
+2025-07-13 14:57:55,978 - langgraph_use2 - INFO - 生成第 10 个用例，第 1 次尝试
+2025-07-13 14:57:55,999 - langgraph_use2 - INFO - 生成第 11 个用例，第 1 次尝试
+2025-07-13 14:57:56,021 - langgraph_use2 - INFO - 生成第 12 个用例，第 1 次尝试
+2025-07-13 14:57:56,040 - langgraph_use2 - INFO - 生成第 13 个用例，第 1 次尝试
+2025-07-13 14:57:56,058 - langgraph_use2 - INFO - 生成第 14 个用例，第 1 次尝试
+2025-07-13 14:57:56,076 - langgraph_use2 - INFO - 生成第 15 个用例，第 1 次尝试
+2025-07-13 14:57:56,093 - langgraph_use2 - INFO - 生成第 16 个用例，第 1 次尝试
+2025-07-13 14:57:56,106 - langgraph_use2 - INFO - 生成第 17 个用例，第 1 次尝试
+2025-07-13 14:57:56,118 - langgraph_use2 - INFO - 生成第 18 个用例，第 1 次尝试
+2025-07-13 14:57:56,131 - langgraph_use2 - INFO - 生成第 19 个用例，第 1 次尝试
+2025-07-13 14:57:56,141 - langgraph_use2 - INFO - 生成第 20 个用例，第 1 次尝试
+2025-07-13 14:57:56,153 - langgraph_use2 - INFO - 生成第 21 个用例，第 1 次尝试
+2025-07-13 14:57:56,165 - langgraph_use2 - INFO - 生成第 22 个用例，第 1 次尝试
+2025-07-13 14:57:56,178 - langgraph_use2 - INFO - 生成第 23 个用例，第 1 次尝试
+2025-07-13 14:57:56,191 - langgraph_use2 - INFO - 生成第 24 个用例，第 1 次尝试
+2025-07-13 14:57:56,203 - langgraph_use2 - INFO - 生成第 25 个用例，第 1 次尝试
+2025-07-13 14:57:56,218 - langgraph_use2 - INFO - 生成第 26 个用例，第 1 次尝试
+2025-07-13 14:57:56,230 - langgraph_use2 - INFO - 生成第 27 个用例，第 1 次尝试
+2025-07-13 14:57:56,243 - langgraph_use2 - INFO - 生成第 28 个用例，第 1 次尝试
+2025-07-13 14:57:56,255 - langgraph_use2 - INFO - 生成第 29 个用例，第 1 次尝试
+2025-07-13 14:57:56,269 - langgraph_use2 - INFO - 生成第 30 个用例，第 1 次尝试
+2025-07-13 14:58:05,618 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:05,619 - langgraph_use2 - INFO -  第 23 个用例生成成功，用时 9.44s
+2025-07-13 14:58:05,620 - langgraph_use2 - INFO - 生成第 31 个用例，第 1 次尝试
+2025-07-13 14:58:05,716 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:05,716 - langgraph_use2 - INFO -  第 30 个用例生成成功，用时 9.45s
+2025-07-13 14:58:05,718 - langgraph_use2 - INFO - 生成第 32 个用例，第 1 次尝试
+2025-07-13 14:58:05,728 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:05,729 - langgraph_use2 - INFO -  第 24 个用例生成成功，用时 9.54s
+2025-07-13 14:58:05,729 - langgraph_use2 - INFO - 生成第 33 个用例，第 1 次尝试
+2025-07-13 14:58:05,754 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:05,755 - langgraph_use2 - INFO -  第 11 个用例生成成功，用时 9.76s
+2025-07-13 14:58:05,755 - langgraph_use2 - INFO - 生成第 34 个用例，第 1 次尝试
+2025-07-13 14:58:06,239 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:06,244 - langgraph_use2 - INFO -  第 14 个用例生成成功，用时 10.19s
+2025-07-13 14:58:06,245 - langgraph_use2 - INFO - 生成第 35 个用例，第 1 次尝试
+2025-07-13 14:58:06,304 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:06,305 - langgraph_use2 - INFO -  第 2 个用例生成成功，用时 10.48s
+2025-07-13 14:58:06,305 - langgraph_use2 - INFO - 生成第 36 个用例，第 1 次尝试
+2025-07-13 14:58:06,512 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:06,513 - langgraph_use2 - INFO -  第 1 个用例生成成功，用时 10.71s
+2025-07-13 14:58:06,513 - langgraph_use2 - INFO - 生成第 37 个用例，第 1 次尝试
+2025-07-13 14:58:07,221 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:07,222 - langgraph_use2 - INFO -  第 12 个用例生成成功，用时 11.20s
+2025-07-13 14:58:07,223 - langgraph_use2 - INFO - 生成第 38 个用例，第 1 次尝试
+2025-07-13 14:58:07,506 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:07,508 - langgraph_use2 - INFO -  第 25 个用例生成成功，用时 11.30s
+2025-07-13 14:58:07,508 - langgraph_use2 - INFO - 生成第 39 个用例，第 1 次尝试
+2025-07-13 14:58:08,009 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,012 - langgraph_use2 - INFO -  第 3 个用例生成成功，用时 12.17s
+2025-07-13 14:58:08,012 - langgraph_use2 - INFO - 生成第 40 个用例，第 1 次尝试
+2025-07-13 14:58:08,096 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,097 - langgraph_use2 - INFO -  第 5 个用例生成成功，用时 12.21s
+2025-07-13 14:58:08,098 - langgraph_use2 - INFO - 生成第 41 个用例，第 1 次尝试
+2025-07-13 14:58:08,319 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,319 - langgraph_use2 - INFO -  第 19 个用例生成成功，用时 12.19s
+2025-07-13 14:58:08,319 - langgraph_use2 - INFO - 生成第 42 个用例，第 1 次尝试
+2025-07-13 14:58:08,345 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,346 - langgraph_use2 - INFO -  第 27 个用例生成成功，用时 12.12s
+2025-07-13 14:58:08,346 - langgraph_use2 - INFO - 生成第 43 个用例，第 1 次尝试
+2025-07-13 14:58:08,730 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,731 - langgraph_use2 - INFO -  第 29 个用例生成成功，用时 12.48s
+2025-07-13 14:58:08,731 - langgraph_use2 - INFO - 生成第 44 个用例，第 1 次尝试
+2025-07-13 14:58:08,762 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,763 - langgraph_use2 - INFO -  第 10 个用例生成成功，用时 12.79s
+2025-07-13 14:58:08,763 - langgraph_use2 - INFO - 生成第 45 个用例，第 1 次尝试
+2025-07-13 14:58:08,860 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:08,861 - langgraph_use2 - INFO -  第 20 个用例生成成功，用时 12.72s
+2025-07-13 14:58:08,861 - langgraph_use2 - INFO - 生成第 46 个用例，第 1 次尝试
+2025-07-13 14:58:09,199 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:09,200 - langgraph_use2 - INFO -  第 22 个用例生成成功，用时 13.04s
+2025-07-13 14:58:09,200 - langgraph_use2 - INFO - 生成第 47 个用例，第 1 次尝试
+2025-07-13 14:58:09,243 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:09,243 - langgraph_use2 - INFO -  第 4 个用例生成成功，用时 13.38s
+2025-07-13 14:58:09,243 - langgraph_use2 - INFO - 生成第 48 个用例，第 1 次尝试
+2025-07-13 14:58:09,757 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:09,759 - langgraph_use2 - INFO -  第 9 个用例生成成功，用时 13.80s
+2025-07-13 14:58:09,759 - langgraph_use2 - INFO - 生成第 49 个用例，第 1 次尝试
+2025-07-13 14:58:10,058 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:10,058 - langgraph_use2 - INFO -  第 15 个用例生成成功，用时 13.98s
+2025-07-13 14:58:10,058 - langgraph_use2 - INFO - 生成第 50 个用例，第 1 次尝试
+2025-07-13 14:58:10,133 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:10,134 - langgraph_use2 - INFO -  第 28 个用例生成成功，用时 13.89s
+2025-07-13 14:58:10,599 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:10,600 - langgraph_use2 - INFO -  第 8 个用例生成成功，用时 14.67s
+2025-07-13 14:58:10,782 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:10,782 - langgraph_use2 - INFO -  第 26 个用例生成成功，用时 14.56s
+2025-07-13 14:58:10,947 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:10,947 - langgraph_use2 - INFO -  第 17 个用例生成成功，用时 14.84s
+2025-07-13 14:58:11,843 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:11,843 - langgraph_use2 - INFO -  第 21 个用例生成成功，用时 15.69s
+2025-07-13 14:58:12,151 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:12,152 - langgraph_use2 - INFO -  第 16 个用例生成成功，用时 16.06s
+2025-07-13 14:58:12,221 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:12,222 - langgraph_use2 - INFO -  第 13 个用例生成成功，用时 16.18s
+2025-07-13 14:58:13,800 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:13,800 - langgraph_use2 - INFO -  第 18 个用例生成成功，用时 17.68s
+2025-07-13 14:58:15,917 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:15,917 - langgraph_use2 - INFO -  第 32 个用例生成成功，用时 10.20s
+2025-07-13 14:58:16,804 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:16,804 - langgraph_use2 - INFO -  第 31 个用例生成成功，用时 11.18s
+2025-07-13 14:58:18,331 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:18,332 - langgraph_use2 - INFO -  第 34 个用例生成成功，用时 12.58s
+2025-07-13 14:58:18,613 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:18,614 - langgraph_use2 - INFO -  第 7 个用例生成成功，用时 22.70s
+2025-07-13 14:58:19,265 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:19,266 - langgraph_use2 - INFO -  第 44 个用例生成成功，用时 10.53s
+2025-07-13 14:58:19,769 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:19,770 - langgraph_use2 - INFO -  第 39 个用例生成成功，用时 12.26s
+2025-07-13 14:58:19,977 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:19,978 - langgraph_use2 - INFO -  第 33 个用例生成成功，用时 14.25s
+2025-07-13 14:58:20,468 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:20,468 - langgraph_use2 - INFO -  第 6 个用例生成成功，用时 24.57s
+2025-07-13 14:58:20,942 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:20,943 - langgraph_use2 - INFO -  第 42 个用例生成成功，用时 12.62s
+2025-07-13 14:58:21,393 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:21,394 - langgraph_use2 - INFO -  第 40 个用例生成成功，用时 13.38s
+2025-07-13 14:58:21,532 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:21,534 - langgraph_use2 - INFO -  第 38 个用例生成成功，用时 14.31s
+2025-07-13 14:58:21,534 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:21,536 - langgraph_use2 - INFO -  第 35 个用例生成成功，用时 15.29s
+2025-07-13 14:58:21,794 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:21,795 - langgraph_use2 - INFO -  第 37 个用例生成成功，用时 15.28s
+2025-07-13 14:58:22,296 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:22,296 - langgraph_use2 - INFO -  第 43 个用例生成成功，用时 13.95s
+2025-07-13 14:58:23,057 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:23,057 - langgraph_use2 - INFO -  第 47 个用例生成成功，用时 13.86s
+2025-07-13 14:58:23,540 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:23,543 - langgraph_use2 - INFO -  第 46 个用例生成成功，用时 14.68s
+2025-07-13 14:58:24,122 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:24,122 - langgraph_use2 - INFO -  第 41 个用例生成成功，用时 16.02s
+2025-07-13 14:58:24,900 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:24,901 - langgraph_use2 - INFO -  第 50 个用例生成成功，用时 14.84s
+2025-07-13 14:58:25,034 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:25,035 - langgraph_use2 - INFO -  第 36 个用例生成成功，用时 18.73s
+2025-07-13 14:58:25,090 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:25,091 - langgraph_use2 - INFO -  第 48 个用例生成成功，用时 15.85s
+2025-07-13 14:58:27,694 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:27,695 - langgraph_use2 - INFO -  第 49 个用例生成成功，用时 17.94s
+2025-07-13 14:58:28,303 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:58:28,304 - langgraph_use2 - INFO -  第 45 个用例生成成功，用时 19.54s
+2025-07-13 14:58:28,304 - langgraph_use2 - INFO - [Step 5] 用例生成完成: 成功 50 个，失败 0 个，用时 32.51s
+2025-07-13 14:58:28,305 - langgraph_use2 - INFO - [Step 6] 校验测试用例，移除高度一致的重复项
+2025-07-13 14:58:28,306 - langgraph_use2 - INFO - [Step 5] 校验完成：未发现重复用例
+2025-07-13 14:58:28,307 - main - INFO - 生成测试用例成功，耗时 222.05 秒
+2025-07-13 15:00:55,900 - main - INFO - 开始重新生成测试用例，使用 document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-13 15:00:56,209 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-13 15:00:56,625 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-13 15:00:56,999 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-13 15:00:57,363 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-13 15:00:57,755 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-13 15:00:58,106 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-13 15:00:58,107 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzRkNmY2Zjg0Mzg5NTc2MTRkZmM2Y2I2YjkzNTA4YTFfNWM2M2ZhNDllZWNhZjE1ZTcwNGRhNmYzODYxMWY2NzZfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzkwMDU2OjE3NTI0NzY0NTZfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDJkMjYwODkxZjYzZjM2MzY4ZDBlNTY4ZDU4ZjhlNTVfOTkyOWJkOTVjMTM3OGU0ODdjZDAxZDY0MzE4Yzc5OTRfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMzkwMDU2OjE3NTI0NzY0NTZfVjM)
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NmY2OTAxYmIzYzNkMTFiYWFlNDc0MmQ0OGU1ZDIyMzFfNThkNTY2MGEzZjkzYmNjMGExZDJjMDI2YzRmNjBjMGVfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMzkwMDU2OjE3NTI0NzY0NTZfVjM)
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzA1ZTY5ZjFiNWY3NjM0MGVlMDMyNjE3ZDc5ZjNkMjdfZTkxOGM1YTRhMmY5ZWVmN2ViNTg4ZTAzNTIzYjFhMmFfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMzkwMDU3OjE3NTI0NzY0NTdfVjM)
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTgyNTMwZGFlNDkxMTRlYWQxMjhmMWEwMTQ3YjgyOTVfZWViZTExNzU4MTU4ODU1YjdlMmU1YWQ5ZTAzNzg3MjdfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMzkwMDU3OjE3NTI0NzY0NTdfVjM)
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 15:00:58,108 - main - INFO - 调用图谱重新生成测试用例
+2025-07-13 15:00:58,109 - regenerate - INFO - [Step 1] 开始处理图像内容
+2025-07-13 15:00:58,110 - regenerate - INFO - [Step 1] 发现 5 张图片，开始识别...
+2025-07-13 15:00:58,110 - regenerate - INFO -   处理图片 1/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 15:00:58,785 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 400 Bad Request"
+2025-07-13 15:00:58,786 - regenerate - WARNING -   图片尺寸过大，使用替代描述: https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzRkNmY2Zjg0Mzg5NTc2MTRkZmM2Y2I2YjkzNTA4YTFfNWM2M2ZhNDllZWNhZjE1ZTcwNGRhNmYzODYxMWY2NzZfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzkwMDU2OjE3NTI0NzY0NTZfVjM
+2025-07-13 15:00:58,786 - regenerate - INFO -   处理图片 2/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 15:01:04,176 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:04,177 - regenerate - INFO -   处理图片 3/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 15:01:07,520 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:07,521 - regenerate - INFO -   处理图片 4/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 15:01:11,867 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:11,867 - regenerate - INFO -   处理图片 5/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 15:01:15,587 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:15,588 - regenerate - INFO - [Step 1] 图像处理完成，共处理 5 张图片
+2025-07-13 15:01:15,588 - regenerate - INFO - ## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+【图像描述】页面结构示意图
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+【图像描述】1. 模块名：登录模块
+    - 核心交互：
+        - 步骤1：用户进入登录页；
+        - 步骤2：输入登录账号；
+        - 步骤3：输入登录密码；
+        - 步骤4：输入验证码；
+        - 步骤5：点击“登录”。
+    - 关键控件：
+        - 登录账号输入框：输入登录账号；
+        - 登录密码输入框：输入登录密码；
+        - 验证码输入框：输入验证码；
+        - 登录按钮：点击后触发登录验证。
+    - 状态提示：
+        - 正常状态：无提示；
+        - 异常状态：无提示。
+
+2. 模块名：注册模块
+    - 核心交互：
+        - 步骤1：用户进入注册页；
+        - 步骤2：输入登录账号；
+        - 步骤3：输入登录密码；
+        - 步骤4：确认登录密码；
+        - 步骤5：输入验证码；
+        - 步骤6：点击“获取验证码”；
+        - 步骤7：点击“提交”。
+    - 关键控件：
+        - 登录账号输入框：输入登录账号；
+        - 登录密码输入框：输入登录密码；
+        - 确认密码输入框：确认登录密码；
+        - 验证码输入框：输入验证码；
+        - 获取验证码按钮：点击后获取验证码；
+        - 提交按钮：点击后触发注册验证。
+    - 状态提示：
+        - 正常状态：无提示；
+        - 异常状态：无提示。
+
+3. 模块名：首次登录模块
+    - 核心交互：
+        - 步骤1：用户首次登录；
+        - 步骤2：系统提示“账号首次登录时需要重新设置密码！”；
+        - 步骤3：点击“确定”。
+    - 关键控件：
+        - 确定按钮：点击后进入重新设置密码页面。
+    - 状态提示：
+        - 正常状态：提示“账号首次登录时需要重新设置密码！”；
+        - 异常状态：无提示。
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+【图像描述】模块名：修改初始密码
+核心交互：
+步骤1：用户进入修改初始密码页面
+步骤2：输入新密码
+步骤3：确认密码
+步骤4：点击“获取验证码”获取验证短信
+步骤5：输入验证短信
+步骤6：点击“提交”按钮完成密码修改
+关键控件：
+新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+确认密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+验证短信输入框：输入获取的验证码
+获取验证码按钮：点击获取验证短信
+取消按钮：点击取消修改密码操作
+提交按钮：点击提交修改密码信息
+状态提示：
+- 新密码和确认密码输入不符合要求时，输入框下方显示对应提示（如“请输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种”）
+- 提交成功时，完成密码修改操作
+- 提交失败时，显示对应错误提示（如“验证码错误”等）
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+【图像描述】模块名：找回密码模块  
+核心交互：  
+步骤1：用户进入找回密码页面  
+步骤2：输入登录账号（手机号）  
+步骤3：输入新密码  
+步骤4：再次输入确认密码  
+步骤5：点击“获取验证码”获取短信验证码  
+步骤6：输入验证短信  
+步骤7：点击“提交”  
+
+关键控件：  
+- 登录账号输入框：输入手机号  
+- 新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种  
+- 确认密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种  
+- 获取验证码按钮：点击获取验证短信  
+- 验证短信输入框：输入收到的验证码  
+- 取消按钮：点击取消找回密码操作  
+- 提交按钮：点击提交信息进行密码找回  
+
+状态提示：（假设部分提示，实际需补充）  
+- 输入不符合要求的密码时，输入框旁显示提示：“至少包括数字、小写字母、大写字母、特殊符号中的两种”  
+- 点击“获取验证码”后，按钮可能显示倒计时（如60秒后可重新获取）  
+- 提交成功时，可能提示“密码重置成功”并跳转至登录页（或其他指定页面）  
+- 提交失败时，提示相应错误信息（如“验证码错误”“手机号未注册”等）
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+【图像描述】模块名：密码修改表单区域
+核心交互：
+步骤1：用户进入密码修改页面
+步骤2：输入原密码
+步骤3：输入新密码
+步骤4：再次输入确认密码
+步骤5：输入验证短信
+步骤6：点击“提交”按钮
+关键控件：
+- 原密码输入框：输入原登录密码
+- 新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+- 确认密码输入框：再次输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+- 验证短信输入框：输入验证码
+- 获取验证码按钮：点击获取验证码
+- 取消按钮：点击取消密码修改操作
+- 提交按钮：点击提交密码修改信息
+状态提示：
+- 输入密码不符合要求时，输入框下方显示提示（如密码长度不够、未包含指定类型字符等）
+- 提交成功时，完成密码修改操作
+- 提交失败时，显示相应错误提示（如原密码错误、验证码错误等）
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 15:01:15,593 - regenerate - INFO - [Step 2] 尝试直接从 PRD 文本提取标题
+2025-07-13 15:01:15,593 - regenerate - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-13 15:01:15,594 - regenerate - INFO - [重新生成 Step 3] 根据评测报告和反馈生成新的测试点
+2025-07-13 15:01:45,813 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:45,815 - regenerate - INFO - [重新生成 Step 4] 根据新的测试点生成测试用例
+2025-07-13 15:01:45,815 - regenerate - INFO - 生成第 1 个用例，第 1 次尝试
+2025-07-13 15:01:45,832 - regenerate - INFO - 生成第 2 个用例，第 1 次尝试
+2025-07-13 15:01:45,851 - regenerate - INFO - 生成第 3 个用例，第 1 次尝试
+2025-07-13 15:01:45,869 - regenerate - INFO - 生成第 4 个用例，第 1 次尝试
+2025-07-13 15:01:45,888 - regenerate - INFO - 生成第 5 个用例，第 1 次尝试
+2025-07-13 15:01:45,907 - regenerate - INFO - 生成第 6 个用例，第 1 次尝试
+2025-07-13 15:01:45,933 - regenerate - INFO - 生成第 7 个用例，第 1 次尝试
+2025-07-13 15:01:45,955 - regenerate - INFO - 生成第 8 个用例，第 1 次尝试
+2025-07-13 15:01:45,970 - regenerate - INFO - 生成第 9 个用例，第 1 次尝试
+2025-07-13 15:01:45,984 - regenerate - INFO - 生成第 10 个用例，第 1 次尝试
+2025-07-13 15:01:45,997 - regenerate - INFO - 生成第 11 个用例，第 1 次尝试
+2025-07-13 15:01:46,010 - regenerate - INFO - 生成第 12 个用例，第 1 次尝试
+2025-07-13 15:01:46,023 - regenerate - INFO - 生成第 13 个用例，第 1 次尝试
+2025-07-13 15:01:46,038 - regenerate - INFO - 生成第 14 个用例，第 1 次尝试
+2025-07-13 15:01:46,053 - regenerate - INFO - 生成第 15 个用例，第 1 次尝试
+2025-07-13 15:01:46,074 - regenerate - INFO - 生成第 16 个用例，第 1 次尝试
+2025-07-13 15:01:46,090 - regenerate - INFO - 生成第 17 个用例，第 1 次尝试
+2025-07-13 15:01:46,105 - regenerate - INFO - 生成第 18 个用例，第 1 次尝试
+2025-07-13 15:01:46,121 - regenerate - INFO - 生成第 19 个用例，第 1 次尝试
+2025-07-13 15:01:46,136 - regenerate - INFO - 生成第 20 个用例，第 1 次尝试
+2025-07-13 15:01:46,149 - regenerate - INFO - 生成第 21 个用例，第 1 次尝试
+2025-07-13 15:01:46,162 - regenerate - INFO - 生成第 22 个用例，第 1 次尝试
+2025-07-13 15:01:46,179 - regenerate - INFO - 生成第 23 个用例，第 1 次尝试
+2025-07-13 15:01:46,192 - regenerate - INFO - 生成第 24 个用例，第 1 次尝试
+2025-07-13 15:01:46,208 - regenerate - INFO - 生成第 25 个用例，第 1 次尝试
+2025-07-13 15:01:46,221 - regenerate - INFO - 生成第 26 个用例，第 1 次尝试
+2025-07-13 15:01:46,235 - regenerate - INFO - 生成第 27 个用例，第 1 次尝试
+2025-07-13 15:01:46,251 - regenerate - INFO - 生成第 28 个用例，第 1 次尝试
+2025-07-13 15:01:46,271 - regenerate - INFO - 生成第 29 个用例，第 1 次尝试
+2025-07-13 15:01:46,288 - regenerate - INFO - 生成第 30 个用例，第 1 次尝试
+2025-07-13 15:01:54,061 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:54,062 - regenerate - INFO -  第 1 个用例生成成功，用时 8.25s
+2025-07-13 15:01:54,314 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:54,314 - regenerate - INFO -  第 9 个用例生成成功，用时 8.34s
+2025-07-13 15:01:55,017 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:55,020 - regenerate - INFO -  第 27 个用例生成成功，用时 8.78s
+2025-07-13 15:01:56,531 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:56,532 - regenerate - INFO -  第 5 个用例生成成功，用时 10.64s
+2025-07-13 15:01:56,599 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:56,600 - regenerate - INFO -  第 18 个用例生成成功，用时 10.49s
+2025-07-13 15:01:57,150 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:57,151 - regenerate - INFO -  第 3 个用例生成成功，用时 11.30s
+2025-07-13 15:01:58,464 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:58,465 - regenerate - INFO -  第 11 个用例生成成功，用时 12.47s
+2025-07-13 15:01:58,701 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:58,702 - regenerate - INFO -  第 8 个用例生成成功，用时 12.75s
+2025-07-13 15:01:58,916 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:58,916 - regenerate - INFO -  第 16 个用例生成成功，用时 12.84s
+2025-07-13 15:01:59,291 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,292 - regenerate - INFO -  第 25 个用例生成成功，用时 13.08s
+2025-07-13 15:01:59,617 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,617 - regenerate - INFO -  第 4 个用例生成成功，用时 13.75s
+2025-07-13 15:01:59,711 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,712 - regenerate - INFO -  第 26 个用例生成成功，用时 13.49s
+2025-07-13 15:01:59,734 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,735 - regenerate - INFO -  第 23 个用例生成成功，用时 13.56s
+2025-07-13 15:01:59,881 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,882 - regenerate - INFO -  第 17 个用例生成成功，用时 13.79s
+2025-07-13 15:01:59,957 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,958 - regenerate - INFO -  第 28 个用例生成成功，用时 13.71s
+2025-07-13 15:01:59,980 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:01:59,981 - regenerate - INFO -  第 30 个用例生成成功，用时 13.69s
+2025-07-13 15:02:00,179 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:00,181 - regenerate - INFO -  第 2 个用例生成成功，用时 14.35s
+2025-07-13 15:02:00,221 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:00,221 - regenerate - INFO -  第 14 个用例生成成功，用时 14.18s
+2025-07-13 15:02:00,525 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:00,526 - regenerate - INFO -  第 24 个用例生成成功，用时 14.33s
+2025-07-13 15:02:00,539 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:00,540 - regenerate - INFO -  第 15 个用例生成成功，用时 14.49s
+2025-07-13 15:02:00,770 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:00,771 - regenerate - INFO -  第 29 个用例生成成功，用时 14.50s
+2025-07-13 15:02:01,024 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:01,026 - regenerate - INFO -  第 20 个用例生成成功，用时 14.89s
+2025-07-13 15:02:01,477 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:01,477 - regenerate - INFO -  第 6 个用例生成成功，用时 15.57s
+2025-07-13 15:02:02,381 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:02,383 - regenerate - INFO -  第 10 个用例生成成功，用时 16.40s
+2025-07-13 15:02:03,336 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:03,337 - regenerate - INFO -  第 12 个用例生成成功，用时 17.33s
+2025-07-13 15:02:04,125 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:04,126 - regenerate - INFO -  第 19 个用例生成成功，用时 18.00s
+2025-07-13 15:02:04,606 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:04,608 - regenerate - INFO -  第 22 个用例生成成功，用时 18.45s
+2025-07-13 15:02:04,999 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:04,999 - regenerate - INFO -  第 21 个用例生成成功，用时 18.85s
+2025-07-13 15:02:05,228 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:05,229 - regenerate - INFO -  第 7 个用例生成成功，用时 19.30s
+2025-07-13 15:02:05,715 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 15:02:05,716 - regenerate - INFO -  第 13 个用例生成成功，用时 19.69s
+2025-07-13 15:02:05,716 - regenerate - INFO - 重新生成测试用例完成，成功 30，失败 0
+2025-07-13 15:02:05,717 - main - INFO - 重新生成成功，耗时 67.61 秒
+2025-07-13 15:06:27,119 - uvicorn.error - INFO - Shutting down
+2025-07-13 15:06:27,230 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-13 15:06:27,230 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-13 15:06:27,230 - uvicorn.error - INFO - Finished server process [26120]

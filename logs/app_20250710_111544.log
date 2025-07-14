@@ -1,0 +1,12 @@
+2025-07-10 11:15:44,260 - main - INFO - ==================================================
+2025-07-10 11:15:44,261 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-10 11:15:44,262 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250710_111544.log
+2025-07-10 11:15:44,262 - main - INFO - ==================================================
+2025-07-10 11:15:44,270 - uvicorn.error - INFO - Started server process [16200]
+2025-07-10 11:15:44,270 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-10 11:15:44,271 - uvicorn.error - INFO - Application startup complete.
+2025-07-10 11:15:44,272 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-10 11:17:22,110 - uvicorn.error - INFO - Shutting down
+2025-07-10 11:17:22,230 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-10 11:17:22,231 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-10 11:17:22,231 - uvicorn.error - INFO - Finished server process [16200]

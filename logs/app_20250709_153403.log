@@ -1,0 +1,163 @@
+2025-07-09 15:34:03,697 - __main__ - INFO - ==================================================
+2025-07-09 15:34:03,697 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 15:34:03,697 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_153403.log
+2025-07-09 15:34:03,697 - __main__ - INFO - ==================================================
+2025-07-09 15:34:03,698 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-09 15:34:03,744 - __main__ - INFO - frpc 启动成功
+2025-07-09 15:34:03,796 - main - INFO - ==================================================
+2025-07-09 15:34:03,796 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 15:34:03,796 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_153403.log
+2025-07-09 15:34:03,796 - main - INFO - ==================================================
+2025-07-09 15:34:03,798 - uvicorn.error - INFO - Started server process [20340]
+2025-07-09 15:34:03,798 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 15:34:03,799 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 15:34:03,799 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 15:34:06,613 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-09 15:34:07,170 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 15:34:07,680 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-09 15:34:08,080 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-09 15:34:08,498 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-09 15:34:08,919 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-09 15:34:09,347 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-09 15:34:09,349 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://api3-eeft-drive.feishu.cn/space/api/box/stream/download/authcode/?code=NDA2YTM4OTQ2NjlmZGY0MTM4NWQ5YWNjOGFiZGMwOTBfNmY2MjA4ZjZmMGRiZTY0YTE1MWRmYjhiOTM4MGZjNzNfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMDQ2NDQ5OjE3NTIxMzI4NDlfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NWFhNjJiNDc1MWZmZTEyNzcxNzJiODUzMDc3OTQ1NGRfZTA3MGIyY2JlNjQyNGQ1YWU4ZmM5ZDZhYmE3NjE3MjZfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMDQ2NDQ5OjE3NTIxMzI4NDlfVjM)
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODNlZDJmYjJiMGU3OWIyNWE3NzY1ZmI0NTBlMGVjZTFfMmUyOTdmYjFiMjQwYjc0YTAyMzYzZDE5ZWM0ZTI0ZjBfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMDQ2NDQ5OjE3NTIxMzI4NDlfVjM)
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NTJiYTExZTYzYTI0ZTg4MDVhMzMzZjQ5NTAyNzM2OTVfNzJmYWQ2ZDhhN2FkZTBmNjdkMmU3MDU4M2YxMzQ4OTFfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMDQ2NDUwOjE3NTIxMzI4NTBfVjM)
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MDgwMTcxNGZjNDdjMjM4Zjc0ODg2YjIxMTM3MjcwMTNfNjc0MWEyOWI0NDU2MjQ0MmE5ZGViMWVkYTU3YTM2MzRfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMDQ2NDUwOjE3NTIxMzI4NTBfVjM)
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-09 15:34:09,354 - main - INFO - 开始调用图谱生成测试用例
+2025-07-09 15:34:09,365 - langgraph_use2 - INFO - [Step 0] 开始处理图像内容
+2025-07-09 15:34:09,365 - langgraph_use2 - INFO - [Step 0] 发现 5 张图片，开始识别...
+2025-07-09 15:34:09,365 - langgraph_use2 - INFO -   处理图片 1/5: https://api3-eeft-drive.feishu.cn/space/api/box/st...
+2025-07-09 15:34:10,155 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 400 Bad Request"
+2025-07-09 15:34:10,156 - langgraph_use2 - WARNING -   图片尺寸过大，使用替代描述: https://api3-eeft-drive.feishu.cn/space/api/box/stream/download/authcode/?code=NDA2YTM4OTQ2NjlmZGY0MTM4NWQ5YWNjOGFiZGMwOTBfNmY2MjA4ZjZmMGRiZTY0YTE1MWRmYjhiOTM4MGZjNzNfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMDQ2NDQ5OjE3NTIxMzI4NDlfVjM
+2025-07-09 15:34:10,156 - langgraph_use2 - INFO -   处理图片 2/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-09 15:34:12,806 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-09 15:34:12,807 - langgraph_use2 - INFO -   处理图片 3/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-09 15:34:14,425 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-09 15:34:14,427 - langgraph_use2 - INFO -   处理图片 4/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-09 15:34:15,867 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-09 15:34:15,869 - langgraph_use2 - INFO -   处理图片 5/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-09 15:34:17,287 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-09 15:34:17,288 - langgraph_use2 - INFO - [Step 0] 图像处理完成，共处理 5 张图片
+2025-07-09 15:34:17,292 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-09 15:34:17,292 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-09 15:34:17,293 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-09 15:34:19,423 - uvicorn.error - INFO - Shutting down
+2025-07-09 15:34:19,532 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

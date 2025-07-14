@@ -1,0 +1,91 @@
+2025-07-09 12:45:58,355 - __main__ - INFO - ==================================================
+2025-07-09 12:45:58,355 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 12:45:58,355 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_124558.log
+2025-07-09 12:45:58,355 - __main__ - INFO - ==================================================
+2025-07-09 12:45:58,360 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-09 12:45:58,409 - __main__ - INFO - frpc 启动成功
+2025-07-09 12:45:58,463 - main - INFO - ==================================================
+2025-07-09 12:45:58,463 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 12:45:58,463 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_124558.log
+2025-07-09 12:45:58,463 - main - INFO - ==================================================
+2025-07-09 12:45:58,465 - uvicorn.error - INFO - Started server process [22224]
+2025-07-09 12:45:58,466 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 12:45:58,466 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 12:45:58,466 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 12:46:00,850 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-09 12:46:01,256 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 12:46:01,520 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 400 Bad Request"
+2025-07-09 12:46:01,523 - feishu_api - ERROR - 飞书图片下载链接接口状态错误: 400
+2025-07-09 12:46:01,523 - feishu_api - ERROR - 获取图片 TgEKbWEBAo8NLixzkxMchwptnpg 下载链接失败: 飞书图片下载链接接口错误，状态码400
+2025-07-09 12:46:01,735 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 400 Bad Request"
+2025-07-09 12:46:01,735 - feishu_api - ERROR - 飞书图片下载链接接口状态错误: 400
+2025-07-09 12:46:01,736 - feishu_api - ERROR - 获取图片 SkDEbgOKsoteNwxRDY1cvMAjndf 下载链接失败: 飞书图片下载链接接口错误，状态码400
+2025-07-09 12:46:01,941 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 400 Bad Request"
+2025-07-09 12:46:01,941 - feishu_api - ERROR - 飞书图片下载链接接口状态错误: 400
+2025-07-09 12:46:01,942 - feishu_api - ERROR - 获取图片 Y1zAbRUnxowpqyxEkfKc1t3Mnph 下载链接失败: 飞书图片下载链接接口错误，状态码400
+2025-07-09 12:46:02,301 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 400 Bad Request"
+2025-07-09 12:46:02,303 - feishu_api - ERROR - 飞书图片下载链接接口状态错误: 400
+2025-07-09 12:46:02,303 - feishu_api - ERROR - 获取图片 FmJybjFF3o2UVSxDTtbcGSdRnXd 下载链接失败: 飞书图片下载链接接口错误，状态码400
+2025-07-09 12:46:02,439 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 400 Bad Request"
+2025-07-09 12:46:02,439 - feishu_api - ERROR - 飞书图片下载链接接口状态错误: 400
+2025-07-09 12:46:02,439 - feishu_api - ERROR - 获取图片 IehHb80ino8l8Tx6VHAciwJwnse 下载链接失败: 飞书图片下载链接接口错误，状态码400
+2025-07-09 12:46:02,440 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image]()
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+1.2.1.2 页面原型
+
+![image]()
+
+1.2.1.3 逻辑说明
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+1.2.2.2 页面原型
+
+![image]()
+
+1.2.2.3 业务逻辑
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+1.2.3.2 页面原型
+
+![image]()
+
+1.2.3.3 业务逻辑
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+1.2.4.2 页面原型
+
+![image]()
+
+1.2.4.3 业务逻辑
+
+
+2025-07-09 12:46:02,440 - main - INFO - 开始调用图谱生成测试用例
+2025-07-09 12:46:02,449 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-09 12:46:02,449 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-09 12:46:02,449 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-09 12:46:04,861 - uvicorn.error - INFO - Shutting down
+2025-07-09 12:46:04,970 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

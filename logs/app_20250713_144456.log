@@ -1,0 +1,376 @@
+2025-07-13 14:44:56,279 - __main__ - INFO - ==================================================
+2025-07-13 14:44:56,279 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 14:44:56,279 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_144456.log
+2025-07-13 14:44:56,279 - __main__ - INFO - ==================================================
+2025-07-13 14:44:56,282 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-13 14:44:56,326 - __main__ - INFO - frpc 启动成功
+2025-07-13 14:44:56,383 - main - INFO - ==================================================
+2025-07-13 14:44:56,383 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 14:44:56,383 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_144456.log
+2025-07-13 14:44:56,383 - main - INFO - ==================================================
+2025-07-13 14:44:56,385 - uvicorn.error - INFO - Started server process [26696]
+2025-07-13 14:44:56,385 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-13 14:44:56,386 - uvicorn.error - INFO - Application startup complete.
+2025-07-13 14:44:56,386 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-13 14:44:58,513 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-13 14:44:58,939 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-13 14:44:59,428 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-13 14:44:59,755 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-13 14:45:00,142 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-13 14:45:00,492 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-13 14:45:00,890 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-13 14:45:00,890 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmZhMjQwNzdjMGY4N2Y0MTI2OTFkMDg1NzYyNzJhNDBfY2JkNDU0NWNjYTFiMDM2ZDVjYTNlNDg3ZGRkNmNlYzBfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzg5MDk4OjE3NTI0NzU0OThfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTVkMGIzMmZiODI4YmU2YTgxNzdmMzFjZjk0MTQ0NTRfYzEzNmU5YmU0Y2JiZjdjN2ZjZWRhOWNlNTdlYzgwYmNfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMzg5MDk5OjE3NTI0NzU0OTlfVjM)
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTNhM2JmYWNjZmUwNzExZDhjZjk4N2IxNDNiMjdiNzVfMzRhYzI4MTZlOWQwNzcxNWE3ZjBmM2Q5NjhiMmFkMTdfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMzg5MDk5OjE3NTI0NzU0OTlfVjM)
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZDIwOTgyNmY4YjY1NTE3NDQ0YTZjNGJlNDEzODc5ZTZfNWEyYWIxNWJlNTVmZWUxYjczMjlhZWZkYTY1Yjk4NWJfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMzg5MDk5OjE3NTI0NzU0OTlfVjM)
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODI3YWM5ODA4MjlkMTQ0MjJmNDAwM2E3MTk1Y2NhYzdfNmYwNDQ2MTk0NGFjZGI4NjhiNGI0MzRhNjM1MzVkMWZfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMzg5MTAwOjE3NTI0NzU1MDBfVjM)
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 14:45:00,895 - main - INFO - 开始调用图谱生成测试用例
+2025-07-13 14:45:00,909 - langgraph_use2 - INFO - [Step 1] 开始处理图像内容
+2025-07-13 14:45:00,909 - langgraph_use2 - INFO - [Step 1] 发现 5 张图片，开始识别...
+2025-07-13 14:45:00,909 - langgraph_use2 - INFO -   处理图片 1/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:45:01,567 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 400 Bad Request"
+2025-07-13 14:45:01,568 - langgraph_use2 - WARNING -   图片尺寸过大，使用替代描述: https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZmZhMjQwNzdjMGY4N2Y0MTI2OTFkMDg1NzYyNzJhNDBfY2JkNDU0NWNjYTFiMDM2ZDVjYTNlNDg3ZGRkNmNlYzBfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMzg5MDk4OjE3NTI0NzU0OThfVjM
+2025-07-13 14:45:01,568 - langgraph_use2 - INFO -   处理图片 2/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:45:05,881 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:45:05,882 - langgraph_use2 - INFO -   处理图片 3/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:45:09,138 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:45:09,138 - langgraph_use2 - INFO -   处理图片 4/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:45:13,989 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:45:13,990 - langgraph_use2 - INFO -   处理图片 5/5: https://internal-api-drive-stream.feishu.cn/space/...
+2025-07-13 14:45:17,655 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:45:17,655 - langgraph_use2 - INFO - [Step 1] 图像处理完成，共处理 5 张图片
+2025-07-13 14:45:17,656 - langgraph_use2 - INFO - ## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+【图像描述】页面结构示意图
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+【图像描述】### 登录模块
+- **核心交互**：
+  - 步骤1：用户进入登录页
+  - 步骤2：输入登录账号
+  - 步骤3：输入登录密码
+  - 步骤4：输入验证码
+  - 步骤5：点击“登录”按钮
+- **关键控件**：
+  - 登录账号输入框：输入登录账号
+  - 登录密码输入框：输入登录密码
+  - 验证码输入框：输入验证码
+  - 登录按钮：点击后触发登录验证
+
+### 注册模块
+- **核心交互**：
+  - 步骤1：用户进入注册页
+  - 步骤2：输入登录账号
+  - 步骤3：输入登录密码
+  - 步骤4：确认登录密码
+  - 步骤5：输入验证码
+  - 步骤6：点击“获取验证码”按钮
+  - 步骤7：点击“提交”按钮
+- **关键控件**：
+  - 登录账号输入框：输入登录账号
+  - 登录密码输入框：输入登录密码
+  - 确认密码输入框：确认登录密码
+  - 验证码输入框：输入验证码
+  - 获取验证码按钮：点击后获取验证码
+  - 提交按钮：点击后触发注册验证
+
+### 状态提示
+- 正常状态：
+  - 提交成功时，页面跳转至首页
+- 异常状态：
+  - 账号首次登录时，提示“账号首次登录时需要重新初始密码！”，点击“确定”后进入注册页
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+【图像描述】模块名：修改初始密码
+核心交互：
+步骤1：用户进入修改初始密码页面
+步骤2：输入新密码
+步骤3：再次输入确认密码
+步骤4：点击“获取验证码”获取短信验证码
+步骤5：输入验证短信
+步骤6：点击“提交”按钮提交修改
+关键控件：
+新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+确认密码输入框：再次输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+获取验证码按钮：点击获取验证短信
+验证短信输入框：输入获取到的短信验证码
+取消按钮：点击取消修改密码操作
+提交按钮：点击提交修改密码信息
+状态提示：
+无（图中未明确显示正常/异常状态下的界面反馈信息）
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+【图像描述】找回密码模块：
+步骤1：用户进入找回密码页面
+步骤2：在“登录账号”输入框输入手机号码
+步骤3：在“新密码”输入框输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）
+步骤4：在“确认密码”输入框再次输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）
+步骤5：点击“获取验证码”按钮获取验证短信
+步骤6：在“验证短信”输入框输入收到的验证码
+步骤7：点击“提交”按钮提交信息（或点击“取消”按钮取消操作）
+
+关键控件：
+- 登录账号输入框：输入手机号码
+- 新密码输入框：输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）
+- 确认密码输入框：再次输入8-10位密码（至少包括数字、小写字母、大写字母、特殊符号中的两种）
+- 获取验证码按钮：点击获取验证短信
+- 验证短信输入框：输入收到的验证码
+- 取消按钮：点击取消操作
+- 提交按钮：点击提交信息
+
+状态提示（假设）：
+- 输入不符合格式的手机号码时，输入框下方显示提示（如“请输入正确的手机号码”）
+- 新密码和确认密码不一致时，显示提示（如“两次输入的密码不一致”）
+- 验证码错误时，显示提示（如“验证码错误”）
+- 提交成功时，页面进行相应反馈（如跳转或提示“密码修改成功”）
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+【图像描述】模块名：密码修改模块
+核心交互：
+步骤1：用户进入密码修改页面
+步骤2：输入原密码
+步骤3：输入新密码
+步骤4：确认新密码
+步骤5：输入验证短信
+步骤6：点击“提交”按钮
+关键控件：
+- 原密码输入框：输入原登录密码
+- 新密码输入框：输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+- 确认密码输入框：再次输入8-10位密码，至少包括数字、小写字母、大写字母、特殊符号中的两种
+- 验证短信输入框：输入验证码
+- 获取验证码按钮：点击获取验证码
+- 取消按钮：点击取消密码修改操作
+- 提交按钮：点击提交修改密码信息
+状态提示：
+- 无明确异常状态下的界面反馈描述
+- 无明确正常状态下的界面反馈描述
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-13 14:45:17,658 - langgraph_use2 - INFO - [Step 2] 尝试直接从 PRD 文本提取标题
+2025-07-13 14:45:17,658 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-13 14:45:17,659 - langgraph_use2 - INFO - [Step 3] 提取测试点
+2025-07-13 14:46:12,959 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:46:12,960 - langgraph_use2 - INFO - [Step 4] 优化测试点
+2025-07-13 14:48:17,048 - uvicorn.error - INFO - Shutting down
+2025-07-13 14:48:17,142 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

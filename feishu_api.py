@@ -1,8 +1,9 @@
 import httpx
 import re
+import logging
 
 FEISHU_API_BASE = "https://open.feishu.cn/open-apis"
-
+logger = logging.getLogger(__name__)
 
 async def fetch_all_blocks(document_id: str, user_access_token: str):
     headers = {"Authorization": f"Bearer {user_access_token}"}
@@ -13,12 +14,19 @@ async def fetch_all_blocks(document_id: str, user_access_token: str):
 
     async with httpx.AsyncClient() as client:
         while True:
-            params = {"limit": limit}
-            if cursor:
-                params["cursor"] = cursor
-            resp = await client.get(url, headers=headers, params=params)
-            resp.raise_for_status()
-            data = resp.json()
+            try:
+                params = {"limit": limit}
+                if cursor:
+                    params["cursor"] = cursor
+                resp = await client.get(url, headers=headers, params=params)
+                resp.raise_for_status()
+                data = resp.json()
+            except httpx.RequestError as e:
+                logger.error(f"请求飞书文档块出错: {e}")
+                raise RuntimeError("请求飞书文档块时网络错误")
+            except httpx.HTTPStatusError as e:
+                logger.error(f"飞书文档块接口返回状态错误: {e.response.status_code}")
+                raise RuntimeError(f"飞书文档块接口错误，状态码{e.response.status_code}")
 
             items = data.get("data", {}).get("items", [])
             all_blocks.extend(items)
@@ -29,20 +37,26 @@ async def fetch_all_blocks(document_id: str, user_access_token: str):
 
     return all_blocks
 
-
 async def get_single_image_url(file_token: str, user_access_token: str) -> str:
     headers = {"Authorization": f"Bearer {user_access_token}"}
     url = f"{FEISHU_API_BASE}/drive/v1/medias/batch_get_tmp_download_url"
     params = {"file_tokens": file_token}
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url, headers=headers, params=params)
-        resp.raise_for_status()
-        data = resp.json()
+        try:
+            resp = await client.get(url, headers=headers, params=params)
+            resp.raise_for_status()
+            data = resp.json()
+        except httpx.RequestError as e:
+            logger.error(f"请求飞书图片下载链接出错: {e}")
+            raise RuntimeError("请求飞书图片下载链接时网络错误")
+        except httpx.HTTPStatusError as e:
+            logger.error(f"飞书图片下载链接接口状态错误: {e.response.status_code}")
+            raise RuntimeError(f"飞书图片下载链接接口错误，状态码{e.response.status_code}")
+
     for item in data.get("data", {}).get("tmp_download_urls", []):
         if item.get("file_token") == file_token:
             return item.get("tmp_download_url", "")
     return ""
-
 
 def extract_text(elements):
     texts = []
@@ -53,75 +67,73 @@ def extract_text(elements):
             texts.append(elem["equation"]["expression"])
     return "".join(texts)
 
-
 def parse_block(block, blocks_map, image_url_map):
     block_type = block.get("block_type")
-    prd = ""
+    md = ""
 
-    if block_type == 1:  # 页面 Block，递归子块
+    if block_type == 1:
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
-                prd += parse_block(child, blocks_map, image_url_map)
+                md += parse_block(child, blocks_map, image_url_map)
 
-    elif 3 <= block_type <= 9:  # heading2~heading8
+    elif 3 <= block_type <= 9:
         level = block_type - 2
         heading_key = f"heading{level}"
         if heading_key in block:
             text = extract_text(block[heading_key]["elements"])
-            prd += f"{'#' * level} {text}\n\n"
+            md += f"{'#' * level} {text}\n\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
-                prd += parse_block(child, blocks_map, image_url_map)
+                md += parse_block(child, blocks_map, image_url_map)
 
-    elif block_type == 2:  # 文本 Block
+    elif block_type == 2:
         if "text" in block:
             text = extract_text(block["text"]["elements"])
-            prd += f"{text}\n\n"
+            md += f"{text}\n\n"
 
-    elif block_type == 10:  # 无序列表 bullet
+    elif block_type == 10:
         if "bullet" in block:
             text = extract_text(block["bullet"]["elements"])
-            prd += f"- {text}\n"
+            md += f"- {text}\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
                 child_md = parse_block(child, blocks_map, image_url_map)
                 child_md = "\n".join("  " + line if line.strip() else line for line in child_md.splitlines())
-                prd += child_md + "\n"
+                md += child_md + "\n"
 
-    elif block_type == 11:  # 有序列表 ordered
+    elif block_type == 11:
         if "ordered" in block:
             text = extract_text(block["ordered"]["elements"])
-            prd += f"1. {text}\n"
+            md += f"1. {text}\n"
         for child_id in block.get("children", []):
             child = blocks_map.get(child_id)
             if child:
                 child_md = parse_block(child, blocks_map, image_url_map)
                 child_md = "\n".join("  " + line if line.strip() else line for line in child_md.splitlines())
-                prd += child_md + "\n"
+                md += child_md + "\n"
 
-    elif block_type == 27:  # 图片块
+    elif block_type == 27:
         image = block.get("image", {})
         file_token = image.get("file_token") or image.get("token")
         if not file_token and "origin" in image:
             file_token = image["origin"].get("file_token") or image["origin"].get("token")
         url = image_url_map.get(file_token, "")
-        prd += f"![image]({url})\n\n"
+        md += f"![image]({url})\n\n"
 
-    elif block_type == 14:  # 代码块
+    elif block_type == 14:
         if "code" in block:
             text = extract_text(block["code"]["elements"])
-            prd += f"```\n{text}\n```\n\n"
+            md += f"\n{text}\n\n\n"
 
-    elif block_type == 15:  # 引用块
+    elif block_type == 15:
         if "quote" in block:
             text = extract_text(block["quote"]["elements"])
-            prd += f"> {text}\n\n"
+            md += f"> {text}\n\n"
 
-    return prd
-
+    return md
 
 def blocks_to_markdown(blocks, image_url_map):
     blocks_map = {b["block_id"]: b for b in blocks}
@@ -133,9 +145,12 @@ def blocks_to_markdown(blocks, image_url_map):
 
     return prd_all
 
-
 async def get_feishu_doc_content(document_id: str, user_access_token: str):
-    blocks = await fetch_all_blocks(document_id, user_access_token)
+    try:
+        blocks = await fetch_all_blocks(document_id, user_access_token)
+    except Exception as e:
+        logger.error(f"获取飞书文档块失败: {e}")
+        raise RuntimeError("获取飞书文档内容失败")
 
     image_tokens = []
     for b in blocks:
@@ -153,10 +168,9 @@ async def get_feishu_doc_content(document_id: str, user_access_token: str):
             url = await get_single_image_url(token, user_access_token)
             image_url_map[token] = url
         except Exception as e:
-            print(f"获取图片 {token} 下载链接失败: {e}")
+            logger.error(f"获取图片 {token} 下载链接失败: {e}")
 
     markdown = blocks_to_markdown(blocks, image_url_map)
-
     text_only = re.sub(r"!\[image\]\([^)]+\)", "", markdown).strip()
 
     return {

@@ -1,0 +1,269 @@
+2025-07-05 17:18:03,147 - __main__ - INFO - ==================================================
+2025-07-05 17:18:03,148 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-05 17:18:03,148 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250705_171803.log
+2025-07-05 17:18:03,148 - __main__ - INFO - ==================================================
+2025-07-05 17:18:03,150 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-05 17:18:03,193 - __main__ - INFO - frpc 启动成功
+2025-07-05 17:18:03,230 - main - INFO - ==================================================
+2025-07-05 17:18:03,230 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-05 17:18:03,230 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250705_171803.log
+2025-07-05 17:18:03,231 - main - INFO - ==================================================
+2025-07-05 17:18:03,232 - uvicorn.error - INFO - Started server process [6936]
+2025-07-05 17:18:03,233 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-05 17:18:03,233 - uvicorn.error - INFO - Application startup complete.
+2025-07-05 17:18:03,233 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-05 17:18:05,475 - main - INFO - 收到飞书请求，document_id=Mhu7dsNVDouXlHxkTqWcnI1Wn8H
+2025-07-05 17:18:05,875 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/Mhu7dsNVDouXlHxkTqWcnI1Wn8H/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-05 17:18:06,459 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Oaj8buRi5oZZXux6kygc9P3NnOs "HTTP/1.1 200 OK"
+2025-07-05 17:18:06,842 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=CzQ2bkzagod3WOx80SJchAQTnbd "HTTP/1.1 200 OK"
+2025-07-05 17:18:07,265 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=D8mnbqozroWun9xueQPciNOwnPc "HTTP/1.1 200 OK"
+2025-07-05 17:18:07,713 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=UmYcb9bS6o0g48xtdJXcKOhCnIf "HTTP/1.1 200 OK"
+2025-07-05 17:18:08,095 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IQ8hb6E2Kon9iqxh2ulczXmnnog "HTTP/1.1 200 OK"
+2025-07-05 17:18:08,420 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=QImxbHnqaovlDQx0AfZckTuxnLj "HTTP/1.1 200 OK"
+2025-07-05 17:18:08,801 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=CGxbbkfGAoMIikxs4QHcMrZdnoH "HTTP/1.1 200 OK"
+2025-07-05 17:18:09,180 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=NvEJbDgBDofiM0xqoetcIvn4nUd "HTTP/1.1 200 OK"
+2025-07-05 17:18:09,545 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=F8KNbZXcFo18R9xxyC7cHQXPnRe "HTTP/1.1 200 OK"
+2025-07-05 17:18:09,946 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SIVkbcT9Xoocf6xb15mckEJRnAh "HTTP/1.1 200 OK"
+2025-07-05 17:18:10,354 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=LnLlbiFEkoCHn1xINjZcnlrUn3g "HTTP/1.1 200 OK"
+2025-07-05 17:18:10,356 - main - INFO - 提取的 PRD 文本:
+# 京东订单多维度调度系统PRD
+
+ 
+
+### 版本修订
+
+### 目录
+
+1. 项目概述
+
+1.1  项目背景
+
+1.2  项目目标   
+
+1.3  功能需求    
+
+2.权限管理     
+
+3.调度作业
+
+3.1  订单调度主要逻辑        
+
+3.1.1 调度机制        
+
+3.1.2 订单建立和释放逻辑规则        
+
+3.1.3 调度订单修改---张樱、戴智泽        
+
+3.1.4 调度订单取消        
+
+3.2  调度        
+
+3.2.1 调度订单配置
+
+3.2.2  调度页面
+
+3.2.3  调度操作及查看    
+
+4.待调度管理
+
+5.调度报表
+
+### 项目概述
+
+#### 1.1  项目背景
+
+#### 1.2  项目目标
+
+#### 1.3  功能需求
+
+### 权限管理
+
+简要说明：
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzllZTg2ZTU4NDUwNTA0MjQ3MDY3NDZlMTY5Y2FlNzJfOWNmMDQ3ODVhNmE4ZDQ4NjQ5NzY2ZGU5YmQ3NmVhNzhfSUQ6NzUyMzUxNjUxMjI5ODgxMTM5M18xNzUxNzA3MDg3OjE3NTE3OTM0ODdfVjM)
+
+图2-1 岗位查询界面
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzY3MTgyM2MyODU0ZDgzOGEwODVjYmUwYTFjMGM5MmNfM2U0MDJhNTAyM2RjNGUwYmM1NGRkNzYxODM4MWQ2MTJfSUQ6NzUyMzUxNzczNDIzNjQzODUzMF8xNzUxNzA3MDg3OjE3NTE3OTM0ODdfVjM)
+
+图2 -2 岗位新建界面
+
+逻辑规则：
+
+1.查询
+
+1.支持按照分公司、岗位名称（支持模糊查询）、变更人erp（支持拼音模糊查询）、变更时间查询活动列表。
+
+2.查询列表默认显示10条数据，可翻页显示。
+
+3.列表以变更时间降序排列。
+
+2.新建
+
+1）岗位成员
+
+需对页面进行依次校验，校验通过则提交保存成功，校验不通过则返回新建页面。
+
+ 
+
+分公司、岗位名称不可更改，其他可进行更改。
+
+### 调度作业
+
+#### 3.1  订单调度主要逻辑
+
+##### 3.1.1 调度机制
+
+进入调度系统订单说明
+
+中小件订单且符合大宗设置条件订单进入该系统；
+
+注意：
+
+##### 3.1.2 订单建立和释放逻辑规则
+
+##### 3.1.3 调度订单修改
+
+调度系统可修改项有：收货人、手机号码、固定电话、预约日历
+
+订单调度前后用户侧修改逻辑
+
+简要说明：
+
+调度后的订单禁止客户再在前台修改（前台不展示修改入口）；
+
+调度前的订单，可允许客户在前台修改（前台有修改入口，一个月仅可修改一次）,且调度系统仍可对用户修改过的订单再次进行修改，但调度只可修改一次；
+
+客户前台完成订单修改后，需在调度系统中对订单更新数据。
+
+订单调度系统中，对订单的修改、取消操作 以调度系统修改(取消)的信息为最终订单信息。
+
+流程图： 
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZjdhYmUxNGIwNGE4NTMzYTgxZWNkNjdjNTk1YjBmZWJfZjAwNzFmODU4MmJjMDFkZTcwMjU0Yzk1NzA2NzZhZGZfSUQ6NzUyMzUxOTE5NDE0MzY1Mzg5Ml8xNzUxNzA3MDg4OjE3NTE3OTM0ODhfVjM)
+
+1）当用户在前台修改订单时，修改系统判断是否为调度订单。如果为调度订单，修改系统调用调度系统判断订单是否已经被调度过（此处已被调度过是指：订单已调度，包含调度成功和调度失败）。
+
+2）调度系统返回是否被调度结果，如果已经被调度过，则订单修改页面不显示修改按钮，不可进行修改；如果订单未被调度过，则订单修改页面显示修改按钮。
+
+3）未被调度过订单修改完成后，提交时，修改系统再次调用调度系统。判断是否调度系统也在同时进行调度，
+
+如果调度系统也在进行调度，以调度信息为准，调度系统调用修改接口将修改后信息写入订单中间件，同时将正在调度的状态回传修改系统，修改系统在前台对用户进行不可修改的提示；
+
+如果调度系统没有同时在进行调度，以用户修改的信息为准，调度系统调用修改接口将修改后信息写入订单中间件，同时将未进行调度状态回传修改系统，修改系统允许用户在前台修改。
+
+##### 3.1.4 调度订单取消
+
+#### 3.2  调度
+
+##### 3.2.1 调度订单配置
+
+简要说明： 
+
+不是所有调度订单全部进入调度系统，可在“调度订单配置”中配置指定调度的订单范围，仅中小件订单且符合配置的调度订单进入调度系统。
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjJiY2JhYTIwMDVjOTUxNzY1ZTFjYzdjZDBjNTk2MzZfZTIxZjU2MzMzMDVjMDhlMjM2MDZhMzRkZGFiZGI4ODFfSUQ6NzUyMzUxOTc3MTYyMzkzMTkzMl8xNzUxNzA3MDg4OjE3NTE3OTM0ODhfVjM)
+
+图3.2.1-1 调度订单配置界面  
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2U0M2Q3MjU5MDBhMmViNWQ2NGNhZjA4MDA1NzAzNzRfYTNkZDNjMjIwMjJlNTIwMmE2MWI5NDFmZTlmZDllOTNfSUQ6NzUyMzUxOTg1NzM2NTA3MzkyNF8xNzUxNzA3MDg4OjE3NTE3OTM0ODhfVjM)
+
+图3.2.2-2 调度订单新增界面
+
+逻辑规则：
+
+##### 3.2.2  调度页面
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MzY1MWYyYTI2ZDQxNmQ2MTBkNDk5YmQwYzMwNzRkZjBfMDYwZDJjYmVmZGQ5ZjJhOTIxZjA0MGRiMmEzNTkyYTlfSUQ6NzUyMzUyMDQzNzE4ODgwNDYyN18xNzUxNzA3MDg5OjE3NTE3OTM0ODlfVjM)
+
+图3.2.2-1 订单调度界面
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTU2MjE0MDZhZmY3YzNmMDA1ZGZhZmE5YzFjYjU0MzhfMDQzZmUyMGM4ODAwZGU5MjcxMzQxZTI3ZTgxN2NhYmZfSUQ6NzUyMzUyMDUxNDgxMDM0NzUyNF8xNzUxNzA3MDg5OjE3NTE3OTM0ODlfVjM)
+
+图3.2.2-2 订单调度查询界面
+
+逻辑规则： 
+
+##### 3.2.3  调度操作及查看
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YzQxYmQzYzJhMDNjOGM3MGViYzdmY2FiMjI4NTdlODdfYjk5ZjdiN2ZhYzlmOGI2ZGFmYjU3YTU4MzlhYTU2ZmNfSUQ6NzUyMzUyMDczNTc2ODM0NjY0M18xNzUxNzA3MDg5OjE3NTE3OTM0ODlfVjM)
+
+图3.2.3-1 调度操作界面
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ODYwYTY3ZWFlZWJjODZkNmVlYzUwM2I0NTAxZDNiZDJfOTkzODlhNWZlMjYwYjYyZTkzZDczYjI2Y2ZlZmViMWNfSUQ6NzUyMzUyMDgyNTk1OTAwNjIxMV8xNzUxNzA3MDkwOjE3NTE3OTM0OTBfVjM)
+
+图3.2.3-2 调度查看界面
+
+逻辑规则：
+
+调度页面：订单编号、下单时间、库房、支付方式、货物重量、货物体积、货物数量、客户账号、客户级别、收货人姓名、固定电话、手机号码、金额、收货地址、货物电梯、是否需要搬动、可通过车型、可选波次；
+
+查询页面：除以上字段外，承诺送达日期、送达波次、进入调度时间、调度完成时间、调度停留时长；
+
+1）预约日历最长显示7天，展示长度与前台展示相同；
+
+2）当调度页面展示预约日历异常时，调度人员点击“调度”后，直接提示“预约日历与当前显示不符，订单将直接下传。”；
+
+Erp中“订单查询”中“配送信息”中添加“多维度调度运输备注”，以接口调用方式返回展示信息。
+
+接口描述：
+
+入参：订单号
+
+回参：订单运输备注信息
+
+调度完成时间：即调度详情页中点击“调度”时的时间；
+
+调度停留时长：调度完成时间-进入调度时间
+
+### 待调度管理
+
+简要说明： 
+
+待调度管理可对未领取、未释放但紧急订单进行针对性调度操作。
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=Y2Q0OTk3NTA1OWY0MWM0NDg4ZDY4OWUyZjFkOTFiNGRfYWI1MTM4YjJhYjM4MzEzNjI2N2NlMmI5OGI2NmU4OWNfSUQ6NzUyMzUyMTQ1ODQ1OTc1NDUwMF8xNzUxNzA3MDkwOjE3NTE3OTM0OTBfVjM)
+
+图4-1 待调度管理界面
+
+逻辑规则： 
+
+如订单未被领取，仅显示下单时间；
+
+未领取订单可进行调度和直接下传操作。
+
+### 调度数据
+
+界面原型：
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTYzNGYwNTZlNDIzZjk0MWQ0MTg4Y2U0YmQ2ZTljY2ZfYmRjM2I3MjA3MTcwMGQ5NzNlNDVmOTFlNDM3MGM2MzdfSUQ6NzUyMzUyMTU3NDM0NDYwNTY5OF8xNzUxNzA3MDkxOjE3NTE3OTM0OTFfVjM)
+
+图5-1 调度数据界面
+
+逻辑规则：
+
+所有数据均仅可查看昨日及之前数据，所有数据当日0点更新。
+
+调度完成时间：即调度详情页中点击“调度”时的时间；
+
+调度停留时长：调度完成时间-进入调度时间
+
+
+2025-07-05 17:18:10,358 - main - INFO - 开始调用图谱生成测试用例
+2025-07-05 17:18:10,368 - langgraph_use - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-05 17:18:10,368 - langgraph_use - INFO - [Step 1] 提取标题成功: 京东订单多维度调度系统PRD
+2025-07-05 17:18:10,369 - langgraph_use - INFO - [Step 2] 提取测试点
+2025-07-05 17:18:49,502 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-05 17:18:49,504 - langgraph_use - INFO - [Step 3] 优化测试点
+2025-07-05 17:19:09,627 - uvicorn.error - INFO - Shutting down
+2025-07-05 17:19:09,736 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

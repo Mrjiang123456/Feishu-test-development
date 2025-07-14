@@ -1,0 +1,52 @@
+2025-07-09 02:04:11,247 - __main__ - INFO - ==================================================
+2025-07-09 02:04:11,247 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 02:04:11,247 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_020411.log
+2025-07-09 02:04:11,247 - __main__ - INFO - ==================================================
+2025-07-09 02:04:11,250 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-09 02:04:11,302 - __main__ - INFO - frpc 启动成功
+2025-07-09 02:04:11,364 - main - INFO - ==================================================
+2025-07-09 02:04:11,365 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 02:04:11,365 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_020411.log
+2025-07-09 02:04:11,365 - main - INFO - ==================================================
+2025-07-09 02:04:11,367 - uvicorn.error - INFO - Started server process [18804]
+2025-07-09 02:04:11,367 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 02:04:11,367 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 02:04:11,368 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 02:04:14,463 - main - INFO - 收到飞书请求，document_id=KExEdM3URoe4JdxRyU6cduwHnZd
+2025-07-09 02:04:14,900 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 02:04:15,354 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SZPlbksxNo9q2AxkE3TcDp3gnlb "HTTP/1.1 200 OK"
+2025-07-09 02:04:15,708 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=JqINbXfOlofwdHxsaYecenlsnAh "HTTP/1.1 200 OK"
+2025-07-09 02:04:16,077 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=ZPq4buihSoeZrCxt6jQcMli8n2f "HTTP/1.1 200 OK"
+2025-07-09 02:04:16,490 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=I69ubTn76oLpwRxLIP6cjz0tnWb "HTTP/1.1 200 OK"
+2025-07-09 02:04:16,826 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=G7hCbfD1UoCXnwxK0hIcXbqhnPg "HTTP/1.1 200 OK"
+2025-07-09 02:04:17,217 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=M5XibpflfokO3Dx25UQcS4zgnVh "HTTP/1.1 200 OK"
+2025-07-09 02:04:17,661 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NGM2ODNmOWZhZGMzMTAzZjQxNTM1M2ZjZGFmZGQ3NWRfZWE2MDg0MDBhNjVmMGU1YmYyZjljMDg5MTc5NWUxNmVfSUQ6NzUyMDQ4MjE0MTQwNzYwODgzNV8xNzUxOTk3ODU2OjE3NTIwODQyNTZfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:19,451 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:19,452 - feishu_api - WARNING - OCR识别失败，token=SZPlbksxNo9q2AxkE3TcDp3gnlb, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:19,658 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OTViYzkxYTk3OTAxZWM5NTRmMjJlZDM1YjYyNzFmNWRfNTRmMWY2MWQzZDI2NmZkYmFjZDQ5NGFmNGI4ZjQwNjBfSUQ6NzUyMTgwNjA4OTg5MDEwMzI5N18xNzUxOTk3ODU2OjE3NTIwODQyNTZfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:19,956 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:19,957 - feishu_api - WARNING - OCR识别失败，token=JqINbXfOlofwdHxsaYecenlsnAh, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:20,159 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MjJiNzFhNTdiMzMzYjQ5ODI3YTA5MTAxMDFmZTE5MjdfMDQ0NDJlMzc3OGM3ODY1OTg1NGUxMGJhYjI1YjgwNzFfSUQ6NzUyMDQ4MjE0MTE3MjQ5ODQzNV8xNzUxOTk3ODU2OjE3NTIwODQyNTZfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:20,351 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:20,352 - feishu_api - WARNING - OCR识别失败，token=ZPq4buihSoeZrCxt6jQcMli8n2f, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:20,579 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWFkODVmN2M5YWVmZDM1YzA4YjkxODYyYzdhNDk1NWZfOWIxMTYzOTllMTg2YzMyZTcyYTdmYzczMzA1NjY2NzhfSUQ6NzUyMDQ4MjE0MDI2MTgyNjU3OV8xNzUxOTk3ODU3OjE3NTIwODQyNTdfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:20,750 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:20,752 - feishu_api - WARNING - OCR识别失败，token=I69ubTn76oLpwRxLIP6cjz0tnWb, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:21,024 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NDUwNDg2Y2ZkMjIxYTcxM2FiNjlmMTI0YTVlZWJlMjNfNGNiMjE5M2JiZjAxMDc4ZmJiMjBmZmFiZTZkNDNhMThfSUQ6NzUyMDQ4MjEzODAwMjA5NjE1Nl8xNzUxOTk3ODU3OjE3NTIwODQyNTdfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:21,134 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:21,135 - feishu_api - WARNING - OCR识别失败，token=G7hCbfD1UoCXnwxK0hIcXbqhnPg, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:21,377 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzVlMDcxNjQ1Mjc2MGI5ZDI1OWFhNjRlOTRlZTYxNGNfYmVlNzY0YzQyMDczMmIyYWFkZjZhMmVlNmVlYTNkYmNfSUQ6NzUyMDQ4MjEzOTQ4MjYxOTkzMl8xNzUxOTk3ODU3OjE3NTIwODQyNTdfVjM "HTTP/1.1 200 OK"
+2025-07-09 02:04:21,485 - httpx - INFO - HTTP Request: POST https://visual.volcengineapi.com "HTTP/1.1 400 Bad Request"
+2025-07-09 02:04:21,485 - feishu_api - WARNING - OCR识别失败，token=M5XibpflfokO3Dx25UQcS4zgnVh, 错误=Client error '400 Bad Request' for url 'https://visual.volcengineapi.com'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 02:04:21,485 - main - INFO - 提取的 PRD 文本:
+None
+2025-07-09 02:04:25,925 - uvicorn.error - INFO - Shutting down
+2025-07-09 02:04:26,034 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-09 02:04:26,035 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-09 02:04:26,035 - uvicorn.error - INFO - Finished server process [18804]

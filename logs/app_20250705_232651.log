@@ -1,0 +1,1404 @@
+2025-07-05 23:26:51,063 - main - INFO - ==================================================
+2025-07-05 23:26:51,063 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-05 23:26:51,063 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250705_232651.log
+2025-07-05 23:26:51,063 - main - INFO - ==================================================
+2025-07-05 23:26:51,065 - uvicorn.error - INFO - Started server process [32140]
+2025-07-05 23:26:51,065 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-05 23:26:51,065 - uvicorn.error - INFO - Application startup complete.
+2025-07-05 23:26:51,067 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-05 23:26:59,525 - main - INFO - 收到飞书请求，document_id=KExEdM3URoe4JdxRyU6cduwHnZd
+2025-07-05 23:27:00,047 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-05 23:27:00,566 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SZPlbksxNo9q2AxkE3TcDp3gnlb "HTTP/1.1 200 OK"
+2025-07-05 23:27:01,117 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=JqINbXfOlofwdHxsaYecenlsnAh "HTTP/1.1 200 OK"
+2025-07-05 23:27:01,626 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=ZPq4buihSoeZrCxt6jQcMli8n2f "HTTP/1.1 200 OK"
+2025-07-05 23:27:02,091 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=I69ubTn76oLpwRxLIP6cjz0tnWb "HTTP/1.1 200 OK"
+2025-07-05 23:27:02,732 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=G7hCbfD1UoCXnwxK0hIcXbqhnPg "HTTP/1.1 200 OK"
+2025-07-05 23:27:03,716 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=M5XibpflfokO3Dx25UQcS4zgnVh "HTTP/1.1 200 OK"
+2025-07-05 23:27:03,717 - main - INFO - 提取的 PRD 文本:
+# B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+#### 1.1.1 业务流程图
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTc3NjgzMTMyNGU3MGI4YTg0MzFiNDE5NDFlYmMzY2FfMjA3Zjk1NTY0ZDNjMmRhMDE5ZjRmMTgyNmFlY2QzMzBfSUQ6NzUyMDQ4MjE0MTQwNzYwODgzNV8xNzUxNzI5MjIxOjE3NTE4MTU2MjFfVjM)
+
+#### 1.1.2 功能架构
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=YTRmMDYzMjU2NTNjMjM5NThjMGE5NTgwYWVkMzlkNjZfNjk0NWUyM2YxMzQyNjFlMTkxY2NhNWJiOTYxZDkzN2JfSUQ6NzUyMTgwNjA4OTg5MDEwMzI5N18xNzUxNzI5MjIxOjE3NTE4MTU2MjFfVjM)
+
+### 1.2 功能说明
+
+#### 1.2.1 账号登录
+
+##### 1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+##### 1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MGM0MzE2ODQ0YTdiMzE4NDk5NzgwNzQzOTc2YzJlMzBfYzljOGZhMmYyOWQ4ZjVhODQ1ZTBhOWRkZDRiN2M2ZDFfSUQ6NzUyMDQ4MjE0MTE3MjQ5ODQzNV8xNzUxNzI5MjIyOjE3NTE4MTU2MjJfVjM)
+
+##### 1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+#### 1.2.2 重置初始密码
+
+##### 1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+##### 1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MmI0MzNkZDk0YzY2MTYxNGQ0ODYxNDA3NWM3YWY3ZDFfZDU5MmEzNjZkZGIwNTEyOGIwODJmMjBjYzBiOWE5MWRfSUQ6NzUyMDQ4MjE0MDI2MTgyNjU3OV8xNzUxNzI5MjIyOjE3NTE4MTU2MjJfVjM)
+
+##### 1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+#### 1.2.3 找回密码
+
+##### 1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+##### 1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZTMyMGY2ZjEzY2UxMDQ1MGNjNTZkNTc1NjY2NDJmMTJfMDZhMzFjN2M5ZDhkMjY0YzBiNmUwZjE1ZTQ1ZjI3ZDBfSUQ6NzUyMDQ4MjEzODAwMjA5NjE1Nl8xNzUxNzI5MjIzOjE3NTE4MTU2MjNfVjM)
+
+##### 1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+#### 1.2.4 修改密码
+
+##### 1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+##### 1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=OWIxYjg5OWFmYzRjNTZhOTgyMjZkYjZiZWUzY2NjNTdfMmEwNmU3NDE3MzY1ZDExMmJkZGEzOTA3MzQwY2VlNDhfSUQ6NzUyMDQ4MjEzOTQ4MjYxOTkzMl8xNzUxNzI5MjIzOjE3NTE4MTU2MjNfVjM)
+
+##### 1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-05 23:27:03,721 - main - INFO - 开始调用图谱生成测试用例
+2025-07-05 23:27:03,728 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-05 23:27:03,728 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-05 23:27:03,729 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-05 23:27:38,169 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-05 23:27:38,169 - langgraph_use2 - INFO - [Step 3] 优化测试点
+2025-07-05 23:28:03,810 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-05 23:28:03,812 - langgraph_use2 - INFO - [Step 4] 生成测试用例
+2025-07-05 23:28:03,812 - langgraph_use2 - INFO - 生成第 1 个用例，第 1 次尝试
+2025-07-05 23:28:03,813 - langgraph_use2 - WARNING - 第 1 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,813 - langgraph_use2 - INFO - 生成第 2 个用例，第 1 次尝试
+2025-07-05 23:28:03,813 - langgraph_use2 - WARNING - 第 2 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,814 - langgraph_use2 - INFO - 生成第 3 个用例，第 1 次尝试
+2025-07-05 23:28:03,814 - langgraph_use2 - WARNING - 第 3 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,814 - langgraph_use2 - INFO - 生成第 4 个用例，第 1 次尝试
+2025-07-05 23:28:03,814 - langgraph_use2 - WARNING - 第 4 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,814 - langgraph_use2 - INFO - 生成第 5 个用例，第 1 次尝试
+2025-07-05 23:28:03,815 - langgraph_use2 - WARNING - 第 5 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,815 - langgraph_use2 - INFO - 生成第 6 个用例，第 1 次尝试
+2025-07-05 23:28:03,815 - langgraph_use2 - WARNING - 第 6 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,815 - langgraph_use2 - INFO - 生成第 7 个用例，第 1 次尝试
+2025-07-05 23:28:03,815 - langgraph_use2 - WARNING - 第 7 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,815 - langgraph_use2 - INFO - 生成第 8 个用例，第 1 次尝试
+2025-07-05 23:28:03,815 - langgraph_use2 - WARNING - 第 8 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,818 - langgraph_use2 - INFO - 生成第 9 个用例，第 1 次尝试
+2025-07-05 23:28:03,818 - langgraph_use2 - WARNING - 第 9 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,818 - langgraph_use2 - INFO - 生成第 10 个用例，第 1 次尝试
+2025-07-05 23:28:03,818 - langgraph_use2 - WARNING - 第 10 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,818 - langgraph_use2 - INFO - 生成第 11 个用例，第 1 次尝试
+2025-07-05 23:28:03,819 - langgraph_use2 - WARNING - 第 11 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,819 - langgraph_use2 - INFO - 生成第 12 个用例，第 1 次尝试
+2025-07-05 23:28:03,819 - langgraph_use2 - WARNING - 第 12 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,819 - langgraph_use2 - INFO - 生成第 13 个用例，第 1 次尝试
+2025-07-05 23:28:03,819 - langgraph_use2 - WARNING - 第 13 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,819 - langgraph_use2 - INFO - 生成第 14 个用例，第 1 次尝试
+2025-07-05 23:28:03,819 - langgraph_use2 - WARNING - 第 14 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,819 - langgraph_use2 - INFO - 生成第 15 个用例，第 1 次尝试
+2025-07-05 23:28:03,819 - langgraph_use2 - WARNING - 第 15 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,820 - langgraph_use2 - INFO - 生成第 16 个用例，第 1 次尝试
+2025-07-05 23:28:03,820 - langgraph_use2 - WARNING - 第 16 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,820 - langgraph_use2 - INFO - 生成第 17 个用例，第 1 次尝试
+2025-07-05 23:28:03,820 - langgraph_use2 - WARNING - 第 17 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,820 - langgraph_use2 - INFO - 生成第 18 个用例，第 1 次尝试
+2025-07-05 23:28:03,820 - langgraph_use2 - WARNING - 第 18 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,820 - langgraph_use2 - INFO - 生成第 19 个用例，第 1 次尝试
+2025-07-05 23:28:03,820 - langgraph_use2 - WARNING - 第 19 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,821 - langgraph_use2 - INFO - 生成第 20 个用例，第 1 次尝试
+2025-07-05 23:28:03,821 - langgraph_use2 - WARNING - 第 20 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,821 - langgraph_use2 - INFO - 生成第 21 个用例，第 1 次尝试
+2025-07-05 23:28:03,821 - langgraph_use2 - WARNING - 第 21 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,821 - langgraph_use2 - INFO - 生成第 22 个用例，第 1 次尝试
+2025-07-05 23:28:03,821 - langgraph_use2 - WARNING - 第 22 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,821 - langgraph_use2 - INFO - 生成第 23 个用例，第 1 次尝试
+2025-07-05 23:28:03,821 - langgraph_use2 - WARNING - 第 23 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,821 - langgraph_use2 - INFO - 生成第 24 个用例，第 1 次尝试
+2025-07-05 23:28:03,821 - langgraph_use2 - WARNING - 第 24 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 25 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 25 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 26 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 26 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 27 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 27 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 28 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 28 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 29 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 29 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 30 个用例，第 1 次尝试
+2025-07-05 23:28:03,822 - langgraph_use2 - WARNING - 第 30 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,822 - langgraph_use2 - INFO - 生成第 31 个用例，第 1 次尝试
+2025-07-05 23:28:03,823 - langgraph_use2 - WARNING - 第 31 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,823 - langgraph_use2 - INFO - 生成第 32 个用例，第 1 次尝试
+2025-07-05 23:28:03,823 - langgraph_use2 - WARNING - 第 32 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,823 - langgraph_use2 - INFO - 生成第 33 个用例，第 1 次尝试
+2025-07-05 23:28:03,825 - langgraph_use2 - WARNING - 第 33 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,825 - langgraph_use2 - INFO - 生成第 34 个用例，第 1 次尝试
+2025-07-05 23:28:03,825 - langgraph_use2 - WARNING - 第 34 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,825 - langgraph_use2 - INFO - 生成第 35 个用例，第 1 次尝试
+2025-07-05 23:28:03,825 - langgraph_use2 - WARNING - 第 35 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,825 - langgraph_use2 - INFO - 生成第 36 个用例，第 1 次尝试
+2025-07-05 23:28:03,825 - langgraph_use2 - WARNING - 第 36 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,825 - langgraph_use2 - INFO - 生成第 37 个用例，第 1 次尝试
+2025-07-05 23:28:03,826 - langgraph_use2 - WARNING - 第 37 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,826 - langgraph_use2 - INFO - 生成第 38 个用例，第 1 次尝试
+2025-07-05 23:28:03,826 - langgraph_use2 - WARNING - 第 38 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,826 - langgraph_use2 - INFO - 生成第 39 个用例，第 1 次尝试
+2025-07-05 23:28:03,826 - langgraph_use2 - WARNING - 第 39 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,826 - langgraph_use2 - INFO - 生成第 40 个用例，第 1 次尝试
+2025-07-05 23:28:03,826 - langgraph_use2 - WARNING - 第 40 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,830 - langgraph_use2 - INFO - 生成第 41 个用例，第 1 次尝试
+2025-07-05 23:28:03,830 - langgraph_use2 - WARNING - 第 41 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,830 - langgraph_use2 - INFO - 生成第 42 个用例，第 1 次尝试
+2025-07-05 23:28:03,830 - langgraph_use2 - WARNING - 第 42 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,830 - langgraph_use2 - INFO - 生成第 43 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 43 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,831 - langgraph_use2 - INFO - 生成第 44 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 44 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,831 - langgraph_use2 - INFO - 生成第 45 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 45 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,831 - langgraph_use2 - INFO - 生成第 46 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 46 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,831 - langgraph_use2 - INFO - 生成第 47 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 47 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:03,831 - langgraph_use2 - INFO - 生成第 48 个用例，第 1 次尝试
+2025-07-05 23:28:03,831 - langgraph_use2 - WARNING - 第 48 个测试点失败（第 1 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,825 - langgraph_use2 - INFO - 生成第 1 个用例，第 2 次尝试
+2025-07-05 23:28:04,826 - langgraph_use2 - WARNING - 第 1 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,826 - langgraph_use2 - INFO - 生成第 5 个用例，第 2 次尝试
+2025-07-05 23:28:04,827 - langgraph_use2 - WARNING - 第 5 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,827 - langgraph_use2 - INFO - 生成第 4 个用例，第 2 次尝试
+2025-07-05 23:28:04,828 - langgraph_use2 - WARNING - 第 4 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,828 - langgraph_use2 - INFO - 生成第 2 个用例，第 2 次尝试
+2025-07-05 23:28:04,828 - langgraph_use2 - WARNING - 第 2 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,829 - langgraph_use2 - INFO - 生成第 3 个用例，第 2 次尝试
+2025-07-05 23:28:04,829 - langgraph_use2 - WARNING - 第 3 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,829 - langgraph_use2 - INFO - 生成第 6 个用例，第 2 次尝试
+2025-07-05 23:28:04,830 - langgraph_use2 - WARNING - 第 6 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,830 - langgraph_use2 - INFO - 生成第 7 个用例，第 2 次尝试
+2025-07-05 23:28:04,830 - langgraph_use2 - WARNING - 第 7 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,830 - langgraph_use2 - INFO - 生成第 13 个用例，第 2 次尝试
+2025-07-05 23:28:04,830 - langgraph_use2 - WARNING - 第 13 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,830 - langgraph_use2 - INFO - 生成第 29 个用例，第 2 次尝试
+2025-07-05 23:28:04,830 - langgraph_use2 - WARNING - 第 29 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,830 - langgraph_use2 - INFO - 生成第 48 个用例，第 2 次尝试
+2025-07-05 23:28:04,831 - langgraph_use2 - WARNING - 第 48 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,831 - langgraph_use2 - INFO - 生成第 47 个用例，第 2 次尝试
+2025-07-05 23:28:04,831 - langgraph_use2 - WARNING - 第 47 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,831 - langgraph_use2 - INFO - 生成第 42 个用例，第 2 次尝试
+2025-07-05 23:28:04,831 - langgraph_use2 - WARNING - 第 42 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,831 - langgraph_use2 - INFO - 生成第 41 个用例，第 2 次尝试
+2025-07-05 23:28:04,831 - langgraph_use2 - WARNING - 第 41 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,831 - langgraph_use2 - INFO - 生成第 40 个用例，第 2 次尝试
+2025-07-05 23:28:04,831 - langgraph_use2 - WARNING - 第 40 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 39 个用例，第 2 次尝试
+2025-07-05 23:28:04,832 - langgraph_use2 - WARNING - 第 39 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 38 个用例，第 2 次尝试
+2025-07-05 23:28:04,832 - langgraph_use2 - WARNING - 第 38 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 44 个用例，第 2 次尝试
+2025-07-05 23:28:04,832 - langgraph_use2 - WARNING - 第 44 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 36 个用例，第 2 次尝试
+2025-07-05 23:28:04,832 - langgraph_use2 - WARNING - 第 36 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 35 个用例，第 2 次尝试
+2025-07-05 23:28:04,832 - langgraph_use2 - WARNING - 第 35 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,832 - langgraph_use2 - INFO - 生成第 34 个用例，第 2 次尝试
+2025-07-05 23:28:04,833 - langgraph_use2 - WARNING - 第 34 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,833 - langgraph_use2 - INFO - 生成第 33 个用例，第 2 次尝试
+2025-07-05 23:28:04,833 - langgraph_use2 - WARNING - 第 33 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,833 - langgraph_use2 - INFO - 生成第 32 个用例，第 2 次尝试
+2025-07-05 23:28:04,833 - langgraph_use2 - WARNING - 第 32 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,833 - langgraph_use2 - INFO - 生成第 31 个用例，第 2 次尝试
+2025-07-05 23:28:04,833 - langgraph_use2 - WARNING - 第 31 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,833 - langgraph_use2 - INFO - 生成第 28 个用例，第 2 次尝试
+2025-07-05 23:28:04,834 - langgraph_use2 - WARNING - 第 28 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,834 - langgraph_use2 - INFO - 生成第 12 个用例，第 2 次尝试
+2025-07-05 23:28:04,834 - langgraph_use2 - WARNING - 第 12 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,834 - langgraph_use2 - INFO - 生成第 26 个用例，第 2 次尝试
+2025-07-05 23:28:04,834 - langgraph_use2 - WARNING - 第 26 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,834 - langgraph_use2 - INFO - 生成第 27 个用例，第 2 次尝试
+2025-07-05 23:28:04,834 - langgraph_use2 - WARNING - 第 27 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,834 - langgraph_use2 - INFO - 生成第 24 个用例，第 2 次尝试
+2025-07-05 23:28:04,834 - langgraph_use2 - WARNING - 第 24 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,835 - langgraph_use2 - INFO - 生成第 23 个用例，第 2 次尝试
+2025-07-05 23:28:04,835 - langgraph_use2 - WARNING - 第 23 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,835 - langgraph_use2 - INFO - 生成第 22 个用例，第 2 次尝试
+2025-07-05 23:28:04,835 - langgraph_use2 - WARNING - 第 22 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,835 - langgraph_use2 - INFO - 生成第 43 个用例，第 2 次尝试
+2025-07-05 23:28:04,835 - langgraph_use2 - WARNING - 第 43 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,835 - langgraph_use2 - INFO - 生成第 20 个用例，第 2 次尝试
+2025-07-05 23:28:04,835 - langgraph_use2 - WARNING - 第 20 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,835 - langgraph_use2 - INFO - 生成第 19 个用例，第 2 次尝试
+2025-07-05 23:28:04,836 - langgraph_use2 - WARNING - 第 19 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,836 - langgraph_use2 - INFO - 生成第 18 个用例，第 2 次尝试
+2025-07-05 23:28:04,836 - langgraph_use2 - WARNING - 第 18 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,836 - langgraph_use2 - INFO - 生成第 46 个用例，第 2 次尝试
+2025-07-05 23:28:04,836 - langgraph_use2 - WARNING - 第 46 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,836 - langgraph_use2 - INFO - 生成第 16 个用例，第 2 次尝试
+2025-07-05 23:28:04,836 - langgraph_use2 - WARNING - 第 16 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,836 - langgraph_use2 - INFO - 生成第 15 个用例，第 2 次尝试
+2025-07-05 23:28:04,836 - langgraph_use2 - WARNING - 第 15 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,836 - langgraph_use2 - INFO - 生成第 30 个用例，第 2 次尝试
+2025-07-05 23:28:04,837 - langgraph_use2 - WARNING - 第 30 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,837 - langgraph_use2 - INFO - 生成第 11 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 11 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,838 - langgraph_use2 - INFO - 生成第 25 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 25 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,838 - langgraph_use2 - INFO - 生成第 10 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 10 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,838 - langgraph_use2 - INFO - 生成第 45 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 45 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,838 - langgraph_use2 - INFO - 生成第 8 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 8 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,838 - langgraph_use2 - INFO - 生成第 37 个用例，第 2 次尝试
+2025-07-05 23:28:04,838 - langgraph_use2 - WARNING - 第 37 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,839 - langgraph_use2 - INFO - 生成第 14 个用例，第 2 次尝试
+2025-07-05 23:28:04,839 - langgraph_use2 - WARNING - 第 14 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,839 - langgraph_use2 - INFO - 生成第 9 个用例，第 2 次尝试
+2025-07-05 23:28:04,839 - langgraph_use2 - WARNING - 第 9 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,839 - langgraph_use2 - INFO - 生成第 21 个用例，第 2 次尝试
+2025-07-05 23:28:04,839 - langgraph_use2 - WARNING - 第 21 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:04,839 - langgraph_use2 - INFO - 生成第 17 个用例，第 2 次尝试
+2025-07-05 23:28:04,839 - langgraph_use2 - WARNING - 第 17 个测试点失败（第 2 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,833 - langgraph_use2 - INFO - 生成第 1 个用例，第 3 次尝试
+2025-07-05 23:28:05,834 - langgraph_use2 - WARNING - 第 1 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,834 - langgraph_use2 - INFO - 生成第 48 个用例，第 3 次尝试
+2025-07-05 23:28:05,835 - langgraph_use2 - WARNING - 第 48 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,835 - langgraph_use2 - INFO - 生成第 2 个用例，第 3 次尝试
+2025-07-05 23:28:05,836 - langgraph_use2 - WARNING - 第 2 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,836 - langgraph_use2 - INFO - 生成第 42 个用例，第 3 次尝试
+2025-07-05 23:28:05,836 - langgraph_use2 - WARNING - 第 42 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,837 - langgraph_use2 - INFO - 生成第 47 个用例，第 3 次尝试
+2025-07-05 23:28:05,837 - langgraph_use2 - WARNING - 第 47 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,837 - langgraph_use2 - INFO - 生成第 41 个用例，第 3 次尝试
+2025-07-05 23:28:05,838 - langgraph_use2 - WARNING - 第 41 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,838 - langgraph_use2 - INFO - 生成第 3 个用例，第 3 次尝试
+2025-07-05 23:28:05,838 - langgraph_use2 - WARNING - 第 3 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,838 - langgraph_use2 - INFO - 生成第 5 个用例，第 3 次尝试
+2025-07-05 23:28:05,838 - langgraph_use2 - WARNING - 第 5 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,840 - langgraph_use2 - INFO - 生成第 4 个用例，第 3 次尝试
+2025-07-05 23:28:05,840 - langgraph_use2 - WARNING - 第 4 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,840 - langgraph_use2 - INFO - 生成第 29 个用例，第 3 次尝试
+2025-07-05 23:28:05,840 - langgraph_use2 - WARNING - 第 29 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,840 - langgraph_use2 - INFO - 生成第 13 个用例，第 3 次尝试
+2025-07-05 23:28:05,842 - langgraph_use2 - WARNING - 第 13 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,842 - langgraph_use2 - INFO - 生成第 35 个用例，第 3 次尝试
+2025-07-05 23:28:05,842 - langgraph_use2 - WARNING - 第 35 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,842 - langgraph_use2 - INFO - 生成第 36 个用例，第 3 次尝试
+2025-07-05 23:28:05,843 - langgraph_use2 - WARNING - 第 36 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,843 - langgraph_use2 - INFO - 生成第 6 个用例，第 3 次尝试
+2025-07-05 23:28:05,843 - langgraph_use2 - WARNING - 第 6 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,843 - langgraph_use2 - INFO - 生成第 7 个用例，第 3 次尝试
+2025-07-05 23:28:05,843 - langgraph_use2 - WARNING - 第 7 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,843 - langgraph_use2 - INFO - 生成第 44 个用例，第 3 次尝试
+2025-07-05 23:28:05,843 - langgraph_use2 - WARNING - 第 44 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,843 - langgraph_use2 - INFO - 生成第 38 个用例，第 3 次尝试
+2025-07-05 23:28:05,843 - langgraph_use2 - WARNING - 第 38 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,843 - langgraph_use2 - INFO - 生成第 40 个用例，第 3 次尝试
+2025-07-05 23:28:05,844 - langgraph_use2 - WARNING - 第 40 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,844 - langgraph_use2 - INFO - 生成第 39 个用例，第 3 次尝试
+2025-07-05 23:28:05,844 - langgraph_use2 - WARNING - 第 39 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,844 - langgraph_use2 - INFO - 生成第 23 个用例，第 3 次尝试
+2025-07-05 23:28:05,844 - langgraph_use2 - WARNING - 第 23 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,844 - langgraph_use2 - INFO - 生成第 17 个用例，第 3 次尝试
+2025-07-05 23:28:05,844 - langgraph_use2 - WARNING - 第 17 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,844 - langgraph_use2 - INFO - 生成第 24 个用例，第 3 次尝试
+2025-07-05 23:28:05,845 - langgraph_use2 - WARNING - 第 24 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,845 - langgraph_use2 - INFO - 生成第 8 个用例，第 3 次尝试
+2025-07-05 23:28:05,846 - langgraph_use2 - WARNING - 第 8 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,846 - langgraph_use2 - INFO - 生成第 27 个用例，第 3 次尝试
+2025-07-05 23:28:05,846 - langgraph_use2 - WARNING - 第 27 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,846 - langgraph_use2 - INFO - 生成第 31 个用例，第 3 次尝试
+2025-07-05 23:28:05,846 - langgraph_use2 - WARNING - 第 31 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,846 - langgraph_use2 - INFO - 生成第 26 个用例，第 3 次尝试
+2025-07-05 23:28:05,846 - langgraph_use2 - WARNING - 第 26 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,846 - langgraph_use2 - INFO - 生成第 37 个用例，第 3 次尝试
+2025-07-05 23:28:05,847 - langgraph_use2 - WARNING - 第 37 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,847 - langgraph_use2 - INFO - 生成第 28 个用例，第 3 次尝试
+2025-07-05 23:28:05,847 - langgraph_use2 - WARNING - 第 28 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,847 - langgraph_use2 - INFO - 生成第 14 个用例，第 3 次尝试
+2025-07-05 23:28:05,847 - langgraph_use2 - WARNING - 第 14 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,847 - langgraph_use2 - INFO - 生成第 32 个用例，第 3 次尝试
+2025-07-05 23:28:05,847 - langgraph_use2 - WARNING - 第 32 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,847 - langgraph_use2 - INFO - 生成第 43 个用例，第 3 次尝试
+2025-07-05 23:28:05,847 - langgraph_use2 - WARNING - 第 43 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,847 - langgraph_use2 - INFO - 生成第 34 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 34 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,848 - langgraph_use2 - INFO - 生成第 10 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 10 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,848 - langgraph_use2 - INFO - 生成第 11 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 11 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,848 - langgraph_use2 - INFO - 生成第 18 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 18 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,848 - langgraph_use2 - INFO - 生成第 46 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 46 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,848 - langgraph_use2 - INFO - 生成第 20 个用例，第 3 次尝试
+2025-07-05 23:28:05,848 - langgraph_use2 - WARNING - 第 20 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,849 - langgraph_use2 - INFO - 生成第 22 个用例，第 3 次尝试
+2025-07-05 23:28:05,849 - langgraph_use2 - WARNING - 第 22 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,849 - langgraph_use2 - INFO - 生成第 12 个用例，第 3 次尝试
+2025-07-05 23:28:05,849 - langgraph_use2 - WARNING - 第 12 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,849 - langgraph_use2 - INFO - 生成第 21 个用例，第 3 次尝试
+2025-07-05 23:28:05,849 - langgraph_use2 - WARNING - 第 21 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,849 - langgraph_use2 - INFO - 生成第 9 个用例，第 3 次尝试
+2025-07-05 23:28:05,849 - langgraph_use2 - WARNING - 第 9 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,849 - langgraph_use2 - INFO - 生成第 30 个用例，第 3 次尝试
+2025-07-05 23:28:05,850 - langgraph_use2 - WARNING - 第 30 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,850 - langgraph_use2 - INFO - 生成第 25 个用例，第 3 次尝试
+2025-07-05 23:28:05,850 - langgraph_use2 - WARNING - 第 25 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,850 - langgraph_use2 - INFO - 生成第 15 个用例，第 3 次尝试
+2025-07-05 23:28:05,850 - langgraph_use2 - WARNING - 第 15 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,850 - langgraph_use2 - INFO - 生成第 19 个用例，第 3 次尝试
+2025-07-05 23:28:05,850 - langgraph_use2 - WARNING - 第 19 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,850 - langgraph_use2 - INFO - 生成第 33 个用例，第 3 次尝试
+2025-07-05 23:28:05,850 - langgraph_use2 - WARNING - 第 33 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,851 - langgraph_use2 - INFO - 生成第 45 个用例，第 3 次尝试
+2025-07-05 23:28:05,851 - langgraph_use2 - WARNING - 第 45 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:05,851 - langgraph_use2 - INFO - 生成第 16 个用例，第 3 次尝试
+2025-07-05 23:28:05,851 - langgraph_use2 - WARNING - 第 16 个测试点失败（第 3 次）: call_model2() got an unexpected keyword argument 'max_tokens'
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\langgraph_use2.py", line 122, in generate_case
+    resp = await call_model2(prompt, max_tokens=2000)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: call_model2() got an unexpected keyword argument 'max_tokens'
+
+2025-07-05 23:28:06,839 - langgraph_use2 - ERROR - 第 1 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,839 - langgraph_use2 - ERROR - 第 14 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 28 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 8 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 29 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 35 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 37 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 26 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,840 - langgraph_use2 - ERROR - 第 36 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 13 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 31 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 27 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 47 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 42 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 24 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 46 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 18 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,841 - langgraph_use2 - ERROR - 第 11 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 10 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 34 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 43 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 48 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 2 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 4 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,842 - langgraph_use2 - ERROR - 第 17 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 23 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 5 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 39 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 40 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 41 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 3 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,843 - langgraph_use2 - ERROR - 第 38 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,844 - langgraph_use2 - ERROR - 第 44 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,844 - langgraph_use2 - ERROR - 第 6 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,844 - langgraph_use2 - ERROR - 第 7 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,844 - langgraph_use2 - ERROR - 第 32 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 16 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 33 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 19 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 9 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 22 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 12 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 45 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 21 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 20 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 25 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 15 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - ERROR - 第 30 个用例多次失败，跳过: NoneType: None
+
+2025-07-05 23:28:06,870 - langgraph_use2 - INFO - [Step 4] 用例生成完成: 成功 0 个，失败 48 个，用时 3.06s
+2025-07-05 23:28:06,871 - langgraph_use2 - INFO - [Step 5] 校验测试用例，移除高度一致的重复项
+2025-07-05 23:28:06,871 - langgraph_use2 - WARNING - 无测试用例可校验
+2025-07-05 23:28:06,872 - main - INFO - 生成测试用例成功，耗时 63.15 秒
+2025-07-05 23:28:30,272 - uvicorn.error - INFO - Shutting down
+2025-07-05 23:28:30,384 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-05 23:28:30,384 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-05 23:28:30,384 - uvicorn.error - INFO - Finished server process [32140]

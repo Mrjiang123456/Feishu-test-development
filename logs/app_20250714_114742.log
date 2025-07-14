@@ -1,0 +1,14 @@
+2025-07-14 11:47:42,516 - __main__ - INFO - ==================================================
+2025-07-14 11:47:42,516 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-14 11:47:42,516 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250714_114742.log
+2025-07-14 11:47:42,516 - __main__ - INFO - ==================================================
+2025-07-14 11:47:42,516 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-14 11:47:42,563 - __main__ - INFO - frpc 启动成功
+2025-07-14 11:47:42,610 - main - INFO - ==================================================
+2025-07-14 11:47:42,610 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-14 11:47:42,610 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250714_114742.log
+2025-07-14 11:47:42,610 - main - INFO - ==================================================
+2025-07-14 11:47:42,610 - uvicorn.error - INFO - Started server process [8104]
+2025-07-14 11:47:42,610 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-14 11:47:42,610 - uvicorn.error - INFO - Application startup complete.
+2025-07-14 11:47:42,610 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)

@@ -1,0 +1,6 @@
+2025-07-08 18:42:14,977 - __main__ - INFO - ==================================================
+2025-07-08 18:42:14,978 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-08 18:42:14,978 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250708_184214.log
+2025-07-08 18:42:14,978 - __main__ - INFO - ==================================================
+2025-07-08 18:42:14,981 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-08 18:42:15,020 - __main__ - INFO - frpc 启动成功

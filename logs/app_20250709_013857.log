@@ -1,0 +1,17 @@
+2025-07-09 01:38:57,013 - main - INFO - ==================================================
+2025-07-09 01:38:57,014 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 01:38:57,014 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_013857.log
+2025-07-09 01:38:57,014 - main - INFO - ==================================================
+2025-07-09 01:38:57,016 - uvicorn.error - INFO - Started server process [4580]
+2025-07-09 01:38:57,016 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 01:38:57,018 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 01:38:57,019 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 01:39:02,151 - main - INFO - 收到飞书请求，document_id=KExEdM3URoe4JdxRyU6cduwHnZd
+2025-07-09 01:39:03,627 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 01:39:05,163 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SZPlbksxNo9q2AxkE3TcDp3gnlb "HTTP/1.1 200 OK"
+2025-07-09 01:39:07,200 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 400 Bad Request"
+2025-07-09 01:39:07,202 - feishu_api - ERROR - 图像识别失败: Client error '400 Bad Request' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+2025-07-09 01:39:07,651 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=JqINbXfOlofwdHxsaYecenlsnAh "HTTP/1.1 200 OK"
+2025-07-09 01:39:24,529 - uvicorn.error - INFO - Shutting down
+2025-07-09 01:39:24,640 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

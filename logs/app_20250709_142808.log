@@ -1,0 +1,193 @@
+2025-07-09 14:28:08,632 - __main__ - INFO - ==================================================
+2025-07-09 14:28:08,632 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 14:28:08,632 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_142808.log
+2025-07-09 14:28:08,632 - __main__ - INFO - ==================================================
+2025-07-09 14:28:08,634 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-09 14:28:08,680 - __main__ - INFO - frpc 启动成功
+2025-07-09 14:28:08,728 - main - INFO - ==================================================
+2025-07-09 14:28:08,729 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-09 14:28:08,729 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250709_142808.log
+2025-07-09 14:28:08,729 - main - INFO - ==================================================
+2025-07-09 14:28:08,731 - uvicorn.error - INFO - Started server process [20500]
+2025-07-09 14:28:08,731 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-09 14:28:08,731 - uvicorn.error - INFO - Application startup complete.
+2025-07-09 14:28:08,731 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-09 14:28:11,957 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-09 14:28:12,178 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 401 Unauthorized"
+2025-07-09 14:28:12,179 - feishu_api - ERROR - 飞书文档块接口返回状态错误: 401
+2025-07-09 14:28:12,179 - feishu_api - ERROR - 获取飞书文档块失败: 飞书文档块接口错误，状态码401
+2025-07-09 14:28:12,180 - main - ERROR - 生成测试用例失败
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 22, in fetch_all_blocks
+    resp.raise_for_status()
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 150, in get_feishu_doc_content
+    blocks = await fetch_all_blocks(document_id, user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 29, in fetch_all_blocks
+    raise RuntimeError(f"飞书文档块接口错误，状态码{e.response.status_code}")
+RuntimeError: 飞书文档块接口错误，状态码401
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\main.py", line 136, in generate_testcases_api
+    result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 153, in get_feishu_doc_content
+    raise RuntimeError("获取飞书文档内容失败")
+RuntimeError: 获取飞书文档内容失败
+2025-07-09 14:28:59,934 - main - INFO - 收到飞书请求，document_id=HuGxdTBuSoIGPLxyVFxcYQlrnNd
+2025-07-09 14:29:00,291 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/HuGxdTBuSoIGPLxyVFxcYQlrnNd/blocks?limit=100 "HTTP/1.1 200 OK"
+2025-07-09 14:29:00,884 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=TgEKbWEBAo8NLixzkxMchwptnpg "HTTP/1.1 200 OK"
+2025-07-09 14:29:01,297 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=SkDEbgOKsoteNwxRDY1cvMAjndf "HTTP/1.1 200 OK"
+2025-07-09 14:29:01,803 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=Y1zAbRUnxowpqyxEkfKc1t3Mnph "HTTP/1.1 200 OK"
+2025-07-09 14:29:02,229 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=FmJybjFF3o2UVSxDTtbcGSdRnXd "HTTP/1.1 200 OK"
+2025-07-09 14:29:02,675 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=IehHb80ino8l8Tx6VHAciwJwnse "HTTP/1.1 200 OK"
+2025-07-09 14:29:02,679 - main - INFO - 提取的 PRD 文本:
+## B端产品登录功能需求文档范文
+
+### 1.1 功能概述
+
+1.1.1 业务流程图
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWQxZjI4YzVhYTg4M2MwYWY3NzcyOGM0ZTc0Y2Q3YjdfODVkNWI5ODhlZGE2N2Q0ZTI3ZTFiNDYwZGVmZTljNTVfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMDQyNTQyOjE3NTIxMjg5NDJfVjM)
+
+1.1.2 功能架构
+
+### 1.2 功能说明
+
+1.2.1 账号登录
+
+1.2.1.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+输入登录账号、密码、验证码进行登录；
+
+1.2.1.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2NmM2EyYmY3MjRmZDhkYWJkYjM1MTg2ZWM2ZjZhODhfNDQ2ZGVmZGQ3NWE3YmRlNGNlOGViNzE2YzJmMDIzNDlfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMDQyNTQyOjE3NTIxMjg5NDJfVjM)
+
+1.2.1.3 逻辑说明
+
+账号输入框：输入账号后显示清空操作按钮，点击清空按钮清空已输入的账号；
+
+密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：验证码为4位随机的大写英文字母，单击验证码展示区域刷新验证码，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且边框变为绿色，失去焦点时恢复原状；
+
+【登录】按钮：点击【登录】按钮时依次校验登录账号、密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则成功登录并进入系统首页；
+
+【找回密码】按钮：点击【找回密码】按钮跳转至找回密码页面；
+
+账号首次成功登录时弹窗提示账号首次登录时需修改初始密码，点击【确定】按钮跳转至修改初始密码页面，初始密码修改后需要重新输入账号、密码、验证码进行登录；
+
+1.2.2 重置初始密码
+
+1.2.2.1 业务流程
+
+用户初次成功登录账号后弹窗提示用户修改初始密码；
+
+点击弹窗的【确定】按钮后页面跳转至重置初始密码页面；
+
+1.2.2.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTRkYjk0ZGVlMTI0MzkyZTlkNDQyZWZiZmE4OTg4ODlfOGEwMzk1YTk1MjFjMDQ2OGQwNWMxYTRlNDY3MTg4NDVfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMDQyNTQzOjE3NTIxMjg5NDNfVjM)
+
+1.2.2.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.3 找回密码
+
+1.2.3.1 业务流程
+
+用户打开登录网址进入登录页面；
+
+忘记登录密码后在登录页面页面点击【找回密码】按钮进入找回密码页面；
+
+1.2.3.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWYwNTFiNGUxN2E5MjFiYTE4NjNhYzMyNWRkOWJlMTRfNzE1ZDYxMTRiYWUyYzkyMzM4MTJiYmNiZWJjMmRkMmFfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMDQyNTQzOjE3NTIxMjg5NDNfVjM)
+
+1.2.3.3 业务逻辑
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改初始密码，返回至登录页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功，然后返回至登录页面；
+
+1.2.4 修改密码
+
+1.2.4.1 业务流程
+
+用户成功登录账号；
+
+在我的页面选择修改密码进入修改密码页面；
+
+1.2.4.2 页面原型
+
+![image](https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzM5OWJmOTQyYmU3ZjdmMGQzODYwMDk5ZDhjMmM4Y2NfN2Q2MGNlYmExZDBjZGVhMTExY2FmODdkNjMxMGEzYTZfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMDQyNTQ0OjE3NTIxMjg5NDRfVjM)
+
+1.2.4.3 业务逻辑
+
+原密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+新密码输入框：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+确认密码：输入密码后显示密码明文查看按钮及清空按钮，鼠标按下明文查看按钮密码明文展示，鼠标松开后密文展示，点击清空按钮清空已输入密码；
+
+验证码：点击【获取验证码】按钮向登录账号绑定手机号发送6位随机数字验证码，验证码已发送后【获取验证码】按钮展示60秒倒计时，倒计时结束后恢复原状，验证码有效期为60秒；
+
+所有输入框获取焦点时提示文字消失且输入框边框变为绿色，失去焦点时恢复原状；
+
+【取消】按钮：点击【取消】按钮取消修改密码，返回至我的页面；
+
+【提交】按钮：点击【提交】按钮依次校验密码、验证码，若某一项校验出问题则在对应输入框下方红字提醒用户错误原因，全部校验通过则提示重置密码成功；
+
+
+2025-07-09 14:29:02,681 - main - INFO - 开始调用图谱生成测试用例
+2025-07-09 14:29:02,700 - langgraph_use2 - INFO - [Step 0] 识别图像并替换为文字描述（分批）
+2025-07-09 14:29:03,015 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWQxZjI4YzVhYTg4M2MwYWY3NzcyOGM0ZTc0Y2Q3YjdfODVkNWI5ODhlZGE2N2Q0ZTI3ZTFiNDYwZGVmZTljNTVfSUQ6NzUyNDkzMzk1NzAyMTIzNzI1Ml8xNzUyMDQyNTQyOjE3NTIxMjg5NDJfVjM "HTTP/1.1 200 OK"
+2025-07-09 14:29:04,064 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=M2NmM2EyYmY3MjRmZDhkYWJkYjM1MTg2ZWM2ZjZhODhfNDQ2ZGVmZGQ3NWE3YmRlNGNlOGViNzE2YzJmMDIzNDlfSUQ6NzUyNDkzMzk1Mzk3MjIyNDAwMl8xNzUyMDQyNTQyOjE3NTIxMjg5NDJfVjM "HTTP/1.1 200 OK"
+2025-07-09 14:29:04,350 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=MTRkYjk0ZGVlMTI0MzkyZTlkNDQyZWZiZmE4OTg4ODlfOGEwMzk1YTk1MjFjMDQ2OGQwNWMxYTRlNDY3MTg4NDVfSUQ6NzUyNDkzMzk1NTY1NDg3NzE4Nl8xNzUyMDQyNTQzOjE3NTIxMjg5NDNfVjM "HTTP/1.1 200 OK"
+2025-07-09 14:29:04,603 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=ZWYwNTFiNGUxN2E5MjFiYTE4NjNhYzMyNWRkOWJlMTRfNzE1ZDYxMTRiYWUyYzkyMzM4MTJiYmNiZWJjMmRkMmFfSUQ6NzUyNDkzMzk1MzM5NTAxNTcwOF8xNzUyMDQyNTQzOjE3NTIxMjg5NDNfVjM "HTTP/1.1 200 OK"
+2025-07-09 14:29:04,900 - httpx - INFO - HTTP Request: GET https://internal-api-drive-stream.feishu.cn/space/api/box/stream/download/authcode/?code=NzM5OWJmOTQyYmU3ZjdmMGQzODYwMDk5ZDhjMmM4Y2NfN2Q2MGNlYmExZDBjZGVhMTExY2FmODdkNjMxMGEzYTZfSUQ6NzUyNDkzMzk1NzE1OTM1NDM5Nl8xNzUyMDQyNTQ0OjE3NTIxMjg5NDRfVjM "HTTP/1.1 200 OK"
+2025-07-09 14:29:04,917 - langgraph_use2 - WARNING - 图片识别异常: call_model() got an unexpected keyword argument 'model'
+2025-07-09 14:29:04,918 - langgraph_use2 - WARNING - 图片识别异常: call_model() got an unexpected keyword argument 'model'
+2025-07-09 14:29:04,918 - langgraph_use2 - WARNING - 图片识别异常: call_model() got an unexpected keyword argument 'model'
+2025-07-09 14:29:04,918 - langgraph_use2 - WARNING - 图片识别异常: call_model() got an unexpected keyword argument 'model'
+2025-07-09 14:29:04,918 - langgraph_use2 - WARNING - 图片识别异常: call_model() got an unexpected keyword argument 'model'
+2025-07-09 14:29:04,918 - langgraph_use2 - INFO - [Step 0] 图像处理完成（分批）
+2025-07-09 14:29:04,923 - langgraph_use2 - INFO - [Step 1] 尝试直接从 PRD 文本提取标题
+2025-07-09 14:29:04,923 - langgraph_use2 - INFO - [Step 1] 提取标题成功: B端产品登录功能需求文档范文
+2025-07-09 14:29:04,924 - langgraph_use2 - INFO - [Step 2] 提取测试点
+2025-07-09 14:29:06,936 - uvicorn.error - INFO - Shutting down
+2025-07-09 14:29:07,045 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

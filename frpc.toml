@@ -1,0 +1,9 @@
+serverAddr = "124.222.154.177"
+serverPort = 7007
+
+[[proxies]]
+name = "genarate-tcp"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8080    # 只需修改本地端口
+remotePort = 7000

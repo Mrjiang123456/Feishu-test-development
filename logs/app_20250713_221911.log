@@ -1,0 +1,24 @@
+2025-07-13 22:19:11,805 - __main__ - INFO - ==================================================
+2025-07-13 22:19:11,805 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 22:19:11,805 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_221911.log
+2025-07-13 22:19:11,805 - __main__ - INFO - ==================================================
+2025-07-13 22:19:11,813 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-13 22:19:11,890 - __main__ - INFO - frpc 启动成功
+2025-07-13 22:19:11,969 - main - INFO - ==================================================
+2025-07-13 22:19:11,970 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-13 22:19:11,970 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250713_221911.log
+2025-07-13 22:19:11,970 - main - INFO - ==================================================
+2025-07-13 22:19:11,974 - uvicorn.error - INFO - Started server process [5768]
+2025-07-13 22:19:11,975 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-13 22:19:11,975 - uvicorn.error - INFO - Application startup complete.
+2025-07-13 22:19:11,976 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-13 22:19:21,526 - main - INFO - 没有提供飞书文档ID和token，跳过文档获取步骤
+2025-07-13 22:19:21,526 - main - INFO - 调用图谱重新生成测试用例
+2025-07-13 22:19:21,564 - regenerate - INFO - [Step 1] 开始处理图像内容
+2025-07-13 22:19:21,565 - regenerate - INFO - [Step 1] 未检测到图片，跳过此步骤
+2025-07-13 22:19:21,565 - regenerate - INFO - [Step 2] 尝试直接从 PRD 文本提取标题
+2025-07-13 22:19:21,565 - regenerate - INFO - [Step 2] 未提取成功，调用模型
+2025-07-13 22:19:37,924 - httpx - INFO - HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 22:19:37,928 - regenerate - INFO - [重新生成 Step 3] 根据评测报告和反馈生成新的测试点
+2025-07-13 22:19:42,026 - uvicorn.error - INFO - Shutting down
+2025-07-13 22:19:42,135 - uvicorn.error - INFO - Waiting for background tasks to complete. (CTRL+C to force quit)

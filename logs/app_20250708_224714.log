@@ -1,0 +1,50 @@
+2025-07-08 22:47:14,317 - __main__ - INFO - ==================================================
+2025-07-08 22:47:14,317 - __main__ - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-08 22:47:14,317 - __main__ - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250708_224714.log
+2025-07-08 22:47:14,317 - __main__ - INFO - ==================================================
+2025-07-08 22:47:14,320 - __main__ - INFO - 启动 frpc: D:\pythonProject\generateTestCases\frpc.exe -c D:\pythonProject\generateTestCases\frpc.toml
+2025-07-08 22:47:14,366 - __main__ - INFO - frpc 启动成功
+2025-07-08 22:47:14,426 - main - INFO - ==================================================
+2025-07-08 22:47:14,426 - main - INFO - 应用程序启动 - 日志系统初始化完成
+2025-07-08 22:47:14,426 - main - INFO - 日志文件路径: D:\pythonProject\generateTestCases\logs\app_20250708_224714.log
+2025-07-08 22:47:14,426 - main - INFO - ==================================================
+2025-07-08 22:47:14,429 - uvicorn.error - INFO - Started server process [21844]
+2025-07-08 22:47:14,429 - uvicorn.error - INFO - Waiting for application startup.
+2025-07-08 22:47:14,429 - uvicorn.error - INFO - Application startup complete.
+2025-07-08 22:47:14,430 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+2025-07-08 22:47:17,637 - main - INFO - 收到飞书请求，document_id=KExEdM3URoe4JdxRyU6cduwHnZd
+2025-07-08 22:47:17,867 - httpx - INFO - HTTP Request: GET https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100 "HTTP/1.1 401 Unauthorized"
+2025-07-08 22:47:17,867 - feishu_api - ERROR - 飞书文档块接口返回状态错误: 401
+2025-07-08 22:47:17,868 - feishu_api - ERROR - 获取飞书文档块失败: 飞书文档块接口错误，状态码401
+2025-07-08 22:47:17,868 - main - ERROR - 生成测试用例失败
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 66, in fetch_all_blocks
+    resp.raise_for_status()
+  File "D:\pythonProject\venv\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://open.feishu.cn/open-apis/docx/v1/documents/KExEdM3URoe4JdxRyU6cduwHnZd/blocks?limit=100'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 206, in get_feishu_doc_content
+    blocks = await fetch_all_blocks(document_id, user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 73, in fetch_all_blocks
+    raise RuntimeError(f"飞书文档块接口错误，状态码{e.response.status_code}")
+RuntimeError: 飞书文档块接口错误，状态码401
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\pythonProject\generateTestCases\main.py", line 136, in generate_testcases_api
+    result = await get_feishu_doc_content(request_data.document_id, request_data.user_access_token)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\pythonProject\generateTestCases\feishu_api.py", line 209, in get_feishu_doc_content
+    raise RuntimeError("获取飞书文档内容失败")
+RuntimeError: 获取飞书文档内容失败
+2025-07-08 22:47:43,851 - uvicorn.error - INFO - Shutting down
+2025-07-08 22:47:43,960 - uvicorn.error - INFO - Waiting for application shutdown.
+2025-07-08 22:47:43,960 - uvicorn.error - INFO - Application shutdown complete.
+2025-07-08 22:47:43,960 - uvicorn.error - INFO - Finished server process [21844]
