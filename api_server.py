@@ -26,17 +26,18 @@ try:
         golden_test_cases: Optional[str] = None  # 黄金标准测试用例，JSON字符串，可选
         model_name: str = MODEL_NAME  # 可选，使用的模型名称
         save_results: bool = True  # 可选，是否保存结果文件
+        is_iteration: bool = False  # 可选，是否启用迭代前后对比功能
+        prev_iteration: Optional[str] = None  # 可选，上一次迭代的测试用例，JSON字符串
 
         # 添加model_config配置，禁用保护命名空间检查
         model_config = {
             "protected_namespaces": ()
         }
-
-
+    
     # 定义保存黄金标准测试用例的请求模型
     class SaveGoldenCasesRequest(BaseModel):
         golden_test_cases: str  # 黄金标准测试用例，JSON字符串
-
+        
         # 添加model_config配置，禁用保护命名空间检查
         model_config = {
             "protected_namespaces": ()
@@ -50,6 +51,7 @@ try:
         error: str = None
         evaluation_result: dict = None
         report: str = None
+        report_iteration: str = None
         files: dict = None
 
 
@@ -73,7 +75,7 @@ try:
     templates_dir = os.path.join(os.path.dirname(__file__), "templates")
     os.makedirs(templates_dir, exist_ok=True)
     templates = Jinja2Templates(directory=templates_dir)
-
+    
     static_dir = os.path.join(os.path.dirname(__file__), "static")
     os.makedirs(static_dir, exist_ok=True)
     app.mount("/static", StaticFiles(directory=static_dir), name="static")
@@ -138,8 +140,8 @@ try:
         """
         log("访问主页")
         return templates.TemplateResponse("index.html", {"request": request})
-
-
+    
+    
     @app.get("/golden-cases", response_class=HTMLResponse)
     async def get_golden_cases_page(request: Request):
         """
@@ -153,13 +155,13 @@ try:
     async def save_golden_cases(request: SaveGoldenCasesRequest):
         """
         保存黄金标准测试用例
-
+        
         :param request: 包含黄金标准测试用例的请求
         :return: 保存结果
         """
         request_id = f"save-golden-{str(uuid.uuid4())[:8]}-{int(time.time() * 1000)}"
         log(f"接收到保存黄金标准测试用例请求: {request_id}", important=True)
-
+        
         try:
             # 验证JSON格式
             try:
@@ -180,14 +182,14 @@ try:
                         "error": f"黄金标准测试用例JSON格式无效: {str(e)}"
                     }
                 )
-
+            
             # 确保goldenset目录存在
             goldenset_dir = "goldenset"
             os.makedirs(goldenset_dir, exist_ok=True)
-
+            
             # 保存到文件
             golden_file_path = os.path.join(goldenset_dir, "golden_cases.json")
-
+            
             # 如果已有文件，备份旧文件
             if os.path.exists(golden_file_path):
                 backup_path = os.path.join(goldenset_dir, f"golden_cases_backup_{int(time.time())}.json")
@@ -196,13 +198,13 @@ try:
                     log(f"已将旧的黄金标准测试用例备份至 {backup_path}")
                 except Exception as e:
                     log_error(f"备份旧的黄金标准测试用例失败: {str(e)}")
-
+            
             # 保存新的黄金标准测试用例
             with open(golden_file_path, "w", encoding="utf-8") as f:
                 f.write(golden_cases_data)
-
+            
             log(f"黄金标准测试用例已保存至 {golden_file_path}", important=True)
-
+            
             return JSONResponse(
                 content={
                     "success": True,
@@ -210,7 +212,7 @@ try:
                     "file_path": golden_file_path
                 }
             )
-
+            
         except Exception as e:
             error_info = {
                 "request_id": request_id,
@@ -237,11 +239,12 @@ try:
         :return: 评测结果
         """
         # 生成唯一请求ID
-        request_id = f"task-{str(uuid.uuid4())[:8]}-{int(time.time() * 1000)}"
+        request_id = f"task-{str(uuid.uuid4())}-{int(time.time() * 1000)}"
         log(f"接收到评测测试用例请求: {request_id}", important=True)
 
         # 确保清除缓存，让每个请求都是全新的评测
         clear_cache()
+        log("已清除缓存，确保本次评测是全新的", important=True)
 
         try:
             # 更新全局变量
@@ -304,7 +307,7 @@ try:
                 # 尝试解析JSON，确保数据有效
                 if not request.ai_test_cases:
                     raise ValueError("AI测试用例数据为空")
-
+                
                 # 检查是否是已经转义的JSON字符串
                 ai_test_cases = request.ai_test_cases
                 try:
@@ -349,7 +352,7 @@ try:
                             log_error(f"特殊处理JSON字符串失败: {str(special_e)}")
                             # 回退到原始字符串
                             ai_test_cases = request.ai_test_cases
-
+                        
             except json.JSONDecodeError as e:
                 error_info = {
                     "request_id": request_id,
@@ -381,21 +384,52 @@ try:
 
             # 直接执行评测任务
             log(f"开始执行评测任务: {request_id}")
-            result = await async_main(ai_test_cases, golden_test_cases)
+            
+            # 记录是否启用迭代对比
+            if request.is_iteration:
+                if request.prev_iteration:
+                    log(f"启用迭代前后对比功能，比较当前测试用例与上一次迭代", important=True)
+                else:
+                    log(f"请求启用迭代对比但未提供上一次迭代数据，迭代对比功能将被禁用", level="WARNING")
+            
+            result = await async_main(
+                ai_test_cases, 
+                golden_test_cases, 
+                is_iteration=request.is_iteration, 
+                prev_iteration_data=request.prev_iteration
+            )
 
             if result and result.get("success", False):
                 log(f"评测任务 {request_id} 完成")
-                return JSONResponse(
-                    content={
-                        "success": True,
-                        "message": "测试用例评测完成",
-                        "evaluation_result": result["evaluation_result"],
-                        "report": result["markdown_report"],
-                        "files": result["files"],
-                        "finish_task": True,
-                        "request_id": request_id
-                    }
-                )
+                response_content = {
+                    "success": True,
+                    "message": "测试用例评测完成",
+                    "evaluation_result": result["evaluation_result"],
+                    "files": result["files"],
+                    "finish_task": True,
+                    "request_id": request_id
+                }
+                
+                # 标准报告
+                if "report" in result:
+                    response_content["report"] = result["report"]
+                    log(f"添加标准报告到API响应，长度: {len(result['report'])}", important=True)
+                elif "markdown_report" in result:
+                    response_content["report"] = result["markdown_report"]
+                    log(f"添加标准报告(markdown_report)到API响应，长度: {len(result['markdown_report'])}", important=True)
+                
+                # 迭代简洁报告，只有在迭代模式下才返回
+                if request.is_iteration and "report_iteration" in result:
+                    response_content["report_iteration"] = result["report_iteration"]
+                    log(f"添加迭代报告到API响应，长度: {len(result['report_iteration'])}", important=True)
+                elif request.is_iteration:
+                    log("警告: 迭代模式启用但结果中没有report_iteration字段", level="WARNING")
+                    log(f"结果中可用的字段: {', '.join(result.keys())}", important=True)
+                
+                # 打印响应内容中包含的字段
+                log(f"最终API响应包含以下字段: {', '.join(response_content.keys())}", important=True)
+                
+                return JSONResponse(content=response_content)
             else:
                 error_msg = result.get("error", "未知错误")
                 error_type = result.get("error_type", "unknown")
@@ -560,16 +594,8 @@ try:
 
     @app.post("/evaluate-from-json")
     async def evaluate_from_json(request: TestCaseComparisonRequest):
-        """
-        从JSON数据评测测试用例（与/compare-test-cases相同）
-
-        :param request: 请求数据，包含AI测试用例和黄金标准测试用例
-        :return: 评测结果
-        """
-        # 确保清除缓存，让每次请求都是全新的评测
-        clear_cache()
-
-        # 直接调用compare_test_cases_api
+        """处理JSON数据的评估请求"""
+        # 复用比较测试用例的API，避免代码重复
         return await compare_test_cases_api(request)
 
 
