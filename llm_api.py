@@ -6,15 +6,62 @@ import traceback
 import re
 import uuid
 import threading
-from typing import Optional, Dict
-from config import API_URL, VOLC_BEARER_TOKEN, MODEL_NAME, MAX_TOKEN_SIZE, LLM_CACHE_SIZE, LLM_TEMPERATURE
+from typing import Optional, Dict, List
+from config import API_URL, VOLC_BEARER_TOKEN, MODEL_NAME, MAX_TOKEN_SIZE, LLM_CACHE_SIZE, LLM_TEMPERATURE, LLM_CACHE_ENABLED, AIOHTTP_TIMEOUT
 from logger import log, log_error
 from functools import lru_cache
 import hashlib
+import itertools
+import os
+import pickle
+from typing import Dict, List, Optional
+import atexit
+
+
+# 全局变量，用于存储缓存
+LLM_CACHE = {}
+LRU_QUEUE = []
+MAX_CACHE_SIZE = LLM_CACHE_SIZE  # 使用配置文件中的缓存大小
+CACHE_FILE = "cache/llm_cache.pkl"
+
+# 确保缓存目录存在
+os.makedirs("cache", exist_ok=True)
+
+# 加载持久化缓存
+def load_cache():
+    global LLM_CACHE
+    if os.path.exists(CACHE_FILE):
+        try:
+            with open(CACHE_FILE, 'rb') as f:
+                cached_data = pickle.load(f)
+                LLM_CACHE = cached_data
+                # 移除启动时的日志打印，避免多次显示
+                return True
+        except Exception as e:
+            log_error(f"加载缓存失败: {str(e)}")
+    return False
+
+# 保存持久化缓存
+def save_cache():
+    if LLM_CACHE:
+        try:
+            with open(CACHE_FILE, 'wb') as f:
+                pickle.dump(LLM_CACHE, f)
+            log(f"已保存{len(LLM_CACHE)}个缓存项", important=True)
+            return True
+        except Exception as e:
+            log_error(f"保存缓存失败: {str(e)}")
+    return False
+
+# 尝试加载缓存
+load_cache()
+
+# 在程序退出时保存缓存
+atexit.register(save_cache)
 
 
 # 简单的LRU缓存装饰器，用于缓存计算过的哈希值
-@lru_cache(maxsize=128)
+@lru_cache(maxsize=LLM_CACHE_SIZE)
 def _compute_hash(text):
     """计算文本的哈希值，用于缓存键"""
     return hashlib.md5(text.encode('utf-8')).hexdigest()
@@ -23,26 +70,25 @@ def _compute_hash(text):
 # 缓存字典，存储API调用结果
 _api_cache = {}
 _MAX_CACHE_SIZE = LLM_CACHE_SIZE  # 从配置中读取缓存大小
-_CACHE_ENABLED = False  # 默认禁用缓存，避免评测结果复用
+_CACHE_ENABLED = LLM_CACHE_ENABLED  # 从配置中读取缓存启用状态
 _cache_lock = threading.Lock()  # 添加线程锁，确保线程安全
 
 
 # 优化缓存更新函数
 def _update_cache(key, value):
     """更新API缓存，如果缓存过大则移除最旧的项目"""
-    if not _CACHE_ENABLED:
+    if not LLM_CACHE_ENABLED:
         return  # 如果缓存被禁用，不执行缓存操作
 
     with _cache_lock:  # 使用线程锁确保线程安全
         _api_cache[key] = value
         # 如果缓存超过最大大小，移除最旧的条目
         if len(_api_cache) > _MAX_CACHE_SIZE:
-            # 批量移除20%的旧缓存项，减少频繁清理
-            items_to_remove = int(_MAX_CACHE_SIZE * 0.2)
-            for _ in range(items_to_remove):
-                if _api_cache:
-                    oldest_key = next(iter(_api_cache))
-                    _api_cache.pop(oldest_key, None)
+            # 批量移除25%的旧缓存项，减少频繁清理
+            items_to_remove = int(_MAX_CACHE_SIZE * 0.25)
+            oldest_keys = list(itertools.islice(_api_cache.keys(), items_to_remove))
+            for old_key in oldest_keys:
+                _api_cache.pop(old_key, None)
 
 
 def clear_cache():
@@ -95,7 +141,7 @@ async def async_call_llm(
         retries: int = 3,
         temperature: float = None,
         model_name: str = None,
-        use_cache: bool = False  # 添加参数控制是否使用缓存
+        use_cache: bool = True  # 默认启用缓存
 ) -> Optional[Dict]:
     """
     异步调用LLM API
@@ -118,20 +164,20 @@ async def async_call_llm(
         model_name = MODEL_NAME
 
     # 为每个请求生成唯一的请求ID，确保不同请求不会使用相同的缓存
-    request_id = str(uuid.uuid4())[:8]  # 生成随机请求ID
-    timestamp = str(int(time.time()))
+    request_id = str(uuid.uuid4())  # 使用完整的UUID，增加唯一性
+    timestamp = str(int(time.time() * 1000))  # 毫秒级时间戳
 
-    # 构建唯一的缓存键，即使启用了缓存，也会包含时间戳和请求ID以确保每次评测的唯一性
-    cache_key = _compute_hash(f"{prompt}|{system_prompt}|{model_name}|{temperature}|{timestamp}|{request_id}")
-
+    # 构建唯一的缓存键，包含时间戳和请求ID以确保每次评测的唯一性
+    cache_key = _compute_hash(f"{prompt}|{system_prompt}|{model_name}|{temperature}|{request_id}|{timestamp}")
+    
     # 只有在显式启用缓存且缓存中存在时才使用缓存
-    if use_cache and _CACHE_ENABLED:
+    if use_cache and LLM_CACHE_ENABLED:
         with _cache_lock:
-            if cache_key in _api_cache:
+            if cache_key in LLM_CACHE:
                 log(f"从缓存返回LLM响应，prompt长度={len(prompt)}, 模型={model_name}", model_name=model_name)
-                return _api_cache[cache_key]
+                return LLM_CACHE[cache_key]
 
-    log(f"调用LLM: prompt长度={len(prompt)}, temperature={temperature}, 模型={model_name}", model_name=model_name)
+    log(f"调用LLM: prompt长度={len(prompt)}, temperature={temperature}, 模型={model_name}, 请求ID={request_id}", model_name=model_name)
 
     if not VOLC_BEARER_TOKEN:
         log_error("VOLC_BEARER_TOKEN未设置", model_name=model_name)
@@ -175,7 +221,7 @@ async def async_call_llm(
                     API_URL,
                     headers=headers,
                     json=payload,
-                    timeout=360,  # 增加超时时间
+                    timeout=AIOHTTP_TIMEOUT,  # 增加超时时间
                     ssl=False  # 禁用SSL验证可加速连接建立
             ) as response:
                 if response.status != 200:
@@ -252,10 +298,26 @@ async def async_call_llm(
                             log_error(f"API返回的content为空, 模型: {model_name}", {"response_json": response_json},
                                       model_name=model_name)
                             if attempt < retries - 1:
-                                await asyncio.sleep(1 * (attempt + 1))
+                                # 增加随机延迟，避免潜在的节流问题
+                                import random
+                                wait_time = (2 * (attempt + 1)) + random.uniform(0.5, 2.0)
+                                log(f"遇到空内容响应，等待{wait_time:.1f}秒后添加随机参数重试", level="WARNING", model_name=model_name)
+
+                                # 添加随机参数到请求中，避免可能的缓存问题
+                                random_suffix = f"_r{random.randint(1000, 9999)}"
+                                if "user" in payload["messages"][-1]["content"]:
+                                    payload["messages"][-1]["content"] += f"\n\n{random_suffix}"
+
+                                # 添加强制不使用缓存的请求头
+                                headers["Cache-Control"] = "no-cache, no-store"
+                                headers["X-Request-ID"] = f"{request_id}_{attempt+1}"  # 更新请求ID
+
+                                await asyncio.sleep(wait_time)
                                 continue
                             else:
-                                return {"text": "API返回空内容"}
+                                # 达到最大重试次数，返回一个简单的错误对象
+                                log(f"达到最大重试次数({retries})，API仍返回空内容", level="ERROR", model_name=model_name)
+                                return {"error": "API返回空内容，请稍后重试", "status": "content_empty"}
 
                         # 从Markdown代码块提取JSON
                         if "```json" in content:
@@ -266,8 +328,8 @@ async def async_call_llm(
                                 model_name=model_name)
                             result = {"text": content}
                             # 缓存结果（如果启用）
-                            if use_cache and _CACHE_ENABLED:
-                                _update_cache(cache_key, result)
+                            if use_cache and LLM_CACHE_ENABLED:
+                                LLM_CACHE[cache_key] = result
                             return result
                         elif "```" in content:
                             # 提取代码块内容
@@ -279,8 +341,8 @@ async def async_call_llm(
                                     model_name=model_name)
                                 result = {"text": content}
                                 # 缓存结果（如果启用）
-                                if use_cache and _CACHE_ENABLED:
-                                    _update_cache(cache_key, result)
+                                if use_cache and LLM_CACHE_ENABLED:
+                                    LLM_CACHE[cache_key] = result
                                 return result
                             json_content = code_block_content
                         else:
@@ -307,14 +369,30 @@ async def async_call_llm(
                             is_markdown = True
                             log(f"检测到内容包含mermaid图表，识别为Markdown格式, 模型: {model_name}", level="WARNING",
                                 model_name=model_name)
+                        # 检查内容是否是空白或几乎为空的Markdown（只有标题或很少内容）
+                        elif len(json_content.strip()) < 100 and json_content.strip().startswith("#"):
+                            is_markdown = True
+                            log(f"检测到几乎为空的Markdown内容，内容长度: {len(json_content.strip())}字符, 模型: {model_name}", level="WARNING",
+                                model_name=model_name)
+                        # 如果内容非常短且不像JSON，也当作Markdown处理
+                        elif len(json_content.strip()) < 50 and not (json_content.strip().startswith("{") or json_content.strip().startswith("[")):
+                            is_markdown = True
+                            log(f"内容非常短且不像JSON，当作Markdown处理，内容长度: {len(json_content.strip())}字符, 模型: {model_name}", level="WARNING",
+                                model_name=model_name)
 
                         if is_markdown:
                             log(f"检测到内容是Markdown格式，不尝试解析为JSON, 模型: {model_name}", level="WARNING",
                                 model_name=model_name)
-                            result = {"text": json_content.strip()}
+                            # 如果Markdown内容为空或内容太少，添加警告信息
+                            markdown_content = json_content.strip()
+                            if len(markdown_content) < 10:
+                                log_error(f"Markdown内容几乎为空，长度: {len(markdown_content)}字符, 模型: {model_name}", level="ERROR")
+                                markdown_content += "\n\n> **警告**: 生成的内容几乎为空，可能需要重新生成。"
+                            
+                            result = {"text": markdown_content}
                             # 缓存结果（如果启用）
-                            if use_cache and _CACHE_ENABLED:
-                                _update_cache(cache_key, result)
+                            if use_cache and LLM_CACHE_ENABLED:
+                                LLM_CACHE[cache_key] = result
                             return result
 
                         # 尝试解析为JSON
@@ -323,8 +401,8 @@ async def async_call_llm(
                                 # 尝试直接解析完整的JSON
                                 parsed_json = json.loads(json_content)
                                 # 缓存结果（如果启用）
-                                if use_cache and _CACHE_ENABLED:
-                                    _update_cache(cache_key, parsed_json)
+                                if use_cache and LLM_CACHE_ENABLED:
+                                    LLM_CACHE[cache_key] = parsed_json
                                 return parsed_json
                             except json.JSONDecodeError as e:
                                 # 记录原始错误
@@ -345,8 +423,8 @@ async def async_call_llm(
                                     log(f"通过替换单引号成功解析JSON, 模型: {model_name}", level="WARNING",
                                         model_name=model_name)
                                     # 缓存结果（如果启用）
-                                    if use_cache and _CACHE_ENABLED:
-                                        _update_cache(cache_key, parsed_json)
+                                    if use_cache and LLM_CACHE_ENABLED:
+                                        LLM_CACHE[cache_key] = parsed_json
                                     return parsed_json
                                 except json.JSONDecodeError:
                                     log("替换单引号失败，尝试其他修复方法", level="WARNING", model_name=model_name)
@@ -360,8 +438,8 @@ async def async_call_llm(
                                         log(f"通过提取JSON对象成功解析, 模型: {model_name}", level="WARNING",
                                             model_name=model_name)
                                         # 缓存结果（如果启用）
-                                        if use_cache and _CACHE_ENABLED:
-                                            _update_cache(cache_key, parsed_json)
+                                        if use_cache and LLM_CACHE_ENABLED:
+                                            LLM_CACHE[cache_key] = parsed_json
                                         return parsed_json
                                 except (json.JSONDecodeError, re.error):
                                     log("提取JSON对象失败，尝试其他修复方法", level="WARNING", model_name=model_name)
@@ -372,8 +450,8 @@ async def async_call_llm(
                                     log(f"通过提取有效JSON部分成功解析, 模型: {model_name}", level="WARNING",
                                         model_name=model_name)
                                     # 缓存结果（如果启用）
-                                    if use_cache and _CACHE_ENABLED:
-                                        _update_cache(cache_key, extracted_json)
+                                    if use_cache and LLM_CACHE_ENABLED:
+                                        LLM_CACHE[cache_key] = extracted_json
                                     return extracted_json
 
                                 # 4. 处理"Extra data"错误 - 尝试只使用第一个有效的JSON对象
@@ -386,8 +464,8 @@ async def async_call_llm(
                                         log(f"通过截取到错误位置成功解析JSON, 模型: {model_name}", level="WARNING",
                                             model_name=model_name)
                                         # 缓存结果（如果启用）
-                                        if use_cache and _CACHE_ENABLED:
-                                            _update_cache(cache_key, parsed_json)
+                                        if use_cache and LLM_CACHE_ENABLED:
+                                            LLM_CACHE[cache_key] = parsed_json
                                         return parsed_json
                                     except (json.JSONDecodeError, AttributeError):
                                         log("截取到错误位置失败，尝试其他方法", level="WARNING", model_name=model_name)
@@ -403,8 +481,8 @@ async def async_call_llm(
                                         level="WARNING", model_name=model_name)
                                     result = {"text": json_content}
                                     # 缓存结果（如果启用）
-                                    if use_cache and _CACHE_ENABLED:
-                                        _update_cache(cache_key, result)
+                                    if use_cache and LLM_CACHE_ENABLED:
+                                        LLM_CACHE[cache_key] = result
                                     return result
 
                                 log_error(f"所有JSON解析方法均失败，返回原始文本, 模型: {model_name}",
@@ -412,16 +490,16 @@ async def async_call_llm(
                                 # 如果不是有效的JSON，直接返回文本内容
                                 result = {"text": content}
                                 # 缓存结果（如果启用）
-                                if use_cache and _CACHE_ENABLED:
-                                    _update_cache(cache_key, result)
+                                if use_cache and LLM_CACHE_ENABLED:
+                                    LLM_CACHE[cache_key] = result
                                 return result
                         else:
                             log_error(f"提取的JSON内容为空, 模型: {model_name}", {"original_content": content[:200]},
                                       model_name=model_name)
                             result = {"text": content}
                             # 缓存结果（如果启用）
-                            if use_cache and _CACHE_ENABLED:
-                                _update_cache(cache_key, result)
+                            if use_cache and LLM_CACHE_ENABLED:
+                                LLM_CACHE[cache_key] = result
                             return result
 
                     except (KeyError, IndexError) as e:
