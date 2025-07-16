@@ -174,14 +174,22 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
                 log(f"警告：跳过非字典格式的测试用例 {case}")
                 continue
 
-            # 确保case_id字段
-            case_id = case.get("case_id", "")
-            if not case_id:
-                case_id = case.get("id", "")
-                if not case_id:
-                    case_id = f"TC-FUNC-{i + 1:03d}"
-            if not case_id.startswith("TC-") and not case_id.startswith("FUNC-"):
-                case_id = f"FUNC-SCEN-{i + 1:03d}"
+            # 获取原始case_id，并保存为original_case_id
+            original_case_id = case.get("case_id", "")
+            
+            # 为没有case_id的情况生成一个备用case_id
+            if not original_case_id:
+                original_case_id = case.get("id", "")
+                if not original_case_id:
+                    original_case_id = f"TC-FUNC-{i + 1:03d}"
+            
+            # 保存原始的case_id，无论其格式如何
+            case_id = original_case_id
+            
+            # 生成格式化的case_id作为备用，但不替换原始case_id
+            formatted_case_id = case_id
+            if not formatted_case_id.startswith("TC-") and not formatted_case_id.startswith("FUNC-"):
+                formatted_case_id = f"FUNC-SCEN-{i + 1:03d}"
 
             # 确保title字段
             title_candidates = ["title", "标题", "测试标题", "test_title", "name", "测试名称"]
@@ -251,7 +259,8 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
 
             # 构建格式化后的测试用例
             formatted_case = {
-                "case_id": case_id,
+                "case_id": case_id,  # 使用原始case_id
+                "formatted_case_id": formatted_case_id,  # 保存格式化后的case_id作为备用
                 "title": title,
                 "preconditions": preconditions,
                 "steps": [str(step).strip() for step in steps if step],
@@ -291,4 +300,4 @@ async def format_test_cases(session: aiohttp.ClientSession, file_content, file_t
         log(f"格式化{file_type}测试用例时发生错误: {e}", important=True)
         import traceback
         log(f"错误详情: {traceback.format_exc()}")
-        return None 
+        return None
