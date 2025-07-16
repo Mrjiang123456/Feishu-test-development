@@ -12,10 +12,10 @@ step_times = {}
 ERROR_LOG_FILE = "log/error_log.txt"  # 错误日志专用文件
 
 # 日志缓冲区
-_log_buffer = queue.Queue(maxsize=100)  # 限制缓冲区大小
-_error_log_buffer = queue.Queue(maxsize=20)  # 错误日志缓冲区大小更小，更快写入
+_log_buffer = queue.Queue(maxsize=200)  # 增加缓冲区大小
+_error_log_buffer = queue.Queue(maxsize=40)  # 增加错误日志缓冲区大小
 _log_writer_thread = None
-_log_write_interval = 1.0  # 日志写入间隔（秒）
+_log_write_interval = 0.5  # 减少日志写入间隔（秒）
 _log_buffer_lock = threading.Lock()
 _shutdown_flag = False
 
@@ -63,11 +63,14 @@ def _log_writer_worker():
             # 如果没有日志要处理，等待一段时间
             if not normal_logs and not error_logs:
                 time.sleep(_log_write_interval)
+            else:
+                # 有日志处理完成后短暂等待，减少CPU占用
+                time.sleep(0.01)
 
         except Exception as e:
             print(f"日志写入工作线程出错: {e}")
             # 短暂休眠，避免出错时CPU占用过高
-            time.sleep(0.5)
+            time.sleep(0.2)
 
 
 def _ensure_log_writer():
