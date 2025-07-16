@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金标准测试用例 - 测试平台</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-vial me-2"></i>测试用例评测平台
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-file-alt me-1"></i> Markdown评估报告</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/test-cases"><i class="fas fa-tasks me-1"></i> 测试用例生成与评估</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/golden-cases"><i class="fas fa-trophy me-1"></i> 黄金标准测试用例</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-trophy text-warning fa-2x me-2"></i>
+                    <h2 class="card-title mb-0">黄金标准测试用例管理</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    黄金标准测试用例是评估AI生成测试用例质量的基准。您可以在此输入或上传黄金标准测试用例。
+                </div>
+                
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="input-tab" data-bs-toggle="tab" data-bs-target="#input-pane" type="button" role="tab" aria-selected="true">
+                            <i class="fas fa-edit me-1"></i> 手动输入
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-pane" type="button" role="tab" aria-selected="false">
+                            <i class="fas fa-upload me-1"></i> 文件上传
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="myTabContent">
+                    <!-- 手动输入标签页 -->
+                    <div class="tab-pane fade show active" id="input-pane" role="tabpanel">
+                        <div class="mb-3">
+                            <label for="golden-cases" class="form-label fw-bold">黄金标准测试用例 (JSON格式):</label>
+                            <textarea id="golden-cases" class="form-control code-editor" rows="12" placeholder="请输入JSON格式的黄金标准测试用例"></textarea>
+                            <div class="form-text">请确保输入的是有效的JSON格式</div>
+                        </div>
+                        <button id="save-golden-btn" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> 保存黄金标准测试用例
+                        </button>
+                    </div>
+                    
+                    <!-- 文件上传标签页 -->
+                    <div class="tab-pane fade" id="upload-pane" role="tabpanel">
+                        <div class="mb-3">
+                            <label for="golden-file" class="form-label fw-bold">选择JSON文件:</label>
+                            <input type="file" id="golden-file" class="form-control" accept=".json">
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button id="upload-golden-btn" class="btn btn-success">
+                                <i class="fas fa-file-upload me-1"></i> 上传文件
+                            </button>
+                            <span id="file-name" class="ms-3 text-muted"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 最近保存的黄金标准 -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-history text-secondary me-2"></i>
+                    <h5 class="card-title mb-0">最近保存的黄金标准</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="recent-golden-cases" class="text-muted">
+                    <p class="text-center">暂无最近保存的黄金标准测试用例</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提示消息 -->
+        <div id="status-message" class="alert alert-dismissible fade" role="alert" style="display:none;">
+            <span id="status-text"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- 加载指示器 -->
+        <div id="loading" class="text-center py-4" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">正在处理...</span>
+            </div>
+            <p class="mt-2">正在处理，请稍候...</p>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-5 bg-gradient">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="footer-brand d-flex align-items-center mb-3">
+                        <i class="fas fa-vial text-primary fa-2x me-2"></i>
+                        <h5 class="m-0 text-light fw-bold">测试用例评测平台</h5>
+                    </div>
+                    <p class="text-muted mb-3">专业的AI测试用例质量评估工具，帮助您对比生成与标准测试用例，提升软件测试质量。</p>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle" title="微信" aria-label="微信">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle" title="QQ" aria-label="QQ">
+                            <i class="fab fa-qq"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-light rounded-circle" title="GitHub" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-4 mb-md-0">
+                    <h6 class="text-light mb-3 border-start border-primary border-4 ps-3">快速链接</h6>
+                    <ul class="nav flex-column gap-2">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link text-muted ps-1 footer-link">
+                                <i class="fas fa-file-alt me-2"></i>评估报告
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/test-cases" class="nav-link text-muted ps-1 footer-link">
+                                <i class="fas fa-tasks me-2"></i>测试用例生成
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/golden-cases" class="nav-link text-muted ps-1 footer-link">
+                                <i class="fas fa-trophy me-2"></i>黄金标准管理
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <h6 class="text-light mb-3 border-start border-primary border-4 ps-3">联系我们</h6>
+                    <ul class="list-unstyled text-muted mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            <a href="mailto:support@testcase-eval.com" class="text-decoration-none text-muted footer-link">13422966424@163.com</a>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone-alt me-2"></i>
+                            <a href="tel:+8610XXXXXXXX" class="text-decoration-none text-muted footer-link">+86 13422966424</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span>北京市海淀区中关村科技园</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 border-secondary">
+            <div class="d-flex flex-wrap justify-content-between align-items-center pt-3">
+                <p class="mb-0 text-muted small">© 2025 测试用例评测平台 | 版本 1.0 | 保留所有权利</p>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-muted small px-2">隐私政策</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-muted small px-2">服务条款</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-muted small px-2">帮助中心</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5 Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 自定义脚本 -->
+    <script>
+        // 显示文件名
+        document.getElementById('golden-file').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || '';
+            document.getElementById('file-name').textContent = fileName;
+        });
+        
+        // 处理保存黄金标准测试用例
+        document.getElementById('save-golden-btn').addEventListener('click', async function() {
+            const goldenCases = document.getElementById('golden-cases').value;
+            
+            if (!goldenCases) {
+                showStatusMessage('请输入黄金标准测试用例', 'danger');
+                return;
+            }
+            
+            // 验证JSON格式
+            try {
+                JSON.parse(goldenCases);
+            } catch (e) {
+                showStatusMessage('JSON格式错误: ' + e.message, 'danger');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/save-golden-cases', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ golden_test_cases: goldenCases })
+                });
+                
+                const result = await response.json();
+                showLoading(false);
+                
+                if (result.success) {
+                    showStatusMessage('黄金标准测试用例保存成功!', 'success');
+                    loadRecentGoldenCases();  // 加载最近的黄金标准
+                } else {
+                    showStatusMessage('保存失败: ' + result.error, 'danger');
+                }
+            } catch (error) {
+                showLoading(false);
+                showStatusMessage('请求错误: ' + error.message, 'danger');
+            }
+        });
+        
+        // 处理文件上传
+        document.getElementById('upload-golden-btn').addEventListener('click', async function() {
+            const fileInput = document.getElementById('golden-file');
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showStatusMessage('请选择文件', 'danger');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                showStatusMessage('请选择JSON文件', 'danger');
+                return;
+            }
+            
+            showLoading(true);
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('file_type', 'golden');
+            
+            try {
+                const response = await fetch('/upload-test-cases', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                showLoading(false);
+                
+                if (result.success) {
+                    showStatusMessage('文件上传成功!', 'success');
+                    
+                    // 读取上传的文件内容并显示在文本区域
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('golden-cases').value = e.target.result;
+                        
+                        // 切换到输入标签页
+                        const inputTab = new bootstrap.Tab(document.getElementById('input-tab'));
+                        inputTab.show();
+                    };
+                    reader.readAsText(file);
+                    
+                    loadRecentGoldenCases();  // 加载最近的黄金标准
+                } else {
+                    showStatusMessage('上传失败: ' + result.error, 'danger');
+                }
+            } catch (error) {
+                showLoading(false);
+                showStatusMessage('请求错误: ' + error.message, 'danger');
+            }
+        });
+        
+        // 显示状态消息
+        function showStatusMessage(message, type) {
+            const statusMessage = document.getElementById('status-message');
+            const statusText = document.getElementById('status-text');
+            
+            statusText.textContent = message;
+            statusMessage.className = 'alert alert-' + type + ' alert-dismissible fade show';
+            statusMessage.style.display = 'block';
+            
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                const alert = bootstrap.Alert.getOrCreateInstance(statusMessage);
+                alert.close();
+            }, 5000);
+        }
+        
+        // 显示/隐藏加载动画
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+        
+        // 加载最近的黄金标准测试用例列表 (模拟)
+        function loadRecentGoldenCases() {
+            // 这里应该是一个API请求来获取最近的黄金标准列表
+            // 现在仅做模拟展示
+            const recentElement = document.getElementById('recent-golden-cases');
+            const currentDate = new Date().toLocaleDateString();
+            
+            recentElement.innerHTML = `
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">golden_cases_${currentDate.replace(/\//g, '-')}.json</h6>
+                            <small class="text-muted">保存时间: ${currentDate} ${new Date().toLocaleTimeString()}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">最新</span>
+                    </a>
+                </div>
+            `;
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以添加更多初始化代码
+        });
+    </script>
+</body>
+</html> 
