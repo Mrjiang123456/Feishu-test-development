@@ -1,7 +1,9 @@
 import difflib
 from collections import Counter
 from logger import log
-from config import DUPLICATE_SIMILARITY_THRESHOLD
+from config import DUPLICATE_SIMILARITY_THRESHOLD, BATCH_SIZE
+import concurrent.futures
+import functools
 
 
 def find_duplicate_test_cases(test_cases):
@@ -35,6 +37,8 @@ def find_duplicate_test_cases(test_cases):
     total_cases = len(test_cases)
     if total_cases <= 1:
         return duplicate_info
+
+    log(f"开始查找重复测试用例，总数: {total_cases}")
 
     # 优化：一次性收集所有标题，避免重复迭代
     all_titles = []
@@ -152,7 +156,8 @@ def find_duplicate_test_cases(test_cases):
                         "preconditions": case_objs[0].get("preconditions", ""),
                         "steps": unique_steps,
                         "expected_results": unique_expected
-                    }
+                    },
+                    "original_case_ids": case_ids  # 确保保留原始case_ids
                 })
 
     # 查找步骤或预期结果高度相似的测试用例
@@ -165,6 +170,8 @@ def find_duplicate_test_cases(test_cases):
 
     # 使用预先计算的映射关系
     case_ids = list(case_steps_map.keys())
+    
+    log(f"进行步骤相似性比较，用例数: {len(case_ids)}")
 
     # 优化：实现批量处理比较操作
     def batch_compare_similarity(cases_batch):
@@ -176,20 +183,33 @@ def find_duplicate_test_cases(test_cases):
             steps1 = case_steps_map[case_id1]
             steps2 = case_steps_map[case_id2]
 
-            # 使用序列匹配算法比较相似度 - 只对长度相近的文本进行比较，提高效率
-            len_diff = abs(len(steps1) - len(steps2))
-            len_threshold = min(len(steps1), len(steps2)) * 0.3  # 长度差异不超过30%
+            # 快速预筛选：比较长度和简单特征
+            len1, len2 = len(steps1), len(steps2)
+            if abs(len1 - len2) > min(len1, len2) * 0.3:
+                continue  # 长度差异过大，跳过详细比较
 
-            if len_diff <= len_threshold:
-                # 使用quick_ratio代替ratio，提高速度
-                similarity = SequenceMatcher(None, steps1, steps2).quick_ratio()
-                if similarity > DUPLICATE_SIMILARITY_THRESHOLD:  # 使用配置参数作为相似度阈值
-                    results[(case_id1, case_id2)] = similarity
+            # 快速特征比较：比较首尾几个字符和词袋特征
+            if len1 > 20 and len2 > 20:
+                # 比较首尾字符
+                if steps1[:10] != steps2[:10] and steps1[-10:] != steps2[-10:]:
+                    # 使用词袋模型进行快速比较
+                    words1 = set(steps1.lower().split())
+                    words2 = set(steps2.lower().split())
+                    # 计算Jaccard相似度
+                    intersection = len(words1.intersection(words2))
+                    union = len(words1.union(words2))
+                    if union > 0 and intersection / union < DUPLICATE_SIMILARITY_THRESHOLD * 0.8:
+                        continue  # 词袋相似度过低，跳过详细比较
+
+            # 只有在快速预筛选通过后，才使用序列匹配算法计算相似度
+            similarity = SequenceMatcher(None, steps1, steps2).quick_ratio()
+            if similarity > DUPLICATE_SIMILARITY_THRESHOLD:  # 使用配置参数作为相似度阈值
+                results[(case_id1, case_id2)] = similarity
         return results
 
     # 准备批量比较任务
     comparison_batches = []
-    batch_size = 100  # 每批比较的数量
+    batch_size = BATCH_SIZE  # 使用配置中的批处理大小
     current_batch = []
 
     for i, case_id1 in enumerate(case_ids):
@@ -214,23 +234,38 @@ def find_duplicate_test_cases(test_cases):
     if current_batch:
         comparison_batches.append(current_batch)
 
-    # 执行批量比较
-    for batch in comparison_batches:
-        batch_results = batch_compare_similarity(batch)
+    log(f"分批处理相似性比较，批次数: {len(comparison_batches)}")
 
-        # 处理结果
-        for (case_id1, case_id2), similarity in batch_results.items():
-            # 更新重复类型计数
-            duplicate_info["duplicate_types"]["steps"] += 1
+    # 使用线程池并行执行批量比较
+    batch_results = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+        # 提交所有批次任务
+        future_to_batch = {executor.submit(batch_compare_similarity, batch): i for i, batch in enumerate(comparison_batches)}
 
-            # 记录相似步骤的用例
-            if case_id1 not in steps_similar_cases:
-                steps_similar_cases[case_id1] = []
-            steps_similar_cases[case_id1].append(case_id2)
+        # 处理完成的任务
+        for future in concurrent.futures.as_completed(future_to_batch):
+            batch_index = future_to_batch[future]
+            try:
+                result = future.result()
+                batch_results.update(result)
+            except Exception as e:
+                log(f"批次 {batch_index} 处理出错: {str(e)}")
 
-            if case_id2 not in steps_similar_cases:
-                steps_similar_cases[case_id2] = []
-            steps_similar_cases[case_id2].append(case_id1)
+    log(f"相似性比较完成，找到 {len(batch_results)} 对相似步骤")
+
+    # 处理批量比较结果
+    for (case_id1, case_id2), similarity in batch_results.items():
+        # 更新重复类型计数
+        duplicate_info["duplicate_types"]["steps"] += 1
+
+        # 记录相似步骤的用例
+        if case_id1 not in steps_similar_cases:
+            steps_similar_cases[case_id1] = []
+        steps_similar_cases[case_id1].append(case_id2)
+
+        if case_id2 not in steps_similar_cases:
+            steps_similar_cases[case_id2] = []
+        steps_similar_cases[case_id2].append(case_id1)
 
     # 构建步骤重复的测试用例组
     processed_case_ids = set()
@@ -296,7 +331,8 @@ def find_duplicate_test_cases(test_cases):
                         "preconditions": similar_cases[0].get("preconditions", "") if similar_cases else "",
                         "steps": similar_cases[0].get("steps", "") if similar_cases else "",  # 使用相似的步骤
                         "expected_results": unique_expected
-                    }
+                    },
+                    "original_case_ids": case_ids  # 确保保留原始case_ids
                 })
 
     # 按类别统计重复情况 - 使用哈希表和Counter优化
@@ -334,4 +370,6 @@ def find_duplicate_test_cases(test_cases):
     duplicate_info["duplicate_count"] = duplicate_count
     duplicate_info["duplicate_rate"] = round(duplicate_count / total_cases * 100, 2) if total_cases > 0 else 0
 
+    log(f"重复用例分析完成，重复率: {duplicate_info['duplicate_rate']}%, 重复数: {duplicate_count}")
+    
     return duplicate_info
