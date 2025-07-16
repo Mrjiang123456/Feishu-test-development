@@ -75,15 +75,17 @@ def ensure_directories():
 if __name__ == "__main__":
     # 确保必要的目录存在
     ensure_directories()
-
+    
     if len(sys.argv) > 1 and sys.argv[1] == "--cli":
         # 命令行模式
         log("以命令行模式运行...", important=True)
         parser = argparse.ArgumentParser(description="测试用例比较工具")
         parser.add_argument("--ai", help="AI生成的测试用例文件路径")
         parser.add_argument("--golden", help="黄金标准测试用例文件路径")
+        parser.add_argument("--iteration", action="store_true", help="是否启用迭代前后对比功能")
+        parser.add_argument("--prev", help="上一次迭代的测试用例文件路径，仅在--iteration为true时有效")
         args = parser.parse_args(sys.argv[2:])
-        main(args.ai, args.golden)
+        main(args.ai, args.golden, is_iteration=args.iteration, prev_iteration_file=args.prev)
     else:
         # API模式（默认）
         try:
@@ -139,8 +141,7 @@ if __name__ == "__main__":
 
                         if server_addr and remote_port:
                             log(f"外网访问地址: http://{server_addr}:{remote_port}", important=True)
-                            log(f"外网黄金标准测试用例页面: http://{server_addr}:{remote_port}/golden-cases",
-                                important=True)
+                            log(f"外网黄金标准测试用例页面: http://{server_addr}:{remote_port}/golden-cases", important=True)
 
                 uvicorn.run("api_server:app", host="127.0.0.1", port=8000, reload=True)
             else:
